@@ -74,6 +74,15 @@ training/
 *.tiff
 *.bmp
 
+# Source-controlled public assets and deterministic sample fixtures.
+!assets/web_window.png
+!samples/sample_*.pdf
+!samples/sample_*_ref.txt
+!samples/generated/cases_manifest.json
+!samples/generated/*_ref.txt
+!samples/generated/clear_ar_clean_scans.pdf
+!samples/generated/clear_ar_low_quality_scans.pdf
+
 # Deterministic, copyright-free test PDFs are source-controlled fixtures.
 !tests/fixtures/
 !tests/fixtures/*.pdf
