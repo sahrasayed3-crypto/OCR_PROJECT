@@ -1,0 +1,116 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.secrets/
+*secret*
+*token*
+*key*.txt
+!openrouter_api_key.example.txt
+
+# Python
+__pycache__/
+**pycache**/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+.venv*/
+venv/
+env/
+
+# Runtime data
+logs/
+*.log
+*.err
+server.log
+server.err
+data/
+conversions/
+backups/
+temporary/
+tmp/
+temp/
+output/
+outputs/
+
+# Regenerable benchmark output (fixtures and manifest remain tracked separately)
+samples/generated/benchmark_report_*.json
+samples/generated/benchmark_report_*.md
+training_data/
+datasets/
+dataset/
+train/
+training/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Generated documents and media
+*.docx
+*.pdf
+*.epub
+*.mobi
+*.azw
+*.azw3
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.tiff
+*.bmp
+
+# Deterministic, copyright-free test PDFs are source-controlled fixtures.
+!tests/fixtures/
+!tests/fixtures/*.pdf
+
+# Large archives and binary bundles
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+*.whl
+*.dll
+*.pyd
+*.exe
+*.lib
+
+# Model files and weights
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+*.onnx
+*.gguf
+*.model
+models/
+weights/
+checkpoints/
+
+# Unsupported OCR/runtime bundles
+tools/tesseract/
+tools/paddle/
+tools/poppler/
+poppler-*/
+tools/python/
+
+# Local metadata
+.DS_Store
+Thumbs.db
+_git_metadata_backup/

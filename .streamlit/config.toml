@@ -1,0 +1,18 @@
+[server]
+address = "0.0.0.0"
+port = 8501
+headless = true
+runOnSave = false
+fileWatcherType = "none"
+# Streamlit requires an integer transport ceiling. Use its maximum 32-bit value
+# so Clouda applies no practical file-size rejection; disk space remains the limit.
+maxUploadSize = 2147483647
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+
+[logger]
+level = "info"

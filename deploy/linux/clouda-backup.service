@@ -1,0 +1,9 @@
+[Unit]
+Description=Create Clouda backup
+
+[Service]
+Type=oneshot
+User=clouda
+Group=clouda
+WorkingDirectory=/opt/clouda
+ExecStart=/opt/clouda/deploy/linux/backup.sh
