@@ -8,7 +8,7 @@ Clouda PDF
 
 ## One-line description
 
-A model-agnostic PDF-to-editable-DOCX workflow for Arabic, English, and mixed documents, with transparent routing of scanned pages pending a validated OCR model.
+A model-agnostic PDF-to-editable-DOCX workflow for Arabic, English, and mixed documents, with transparent routing of scanned pages pending licensing, integration, and evaluation of the selected primary OCR candidate.
 
 ## Problem
 
