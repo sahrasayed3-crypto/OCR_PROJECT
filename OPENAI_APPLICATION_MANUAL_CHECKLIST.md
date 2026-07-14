@@ -16,15 +16,15 @@ https://github.com/sahrasayed3-crypto/OCR_PROJECT
 
 ## Latest Commit Hash
 
-Record the final commit hash after this application-readiness package is committed and pushed.
+Record the final commit hash after any later application-readiness update is committed and pushed.
 
-Previous verified publication commit:
+Current application-readiness commit before this checklist update:
 
-`d4f398346ffd1db6eb7665a2fc4017f78dd7c69f`
+`c00710958a3bf9724504598baa2d4b41545fe802`
 
 ## GitHub Actions Status
 
-Verify the latest GitHub Actions run after the final application-readiness commit is pushed.
+Verify the latest GitHub Actions run after any final application-readiness commit is pushed.
 
 ## License
 

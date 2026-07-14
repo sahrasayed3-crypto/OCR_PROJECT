@@ -105,7 +105,7 @@ The project can give Arabic-document maintainers a transparent, reproducible PDF
 
 ## 14. Who Will Use The Project
 
-Potential users include Arabic researchers, small publishers, digitization volunteers, archives, libraries, educators, and developers building OCR workflows for Arabic, English, and mixed-language PDFs.
+Potential audiences include Arabic researchers, small publishers, digitization volunteers, archives, libraries, educators, and developers building OCR workflows for Arabic, English, and mixed-language PDFs.
 
 ## 15. Why This Project Is A Strong Fit For Open-Source Support
 
@@ -127,11 +127,11 @@ Dataset licensing and written-permission verification are still in progress. The
 - AMD/ROCm support must be validated on real documented hardware before any claim is made.
 - Private data and permission correspondence must remain outside the public repository.
 
-## 19. Requested Support Amount
+## 19. Requested Support
 
-Requested range: USD 10,000 to USD 20,000 in OpenAI API credits.
+The application should request API credits for open-source engineering work without naming a specific dollar amount unless the form asks for one. The current OpenAI form asks how credits would be used, not how much credit is requested.
 
-This range is intended for staged open-source engineering work over roughly 90 days: maintainer automation, test generation, security review, evaluation tooling, documentation review, and assisted integration after legal gates are satisfied. It is below the published maximum and should be adjusted by the maintainer based on actual expected usage and OpenAI program guidance.
+The support would be used for staged open-source engineering work: maintainer automation, test generation, security review, evaluation tooling, documentation review, CI and release automation, and assisted integration after legal gates are satisfied.
 
 ## 20. Additional Information
 
@@ -141,12 +141,12 @@ Clouda PDF is intentionally careful about what it does and does not claim. The r
 
 ## Why Does This Repository Qualify? (500 Characters Max)
 
-Clouda PDF addresses Arabic PDF-to-DOCX and OCR-readiness, an underserved area for historical, degraded, and mixed Arabic-English documents. The public Apache-2.0 repository already provides direct PDF text extraction, DOCX export, page-state metadata, tests, and model-agnostic OCR integration scaffolding without overstating unverified OCR accuracy.
+Clouda PDF is an actively maintained Apache-2.0 project addressing an underserved gap in Arabic document tooling. It already provides tested PDF-to-DOCX extraction, RTL-aware export, explicit page-state routing, 146 automated tests, and model-agnostic OCR interfaces. Although newly public, it offers a practical foundation for Arabic researchers, archives, and OCR developers.
 
 ## How Will You Use API Credits? (500 Characters Max)
 
-I would use credits for open-source maintenance: Codex-assisted tests, code review, release checks, documentation consistency, issue triage, evaluation tooling, and security review. Credits would also help integrate the selected OCR candidate only after dataset licensing and written permissions are verified. No private datasets or weights would be published.
+I would use API credits for open-source maintenance and engineering: Codex-assisted code review, test generation, CI and release automation, documentation consistency, security review, and reproducible OCR evaluation tooling. After licensing and written permissions are verified, credits would also support integration and testing of the selected OCR candidate behind the public model-agnostic interface.
 
 ## Anything Else We Should Know? (500 Characters Max)
 
-A primary model candidate has been selected, but training has not started because dataset licensing and written-permission verification are still in progress. No final CER/WER or production scanned-page OCR claim is made. The public repository remains useful independently through direct extraction, DOCX export, metadata, tests, and evaluation scaffolding.
+The repository deliberately separates verified functionality from future OCR claims. A primary model candidate is selected, but training awaits dataset-license and written-permission verification. No final CER/WER is claimed. The public project is already functional for born-digital extraction, RTL-aware DOCX export, page-state metadata, testing, and future OCR integration.
