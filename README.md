@@ -1,8 +1,10 @@
 # Clouda PDF
 
-Clouda PDF converts born-digital PDF documents into editable, text-only DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries.
+Clouda PDF is an open-source, model-agnostic PDF-to-DOCX project for Arabic, English, and mixed-language documents. Its long-term goal is reliable Arabic OCR for modern and historical books, including weak or medium-quality scanned pages, margins, footnotes, RTL text, and mixed Arabic-English reading order.
 
-It is designed for modern and historical Arabic books as well as English and mixed-language documents. The currently supported path is embedded-text extraction from digital PDFs; scanned pages are detected but deliberately remain `pending_ocr_model` until a final OCR model is selected and evaluated.
+The current verified implementation converts born-digital PDF documents into editable, text-only DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries. Image-only scanned pages are detected and routed to `pending_ocr_model`; they are not treated as successful OCR output until a final OCR model is selected, integrated, and measured.
+
+It is designed for modern and historical Arabic books as well as English and mixed-language documents. Text fidelity is the priority. The project does not currently attempt layout-perfect reconstruction of images, tables, or page artwork.
 
 ## Why it exists
 
@@ -15,6 +17,7 @@ Researchers, publishers, and archives need editable documents without silently l
 - Classify pages as `digital_text`, `blank_page`, `near_blank`, or `pending_ocr_model` and record per-page metadata.
 - Preserve short page-number text rather than discarding it.
 - Use a model-agnostic `ExtractionEngine` and `EngineRegistry` for a future OCR integration.
+- Keep scanned, low-quality, and image-only pages in an explicit review state instead of claiming unmeasured OCR accuracy.
 
 ```mermaid
 flowchart LR
@@ -55,7 +58,7 @@ Open `http://127.0.0.1:8501`.
 .\.venv311\Scripts\python.exe -m mypy .
 ```
 
-Verified on 2026-07-13: `145 passed` with `81%` overall `pdfword` coverage. Ruff, Black, mypy, compile validation, and the local demo pass across the project.
+Verified on 2026-07-14: `146 passed` with `81%` overall `pdfword` coverage. Ruff, Black, mypy, and compile validation pass across the project.
 
 ## External tools
 
@@ -86,16 +89,19 @@ It demonstrates digital text extraction, DOCX generation, a scanned page routed 
 - Scanned-page OCR, CER, and WER results are not claimed. They require real ground-truth evaluation.
 - Layout-perfect reconstruction, tables, images, margins, and footnotes are not rebuilt as DOCX objects; page boundaries and extracted text are retained.
 - AMD/ROCm readiness is architectural and diagnostic only. No GPU inference or training has been validated.
+- Qwen, Kraken, PaddleOCR, Tesseract, and other OCR candidates are benchmark candidates only until legally usable, installed, and evaluated on the same ground-truth set.
 
 ## Roadmap
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/MODEL_INTEGRATION.md](docs/MODEL_INTEGRATION.md). The final OCR engine will be selected only after a documented benchmark and ground-truth evaluation.
+See [ROADMAP.md](ROADMAP.md), [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/MODEL_INTEGRATION.md](docs/MODEL_INTEGRATION.md). The final OCR engine will be selected only after a documented benchmark and ground-truth evaluation.
 
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Testing](docs/TESTING.md)
 - [Model integration](docs/MODEL_INTEGRATION.md)
+- [Data licenses](DATA_LICENSES.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 - [Security](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
 

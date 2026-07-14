@@ -67,12 +67,18 @@ def save_job_files(storage: JobStorage, pdf_bytes: bytes, docx_bytes: bytes) -> 
 def atomic_write(path: str | Path, data: bytes) -> None:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(dir=target.parent, delete=False) as temporary:
-        temporary_path = Path(temporary.name)
-        temporary.write(data)
-        temporary.flush()
-        os.fsync(temporary.fileno())
-    os.replace(temporary_path, target)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=target.parent, delete=False) as temporary:
+            temporary_path = Path(temporary.name)
+            temporary.write(data)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        os.replace(temporary_path, target)
+    except Exception:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+        raise
 
 
 def atomic_write_stream(

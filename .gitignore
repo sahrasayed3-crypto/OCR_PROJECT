@@ -36,6 +36,7 @@ server.err
 data/
 conversions/
 backups/
+audit_backups/
 temporary/
 tmp/
 temp/
@@ -120,6 +121,7 @@ poppler-*/
 tools/python/
 
 # Local metadata
+.vscode/
 .DS_Store
 Thumbs.db
 _git_metadata_backup/

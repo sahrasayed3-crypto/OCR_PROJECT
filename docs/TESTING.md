@@ -16,7 +16,7 @@ The report intentionally does not treat `pending_ocr_model` as OCR success or as
 
 ## Latest verified result
 
-On 2026-07-13, the full suite completed with **145 passed** and **81%** overall `pdfword` coverage (`80.88%` measured by pytest-cov). Coverage improved through meaningful tests for invalid/empty inputs, engine metadata, DOCX generation, cleanup safety, local key-store behavior, CLI startup guards, OpenRouter/provider error handling, conversion-service recovery, settings, storage, and worker guards.
+On 2026-07-14, the full suite completed with **145 passed** and **81%** overall `pdfword` coverage (`80.89%` measured by pytest-cov). Coverage improved through meaningful tests for invalid/empty inputs, engine metadata, DOCX generation, cleanup safety, local key-store behavior, CLI startup guards, OpenRouter/provider error handling, conversion-service recovery, settings, storage, and worker guards.
 
 ## Quality checks
 

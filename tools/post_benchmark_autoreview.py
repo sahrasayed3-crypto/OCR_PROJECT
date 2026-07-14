@@ -12,6 +12,23 @@ WORKSPACE = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd().res
 POLL_SECONDS = int(sys.argv[2]) if len(sys.argv) > 2 else 30
 LOGS_DIR = WORKSPACE / "logs"
 GENERATED_DIR = WORKSPACE / "samples" / "generated"
+SKIP_PARTS = {
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    ".venv311",
+    "__pycache__",
+    "backups",
+    "conversions",
+    "data",
+    "logs",
+    "outputs",
+    "poppler-26.02.0",
+    "tools/poppler",
+    "tools/python",
+}
 
 
 def _timestamp() -> str:
@@ -69,13 +86,38 @@ def _run_cmd(args: list[str]) -> tuple[int, str]:
     return p.returncode, text.strip()
 
 
+def _relative_key(path: Path) -> str:
+    try:
+        return path.relative_to(WORKSPACE).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _should_skip(path: Path) -> bool:
+    rel = _relative_key(path)
+    parts = set(Path(rel).parts)
+    return bool(parts & SKIP_PARTS) or any(
+        rel == item or rel.startswith(f"{item}/") for item in SKIP_PARTS
+    )
+
+
+def _compile_targets() -> list[str]:
+    targets = ["app.py", "pdfword", "scripts", "tests"]
+    tools_dir = WORKSPACE / "tools"
+    if tools_dir.exists():
+        targets.extend(
+            str(path.relative_to(WORKSPACE)) for path in sorted(tools_dir.glob("*.py"))
+        )
+    return targets
+
+
 def _scan_signals() -> tuple[list[str], list[str]]:
     todo_hits: list[str] = []
     bare_except_hits: list[str] = []
     for path in WORKSPACE.rglob("*"):
         if not path.is_file():
             continue
-        if any(part in {".git", ".venv", "__pycache__"} for part in path.parts):
+        if _should_skip(path):
             continue
         if path.suffix.lower() not in {
             ".py",
@@ -144,7 +186,7 @@ def main() -> int:
         [sys.executable, "-m", "unittest", "discover", "-s", "tests"]
     )
     compile_code, compile_out = _run_cmd(
-        [sys.executable, "-m", "compileall", "-q", "."]
+        [sys.executable, "-m", "compileall", "-q", *_compile_targets()]
     )
     todo_hits, bare_except_hits = _scan_signals()
     learner = SelfLearningEngine()
@@ -152,7 +194,7 @@ def main() -> int:
     adaptive_clear = learner.get_adaptive_profile("CLEAR")
     adaptive_complex = learner.get_adaptive_profile("COMPLEX")
 
-    all_files = [p for p in WORKSPACE.rglob("*") if p.is_file()]
+    all_files = [p for p in WORKSPACE.rglob("*") if p.is_file() and not _should_skip(p)]
     py_files = [p for p in all_files if p.suffix.lower() == ".py"]
 
     lines: list[str] = []

@@ -55,15 +55,34 @@ if ($latestJson) {
 
 $allFiles = @(Get-ChildItem -LiteralPath $WorkspaceRoot -Recurse -File)
 $pyFiles = @($allFiles | Where-Object { $_.Extension -eq ".py" })
+$compileTargets = @(
+    "app.py",
+    "pdfword",
+    "scripts",
+    "tests"
+)
+$compileTargets += @(Get-ChildItem -LiteralPath (Join-Path $WorkspaceRoot "tools") -Filter "*.py" -File |
+    ForEach-Object { $_.FullName })
 
 $unitOut = & python -m unittest discover -s tests 2>&1 | Out-String
 $unitCode = $LASTEXITCODE
 
-$compileOut = & python -m compileall -q . 2>&1 | Out-String
+$compileOut = & python -m compileall -q @compileTargets 2>&1 | Out-String
 $compileCode = $LASTEXITCODE
 
-$todoHits = & rg -n "TODO|FIXME|XXX|HACK" . 2>$null | Out-String
-$bareExceptHits = & rg -n "except\s*:" . 2>$null | Out-String
+$rgExcludes = @(
+    "--glob", "!tools/python/**",
+    "--glob", "!tools/poppler/**",
+    "--glob", "!poppler-26.02.0/**",
+    "--glob", "!.venv*/**",
+    "--glob", "!data/**",
+    "--glob", "!conversions/**",
+    "--glob", "!logs/**",
+    "--glob", "!outputs/**",
+    "--glob", "!backups/**"
+)
+$todoHits = & rg -n @rgExcludes "TODO|FIXME|XXX|HACK" . 2>$null | Out-String
+$bareExceptHits = & rg -n @rgExcludes "except\s*:" . 2>$null | Out-String
 
 $nowIso = (Get-Date).ToString("s")
 $report = @()
