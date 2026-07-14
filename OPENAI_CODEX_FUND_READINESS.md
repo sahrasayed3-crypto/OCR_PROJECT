@@ -22,7 +22,7 @@ Arabic OCR for historical and degraded documents remains difficult, especially w
 
 ## Open-Source Status
 
-The repository is prepared as an open-source project under the existing `LICENSE`. It includes contribution, security, testing, roadmap, and data-license documentation.
+The repository is public and prepared as an open-source project under Apache License 2.0 for files actually present in the public repository. It includes contribution, security, testing, roadmap, and data-license documentation.
 
 ## Current Technical Status
 
@@ -88,7 +88,7 @@ Maintain deterministic fixtures, documented test commands, dataset manifests, en
 
 ## Requested Support
 
-Codex usage credits and technical support for open-source engineering, evaluation automation, and documentation quality.
+Codex usage credits and technical support for open-source engineering, evaluation automation, documentation quality, maintainer automation, release review, and security review. The requested credit amount should be a justified working range rather than an automatic request for the maximum available award.
 
 ## Suggested Application Answers
 

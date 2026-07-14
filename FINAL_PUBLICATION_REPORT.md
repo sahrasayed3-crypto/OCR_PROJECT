@@ -164,7 +164,7 @@ Tracked public files are within normal repository size. The largest tracked file
 
 ## GitHub Actions Result
 
-The latest pushed publication commit before this report, `1ce8aacd93b5b6db63e3f7cda13c31223e29679b`, completed GitHub Actions successfully. The final report commit will trigger a new CI run after push and must be reviewed as the final remote status.
+The latest verified publication commit, `d4f398346ffd1db6eb7665a2fc4017f78dd7c69f`, completed GitHub Actions successfully. Any later application-readiness documentation commit should trigger a new CI run after push and must be reviewed as the final remote status before manual submission.
 
 ## Browser Verification Result
 
@@ -179,7 +179,7 @@ Previously verified through GitHub browser/API:
 - No forbidden private paths appeared in the repository tree.
 - GitHub Actions accessible.
 
-Final browser verification must be repeated after the report commit is pushed.
+Browser verification should be repeated after any later application-readiness documentation commit is pushed.
 
 ## Public-Access Verification Result
 
@@ -187,7 +187,7 @@ The repository URL works without the `.git` suffix:
 
 https://github.com/sahrasayed3-crypto/OCR_PROJECT
 
-Public access should be rechecked after the report commit is pushed.
+Public access should be rechecked after any later application-readiness documentation commit is pushed.
 
 ## Known Limitations
 
