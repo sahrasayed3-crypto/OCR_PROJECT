@@ -2,7 +2,7 @@
 
 ## Project Summary
 
-Clouda PDF is an open-source PDF-to-DOCX project preparing for Arabic OCR evaluation with a model-agnostic architecture.
+Clouda PDF is an open-source PDF-to-DOCX project preparing for Arabic OCR evaluation with a model-agnostic architecture. A primary model candidate has been selected, but it is not final yet.
 
 ## Problem
 
@@ -10,7 +10,7 @@ Researchers and archives need reliable editable output from Arabic, English, and
 
 ## Solution
 
-The current system provides verified direct PDF text extraction and DOCX export, with scanned pages routed to an explicit `pending_ocr_model` state until a model is selected and measured.
+The current system provides verified direct PDF text extraction and DOCX export, with scanned pages routed to an explicit `pending_ocr_model` state until the selected primary model candidate is licensed, integrated, trained or adapted as needed, and measured.
 
 ## Target Users
 
@@ -18,7 +18,7 @@ Arabic researchers, publishers, libraries, archives, digitization teams, and dev
 
 ## Current Status
 
-Local development project with passing automated tests and no production cloud deployment.
+Local development project with passing automated tests, a selected primary model candidate, no OCR training started yet, and no production cloud deployment.
 
 ## Open-Source Status
 
@@ -30,7 +30,7 @@ Streamlit UI, conversion service, storage helpers, model-agnostic extraction eng
 
 ## Proposed Azure Architecture
 
-Future Azure usage could include Blob Storage for licensed datasets, Azure Machine Learning or GPU VMs for benchmarking, and GitHub Actions for CI. No Azure resource should be created until reviewed manually.
+Future Azure usage could include Blob Storage for licensed datasets, Azure Machine Learning or GPU VMs for benchmarking the selected primary model candidate, and GitHub Actions for CI. No Azure resource should be created until reviewed manually.
 
 ## Security Plan
 
@@ -50,9 +50,9 @@ Azure credits for controlled OCR benchmarking, optional GPU evaluation, storage 
 
 ## 3-6 Month Roadmap
 
-- Finalize licensed evaluation data.
-- Benchmark OCR candidates.
-- Select optional engine.
+- Finalize licensed evaluation data and written permissions.
+- Benchmark the selected primary OCR candidate against baselines.
+- Integrate the candidate only after license and evaluation gates pass.
 - Publish reproducible accuracy and performance reports.
 - Improve DOCX output for footnotes and mixed reading order.
 

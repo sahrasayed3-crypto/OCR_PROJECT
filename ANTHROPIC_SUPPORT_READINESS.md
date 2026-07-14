@@ -2,7 +2,7 @@
 
 ## Project Summary
 
-Clouda PDF is an open-source, model-agnostic PDF-to-DOCX project preparing for reliable Arabic OCR evaluation and integration.
+Clouda PDF is an open-source, model-agnostic PDF-to-DOCX project preparing for reliable Arabic OCR evaluation and integration. A primary model candidate has been selected, but training has not started yet.
 
 ## Why Claude / Claude Code Is Useful
 
@@ -10,7 +10,7 @@ Claude or Claude Code could help review Python code, improve documentation, desi
 
 ## Planned Coding Tasks
 
-- Add optional OCR engines behind the existing interface.
+- Add the selected primary OCR candidate behind the existing interface after licensing and permission gates are complete.
 - Improve DOCX handling for footnotes, margins, and mixed reading order.
 - Strengthen tests for corrupt PDFs, page ranges, storage cleanup, and low-memory behavior.
 
@@ -36,7 +36,7 @@ The project can help Arabic document digitization by publishing reproducible wor
 
 ## Current Project Status
 
-Direct PDF text extraction and DOCX export are implemented. Scanned-page OCR is not yet implemented.
+Direct PDF text extraction and DOCX export are implemented. A primary model candidate has been selected. Training has not started yet because dataset licensing and written-permission verification are still in progress, and scanned-page OCR is not yet implemented.
 
 ## Dataset Licensing Status
 

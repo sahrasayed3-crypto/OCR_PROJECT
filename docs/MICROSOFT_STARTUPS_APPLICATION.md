@@ -16,7 +16,7 @@ Archives, researchers, publishers, and small teams need editable text from PDFs,
 
 ## Solution
 
-Clouda PDF extracts the embedded text layer from born-digital PDFs, creates editable DOCX output with RTL-aware text handling, and records page-level metadata. Image-only pages are explicitly held as `pending_ocr_model` until a final OCR engine is selected and evaluated.
+Clouda PDF extracts the embedded text layer from born-digital PDFs, creates editable DOCX output with RTL-aware text handling, and records page-level metadata. Image-only pages are explicitly held as `pending_ocr_model` until the selected primary model candidate is licensed, integrated, trained or adapted as needed, and evaluated.
 
 ## Target users
 
@@ -28,7 +28,7 @@ Pre-Seed, working prototype with direct-text PDF conversion, DOCX output, page-l
 
 ## Current progress
 
-The digital-text path, DOCX export, page classification, test fixtures, and Windows CI are implemented. The latest local readiness run completed 145 tests with 81% overall coverage. A final OCR model has not been selected or integrated.
+The digital-text path, DOCX export, page classification, test fixtures, and Windows CI are implemented. The latest local readiness run completed 145 tests with 81% overall coverage. A primary model candidate has been selected, but training has not started yet because dataset licensing and written-permission verification are still in progress.
 
 ## Why Azure is needed
 

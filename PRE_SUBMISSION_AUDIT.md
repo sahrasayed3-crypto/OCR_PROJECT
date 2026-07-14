@@ -16,9 +16,9 @@ The repository is in a stronger public-review state after local validation and d
 | Black | PASS | `black --check .` passed after formatting `tools/post_benchmark_autoreview.py`. |
 | mypy | PASS | `mypy .` passed. |
 | Secret scan | PASS WITH REVIEW | No real key patterns found; hits were placeholders, variable names, or test strings. |
-| License docs | PASS | `LICENSE`, `DATA_LICENSES.md`, and `THIRD_PARTY_NOTICES.md` exist. |
+| License docs | PASS | `LICENSE` is Apache License 2.0 for public repository files only; `DATA_LICENSES.md`, `THIRD_PARTY_NOTICES.md`, README, and NOTICE document excluded private components. |
 | Dataset readiness | PARTIAL | Policy exists; final licensed OCR dataset is not yet assembled. |
-| OCR readiness | PARTIAL | Interface exists; final OCR model is not selected. |
+| OCR readiness | PARTIAL | Interface exists; a primary model candidate has been selected, but training has not started because dataset licensing and written-permission verification are still in progress. |
 | AMD readiness | PARTIAL | Roadmap and diagnostics exist; ROCm is not validated. |
 | GitHub readiness | PENDING | Requires final commit, push, and remote Actions verification. |
 
@@ -38,19 +38,21 @@ The repository is in a stronger public-review state after local validation and d
 ## Files Modified
 
 - `README.md`
+- `LICENSE`
+- `NOTICE`
 - `tools/post_benchmark_autoreview.py`
 
 Other modified or untracked files existed before this final audit and should be reviewed in Git status before committing.
 
 ## Problems Fixed
 
-- README now states the open-source, model-agnostic goal and current OCR limitations more explicitly.
+- README now states the open-source, model-agnostic goal, current OCR limitations, selected primary model candidate status, and Apache 2.0 public-scope boundary more explicitly.
 - Missing root-level roadmap, data-license, third-party notice, data pipeline, evaluation, and support-readiness files were added.
 - Black formatting was applied to the auto-review helper.
 
 ## Remaining Problems
 
-- Final OCR model is not selected or integrated.
+- The selected primary model candidate is not integrated or final; training has not started because dataset licensing and written-permission verification are still in progress.
 - No scanned-page CER/WER results exist.
 - ROCm support is not validated.
 - Local ignored runtime folders include virtualenv, caches, conversions, data, logs, Poppler/Python bundles, and `_git_metadata_backup`; they should remain uncommitted.

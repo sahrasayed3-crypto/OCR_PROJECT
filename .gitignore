@@ -3,6 +3,12 @@
 .env.*
 !.env.example
 .secrets/
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.pfx
 *secret*
 *token*
 *key*.txt
@@ -34,6 +40,9 @@ logs/
 server.log
 server.err
 data/
+data_private/
+private/
+private_data/
 conversions/
 backups/
 audit_backups/
@@ -49,8 +58,17 @@ samples/generated/benchmark_report_*.md
 training_data/
 datasets/
 dataset/
+distorted_datasets/
+generated_distorted_datasets/
+experiment_artifacts/
+experiments/
+runs/
+wandb/
+mlruns/
 train/
 training/
+training_cache/
+training_caches/
 
 # Databases
 *.db
@@ -112,6 +130,12 @@ training/
 models/
 weights/
 checkpoints/
+adapters/
+lora_adapters/
+qlora_adapters/
+*.adapter
+*.lora
+*.qlora
 
 # Unsupported OCR/runtime bundles
 tools/tesseract/
@@ -125,3 +149,4 @@ tools/python/
 .DS_Store
 Thumbs.db
 _git_metadata_backup/
+docs/permissions/

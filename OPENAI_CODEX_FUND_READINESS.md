@@ -30,6 +30,7 @@ The repository is prepared as an open-source project under the existing `LICENSE
 - DOCX export works for text-first output.
 - Page states include `digital_text`, `blank_page`, `near_blank`, and `pending_ocr_model`.
 - Scanned-page OCR is not yet implemented.
+- A primary model candidate has been selected. Training has not started yet because dataset licensing and written-permission verification are still in progress.
 - The engine interface is model-agnostic.
 
 ## Key Completed Components
@@ -43,7 +44,7 @@ The repository is prepared as an open-source project under the existing `LICENSE
 
 ## Current Limitations
 
-- No final OCR model is selected.
+- The selected primary model candidate is not final until licensing, integration, training/adaptation, evaluation, and acceptance testing are complete.
 - No scanned-page CER/WER is claimed.
 - Layout-perfect reconstruction is not implemented.
 - ROCm support is not validated.
@@ -51,7 +52,7 @@ The repository is prepared as an open-source project under the existing `LICENSE
 ## Planned Use Of Codex
 
 - Improve tests, documentation, and release hygiene.
-- Add candidate OCR integrations behind the engine interface.
+- Integrate the selected primary OCR candidate behind the engine interface after licensing and permission checks are complete.
 - Review security, data licensing, and reproducibility.
 - Assist with benchmark automation and failure analysis.
 
@@ -80,8 +81,8 @@ Maintain deterministic fixtures, documented test commands, dataset manifests, en
 ## 3-6 Month Milestones
 
 - Finalize consented evaluation set.
-- Benchmark OCR candidates.
-- Select an optional OCR engine.
+- Verify the selected primary model candidate's license and written data permissions.
+- Benchmark the selected candidate against fallback baselines.
 - Publish CER/WER with methodology.
 - Improve DOCX handling for footnotes and mixed reading order.
 

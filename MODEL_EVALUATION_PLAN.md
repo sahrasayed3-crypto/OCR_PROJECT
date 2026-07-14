@@ -1,18 +1,11 @@
 # Model Evaluation Plan
 
-No model is selected or claimed as supported until it passes this plan with documented license status and reproducible results.
+A primary model candidate has been selected. Training has not started yet because dataset licensing and written-permission verification are still in progress. The candidate is not claimed as the final supported model until it passes this plan with documented license status and reproducible results.
 
-## Candidate Models
+## Candidate And Baselines
 
-- QARI
-- AtlasOCR
-- Baseer
-- Qwen base model
-- Qwen after fine-tuning
-- Kraken Arabic/OpenITI-style models
-- PaddleOCR Arabic
-- Tesseract Arabic
-- Any additional legally usable model with documented license terms
+- Selected primary model candidate, before and after any approved training/adaptation.
+- Legally usable baselines such as QARI, AtlasOCR, Baseer, Kraken Arabic/OpenITI-style models, PaddleOCR Arabic, Tesseract Arabic, or any additional model with documented license terms.
 
 ## Fair Comparison Rules
 
@@ -46,4 +39,4 @@ No model is selected or claimed as supported until it passes this plan with docu
 
 ## Current Status
 
-The current repository supports direct embedded-text extraction only. Scanned-page OCR remains `pending_ocr_model`; no CER/WER result should be presented as a final OCR benchmark.
+The current repository supports direct embedded-text extraction only. Scanned-page OCR remains `pending_ocr_model`; no CER/WER result should be presented as a final OCR benchmark until the selected primary candidate is licensed, trained/adapted if needed, integrated, and evaluated.

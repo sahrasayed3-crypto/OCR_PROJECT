@@ -2,7 +2,7 @@
 
 Clouda PDF is an open-source, model-agnostic PDF-to-DOCX project for Arabic, English, and mixed-language documents. Its long-term goal is reliable Arabic OCR for modern and historical books, including weak or medium-quality scanned pages, margins, footnotes, RTL text, and mixed Arabic-English reading order.
 
-The current verified implementation converts born-digital PDF documents into editable, text-only DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries. Image-only scanned pages are detected and routed to `pending_ocr_model`; they are not treated as successful OCR output until a final OCR model is selected, integrated, and measured.
+The current verified implementation converts born-digital PDF documents into editable, text-only DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries. Image-only scanned pages are detected and routed to `pending_ocr_model`; they are not treated as successful OCR output until the selected primary model candidate is licensed, integrated, trained or adapted as needed, and measured.
 
 It is designed for modern and historical Arabic books as well as English and mixed-language documents. Text fidelity is the priority. The project does not currently attempt layout-perfect reconstruction of images, tables, or page artwork.
 
@@ -85,7 +85,8 @@ It demonstrates digital text extraction, DOCX generation, a scanned page routed 
 
 ## Current limitations
 
-- A final OCR model has not been selected, installed, or integrated.
+- A primary model candidate has been selected. Training has not started yet because dataset licensing and written-permission verification are still in progress.
+- The selected candidate is not treated as the final production model until licensing, integration, evaluation, and acceptance tests are complete.
 - Scanned-page OCR, CER, and WER results are not claimed. They require real ground-truth evaluation.
 - Layout-perfect reconstruction, tables, images, margins, and footnotes are not rebuilt as DOCX objects; page boundaries and extracted text are retained.
 - AMD/ROCm readiness is architectural and diagnostic only. No GPU inference or training has been validated.
@@ -93,7 +94,7 @@ It demonstrates digital text extraction, DOCX generation, a scanned page routed 
 
 ## Roadmap
 
-See [ROADMAP.md](ROADMAP.md), [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/MODEL_INTEGRATION.md](docs/MODEL_INTEGRATION.md). The final OCR engine will be selected only after a documented benchmark and ground-truth evaluation.
+See [ROADMAP.md](ROADMAP.md), [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/MODEL_INTEGRATION.md](docs/MODEL_INTEGRATION.md). The selected primary model candidate will only become the final OCR engine after licensing, written-permission checks, integration, documented benchmarks, and ground-truth evaluation.
 
 ## Documentation
 
@@ -104,6 +105,18 @@ See [ROADMAP.md](ROADMAP.md), [docs/ROADMAP.md](docs/ROADMAP.md), and [docs/MODE
 - [Third-party notices](THIRD_PARTY_NOTICES.md)
 - [Security](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
+
+## Open-Source Scope
+
+This repository contains the public open-source portion of OCR_PROJECT / Clouda PDF: the application structure, model-agnostic interfaces, OCR engine registry, page routing, blank and near-blank page handling, quality and review workflow, public evaluation utilities, tests, documentation, and safe examples.
+
+Some components are intentionally not included in this repository. Training data, private reference texts, final model weights, LoRA/QLoRA adapters, checkpoints, production service code, customer data, proprietary data-collection tools, advanced private training recipes, and sensitive deployment configuration may be licensed, hosted, or distributed separately.
+
+The Apache License 2.0 in `LICENSE` applies only to files actually present in this public repository, unless a file states otherwise. It does not cover private or separately licensed components.
+
+The following are not included in the public Apache 2.0 license grant: datasets, private reference texts, model weights, final OCR model artifacts, LoRA/QLoRA adapters, checkpoints, training recipes, final hyperparameters, production configuration, hosted service code, deployment secrets, customer data, uploaded PDFs, generated DOCX output, local permission evidence under `docs/permissions/`, trademarks, logos, project names, and brand assets.
+
+This repository does not claim ownership of external datasets or third-party OCR models. Any future data or model release must include its own license, source, permission, and redistribution terms.
 
 ## License
 

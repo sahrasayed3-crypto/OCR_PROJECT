@@ -4,11 +4,11 @@
 
 ROCm support is not implemented and has not been tested.
 
-The project is architecturally prepared for future AMD-compatible OCR integration through `pdfword.engines.ExtractionEngine`, but no trainable OCR model has been selected yet.
+The project is architecturally prepared for future AMD-compatible OCR integration through `pdfword.engines.ExtractionEngine`. A primary model candidate has been selected, but training has not started yet because dataset licensing and written-permission verification are still in progress.
 
 ## Required Before Any ROCm Claim
 
-1. Select an OCR model with documented AMD ROCm compatibility.
+1. Verify the selected primary model candidate's AMD ROCm compatibility and license terms.
 2. Add dependencies to `requirements-rocm.txt` with exact tested versions.
 3. Add a system diagnostic report using `tools/system_rocm_info.py`.
 4. Validate CPU fallback behavior.
