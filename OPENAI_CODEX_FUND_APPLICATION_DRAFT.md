@@ -18,6 +18,8 @@ Clouda PDF is an Apache-2.0, model-agnostic PDF-to-DOCX project for Arabic, Engl
 
 ## 4. Detailed Project Description
 
+Internal preparation material; not a direct form field in the current OpenAI form.
+
 Clouda PDF converts selectable-text PDFs into editable DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries. It intentionally separates verified direct PDF text extraction from future OCR claims. Image-only or scanned pages are detected and routed to `pending_ocr_model` instead of being treated as successful OCR output.
 
 The public repository contains a Streamlit entry point, conversion service, direct extraction engine, model-agnostic engine interface, page-state metadata contract, DOCX exporter, deterministic fixtures, tests, and documentation. It is designed so a future OCR model can be integrated behind a generic engine contract only after licensing, written data permissions, evaluation, and acceptance tests are complete.
@@ -78,6 +80,8 @@ Credits would not be used to publish private datasets, expose permission corresp
 
 ## 12. Concrete Milestones
 
+Internal preparation material; not a direct form field in the current OpenAI form.
+
 ## First 30 Days
 
 - Review and tighten public documentation and issue templates.
@@ -113,6 +117,8 @@ The project is public, Apache-2.0 for repository files, and focused on a clear u
 
 ## 16. Licensing Status
 
+Internal preparation material; not a direct form field in the current OpenAI form. Use the short licensing-status statement from `OPENAI_APPLICATION_SHORT_SUMMARY.md` if a concise note is needed.
+
 The public repository files are licensed under Apache License 2.0 unless a file states otherwise. Apache 2.0 applies only to files actually present in the public repository. It does not cover datasets, private reference texts, model weights, LoRA/QLoRA adapters, checkpoints, private training recipes, production configuration, permission correspondence, trademarks, logos, or brand assets.
 
 ## 17. Dataset-Permission Status
@@ -121,6 +127,8 @@ Dataset licensing and written-permission verification are still in progress. The
 
 ## 18. Risks And Blockers
 
+Internal preparation material; not a direct form field in the current OpenAI form.
+
 - Dataset licensing and written permissions must be completed before training starts.
 - No final scanned-page OCR accuracy can be claimed until a consented evaluation set exists.
 - The selected model candidate may fail license, integration, quality, or resource-usage gates.
@@ -128,6 +136,8 @@ Dataset licensing and written-permission verification are still in progress. The
 - Private data and permission correspondence must remain outside the public repository.
 
 ## 19. Requested Support
+
+Internal preparation material; not a direct form field in the current OpenAI form. Do not include a requested dollar amount unless the form explicitly asks for one.
 
 The application should request API credits for open-source engineering work without naming a specific dollar amount unless the form asks for one. The current OpenAI form asks how credits would be used, not how much credit is requested.
 

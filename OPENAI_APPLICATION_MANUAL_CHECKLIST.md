@@ -14,6 +14,21 @@ Use this checklist before manually copying answers into the OpenAI Codex for Ope
 
 https://github.com/sahrasayed3-crypto/OCR_PROJECT
 
+## Actual Form Fields
+
+The current OpenAI form requires:
+
+- First name
+- Last name
+- Email
+- GitHub username
+- OpenAI Organization ID
+- Maintainer role
+- Repository URL
+- Why the repository qualifies
+- How API credits will be used
+- Additional information
+
 ## Latest Commit Hash
 
 Record the final commit hash after any later application-readiness update is committed and pushed.
@@ -88,7 +103,23 @@ Not covered by the public Apache 2.0 grant:
 - GitHub username.
 - OpenAI Organization ID.
 - Maintainer role confirmation.
+- Repository URL confirmation.
+- Why the repository qualifies.
+- How API credits will be used.
+- Additional information.
 - Any personal or organizational context the user wants to include.
+
+## Internal Preparation Material
+
+These sections are useful for review but are not direct fields in the current OpenAI form:
+
+- Detailed project description.
+- 30/60/90-day milestones.
+- Risks and blockers.
+- Requested support amount.
+- Long licensing explanation.
+
+Do not include a requested credit amount unless the form explicitly asks for one.
 
 ## Manual Submission Reminder
 
