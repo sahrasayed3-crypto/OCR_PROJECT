@@ -52,7 +52,10 @@ def cleanup(
     if action not in mapping:
         raise ValueError("Unsupported lifecycle cleanup")
     root = mapping[action].resolve()
-    if not any(_inside(root, allowed) for allowed in (roots.artifact_root, roots.dataset_root, roots.cache_root)):
+    if not any(
+        _inside(root, allowed)
+        for allowed in (roots.artifact_root, roots.dataset_root, roots.cache_root)
+    ):
         raise PermissionError("Lifecycle root escaped configured state")
     candidates: list[Path] = []
     now = datetime.now(timezone.utc).timestamp()
@@ -75,18 +78,30 @@ def cleanup(
         "action": f"cleanup-{action}",
         "dry_run": dry_run,
         "root": str(root),
-        "files": [{"path": str(path), "bytes": path.stat().st_size, "sha256": _sha256(path)} for path in candidates],
+        "files": [
+            {"path": str(path), "bytes": path.stat().st_size, "sha256": _sha256(path)}
+            for path in candidates
+        ],
         "confirmation_token": token,
         "performed_at": datetime.now(timezone.utc).isoformat(),
     }
     if not dry_run:
-        trash = roots.artifact_root / "lifecycle-trash" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        trash = (
+            roots.artifact_root
+            / "lifecycle-trash"
+            / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        )
         for path in candidates:
             destination = trash / path.relative_to(root)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(path), destination)
         audit["recoverable_trash"] = str(trash)
-    report = roots.artifact_root / "reports" / "lifecycle" / f"{audit['action']}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json"
+    report = (
+        roots.artifact_root
+        / "reports"
+        / "lifecycle"
+        / f"{audit['action']}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json"
+    )
     report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(json.dumps(audit, indent=2), encoding="utf-8")
     audit["report"] = str(report)
@@ -105,7 +120,11 @@ def archive_run(
         raise PermissionError("Run archive source must be a dataset-state directory")
     files = [path for path in source.rglob("*") if path.is_file()]
     manifest = [
-        {"path": path.relative_to(source).as_posix(), "bytes": path.stat().st_size, "sha256": _sha256(path)}
+        {
+            "path": path.relative_to(source).as_posix(),
+            "bytes": path.stat().st_size,
+            "sha256": _sha256(path),
+        }
         for path in files
     ]
     token = confirmation_token("archive-run", source)
@@ -123,7 +142,10 @@ def archive_run(
             with zipfile.ZipFile(temp, "w", compression=zipfile.ZIP_DEFLATED) as handle:
                 for path in files:
                     handle.write(path, path.relative_to(source).as_posix())
-                handle.writestr("ARCHIVE_MANIFEST.v1.json", json.dumps({"schema_version": 1, "files": manifest}, indent=2))
+                handle.writestr(
+                    "ARCHIVE_MANIFEST.v1.json",
+                    json.dumps({"schema_version": 1, "files": manifest}, indent=2),
+                )
             temp.replace(archive)
         finally:
             temp.unlink(missing_ok=True)
@@ -147,11 +169,18 @@ def verify_archive(path: str | Path) -> dict[str, Any]:
     with zipfile.ZipFile(archive) as handle:
         validate_zip_archive(
             handle,
-            limits=ArchiveLimits(max_members=100_000, max_total_uncompressed_bytes=20 * 1024**3),
+            limits=ArchiveLimits(
+                max_members=100_000, max_total_uncompressed_bytes=20 * 1024**3
+            ),
         )
         manifest = json.loads(handle.read("ARCHIVE_MANIFEST.v1.json"))
         for item in manifest["files"]:
             digest = hashlib.sha256(handle.read(item["path"])).hexdigest()
             if digest != item["sha256"]:
                 failures.append(item["path"])
-    return {"schema_version": 1, "archive": str(archive), "failures": failures, "passed": not failures}
+    return {
+        "schema_version": 1,
+        "archive": str(archive),
+        "failures": failures,
+        "passed": not failures,
+    }

@@ -16,7 +16,9 @@ from clouda_data.evaluation.wer import wer
 def evaluate_records(records: list[dict[str, Any]]) -> dict[str, Any]:
     pages: list[dict[str, Any]] = []
     for record in records:
-        reference = str(record.get("reference_text") or record.get("ground_truth_text") or "")
+        reference = str(
+            record.get("reference_text") or record.get("ground_truth_text") or ""
+        )
         prediction = str(record.get("prediction_text") or record.get("ocr_text") or "")
         normalized_reference = normalize_ocr_text(reference)
         normalized_prediction = normalize_ocr_text(prediction)
@@ -45,6 +47,7 @@ def evaluate_records(records: list[dict[str, Any]]) -> dict[str, Any]:
             "processing_time": float(record.get("processing_time", 0.0)),
         }
         pages.append(page)
+
     def summary(items: list[dict[str, Any]]) -> dict[str, Any]:
         if not items:
             return {"pages": 0}
@@ -53,7 +56,9 @@ def evaluate_records(records: list[dict[str, Any]]) -> dict[str, Any]:
             "cer": mean(item["cer"] for item in items),
             "wer": mean(item["wer"] for item in items),
             "exact_match_rate": mean(item["exact_match"] for item in items),
-            "normalized_exact_match_rate": mean(item["normalized_exact_match"] for item in items),
+            "normalized_exact_match_rate": mean(
+                item["normalized_exact_match"] for item in items
+            ),
             "character_accuracy": mean(item["character_accuracy"] for item in items),
             "word_accuracy": mean(item["word_accuracy"] for item in items),
             "missing_text_rate": mean(item["missing_text"] for item in items),
@@ -61,11 +66,21 @@ def evaluate_records(records: list[dict[str, Any]]) -> dict[str, Any]:
             "empty_output_rate": mean(item["empty_output"] for item in items),
             "page_success_rate": mean(item["success"] for item in items),
             "processing_time": sum(item["processing_time"] for item in items),
-            "throughput_pages_per_second": len(items) / max(0.001, sum(item["processing_time"] for item in items)),
+            "throughput_pages_per_second": len(items)
+            / max(0.001, sum(item["processing_time"] for item in items)),
         }
+
     dimensions = [
-        "dataset", "source", "profile", "severity", "difficulty", "document",
-        "page_type", "language", "model", "model_revision",
+        "dataset",
+        "source",
+        "profile",
+        "severity",
+        "difficulty",
+        "document",
+        "page_type",
+        "language",
+        "model",
+        "model_revision",
     ]
     grouped: dict[str, dict[str, Any]] = {}
     for dimension in dimensions:
@@ -94,10 +109,15 @@ def evaluate_manifest(path: str | Path, output: str | Path | None = None) -> Pat
     target = (
         Path(output).expanduser().resolve()
         if output
-        else StorageRoots.from_env().artifact_root / "reports" / "evaluation" / f"{input_path.stem}.json"
+        else StorageRoots.from_env().artifact_root
+        / "reports"
+        / "evaluation"
+        / f"{input_path.stem}.json"
     )
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    target.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     target.with_suffix(".md").write_text(
         "# OCR evaluation\n\n"
         f"- Pages: {report['summary'].get('pages', 0)}\n"

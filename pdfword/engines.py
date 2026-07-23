@@ -347,8 +347,17 @@ DEFAULT_ENGINE_REGISTRY.register(LOCAL_MODEL_ENGINE)
 
 
 def get_engine_registry() -> EngineRegistry:
-    if os.getenv("CLOUDA_LOCAL_OCR_ENABLED", "").strip().lower() in {"1", "true", "yes", "on"}:
-        from .local_ocr_adapters import LocalOCRConfig, model_revision, provider_from_config
+    if os.getenv("CLOUDA_LOCAL_OCR_ENABLED", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }:
+        from .local_ocr_adapters import (
+            LocalOCRConfig,
+            model_revision,
+            provider_from_config,
+        )
 
         config = LocalOCRConfig.from_env()
         provider = provider_from_config(config)

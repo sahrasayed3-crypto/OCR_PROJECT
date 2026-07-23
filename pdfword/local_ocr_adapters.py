@@ -49,22 +49,35 @@ class LocalOCRConfig:
     def from_env(cls) -> "LocalOCRConfig":
         env = os.environ
         return cls(
-            enabled=env.get("CLOUDA_LOCAL_OCR_ENABLED", "").lower() in {"1", "true", "yes", "on"},
+            enabled=env.get("CLOUDA_LOCAL_OCR_ENABLED", "").lower()
+            in {"1", "true", "yes", "on"},
             engine=env.get("CLOUDA_LOCAL_OCR_ENGINE", "none").strip().lower(),
             model_path=env.get("CLOUDA_LOCAL_OCR_MODEL_PATH", "").strip(),
             processor_path=env.get("CLOUDA_LOCAL_OCR_PROCESSOR_PATH", "").strip(),
             device=env.get("CLOUDA_LOCAL_OCR_DEVICE", "cpu").strip(),
             dtype=env.get("CLOUDA_LOCAL_OCR_DTYPE", "float32").strip(),
-            max_image_pixels=int(env.get("CLOUDA_LOCAL_OCR_MAX_IMAGE_PIXELS", "40000000")),
+            max_image_pixels=int(
+                env.get("CLOUDA_LOCAL_OCR_MAX_IMAGE_PIXELS", "40000000")
+            ),
             max_new_tokens=int(env.get("CLOUDA_LOCAL_OCR_MAX_NEW_TOKENS", "2048")),
             timeout_seconds=int(env.get("CLOUDA_LOCAL_OCR_TIMEOUT_SECONDS", "120")),
             batch_size=int(env.get("CLOUDA_LOCAL_OCR_BATCH_SIZE", "1")),
-            endpoint=env.get("CLOUDA_LOCAL_OCR_ENDPOINT", "http://127.0.0.1:8001/v1").strip(),
+            endpoint=env.get(
+                "CLOUDA_LOCAL_OCR_ENDPOINT", "http://127.0.0.1:8001/v1"
+            ).strip(),
             task=env.get("CLOUDA_LOCAL_OCR_TASK", "markdown").strip(),
         )
 
     def validate(self) -> None:
-        if self.engine not in {"none", "mock", "local_http", "openai_compatible", "command_line", "transformers", "qwen_vl"}:
+        if self.engine not in {
+            "none",
+            "mock",
+            "local_http",
+            "openai_compatible",
+            "command_line",
+            "transformers",
+            "qwen_vl",
+        }:
             raise ValueError("Unsupported local OCR engine")
         if self.task not in TASK_PROMPTS:
             raise ValueError("Unsupported OCR task")
@@ -99,12 +112,18 @@ class MockOCRProvider:
             status=OCR_STATUS_SUCCEEDED,
             text=self.text,
             confidence=self.confidence,
-            metadata={"page_no": page_no, "model_revision": "test-fixture-v1", "synthetic_mock": True},
+            metadata={
+                "page_no": page_no,
+                "model_revision": "test-fixture-v1",
+                "synthetic_mock": True,
+            },
         )
 
 
 class LocalHTTPProvider:
-    def __init__(self, config: LocalOCRConfig, *, openai_compatible: bool = False) -> None:
+    def __init__(
+        self, config: LocalOCRConfig, *, openai_compatible: bool = False
+    ) -> None:
         self.config = config
         self.openai_compatible = openai_compatible
         parsed = urllib.parse.urlparse(config.endpoint)
@@ -125,18 +144,29 @@ class LocalHTTPProvider:
         if self.openai_compatible:
             body: dict[str, Any] = {
                 "model": self.config.model_path or "local-model",
-                "messages": [{
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": TASK_PROMPTS[self.config.task]},
-                        {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{encoded}"}},
-                    ],
-                }],
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": TASK_PROMPTS[self.config.task]},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{encoded}"
+                                },
+                            },
+                        ],
+                    }
+                ],
                 "max_tokens": self.config.max_new_tokens,
             }
             url = self.config.endpoint.rstrip("/") + "/chat/completions"
         else:
-            body = {"image_base64": encoded, "prompt": TASK_PROMPTS[self.config.task], "page_no": page_no}
+            body = {
+                "image_base64": encoded,
+                "prompt": TASK_PROMPTS[self.config.task],
+                "page_no": page_no,
+            }
             url = self.config.endpoint
         request = urllib.request.Request(
             url,
@@ -145,7 +175,9 @@ class LocalHTTPProvider:
             method="POST",
         )
         try:
-            with urllib.request.urlopen(request, timeout=self.config.timeout_seconds) as response:
+            with urllib.request.urlopen(
+                request, timeout=self.config.timeout_seconds
+            ) as response:
                 if response.length and response.length > 10 * 1024 * 1024:
                     raise ValueError("OCR response exceeds size limit")
                 payload = json.loads(response.read(10 * 1024 * 1024).decode())
@@ -158,7 +190,11 @@ class LocalHTTPProvider:
             if not str(text).strip():
                 raise ValueError("OCR endpoint returned empty text")
             return OCRResult(
-                engine_name="openai_compatible_local" if self.openai_compatible else "local_http",
+                engine_name=(
+                    "openai_compatible_local"
+                    if self.openai_compatible
+                    else "local_http"
+                ),
                 model_name=self.config.model_path or "local-endpoint",
                 status=OCR_STATUS_SUCCEEDED,
                 text=str(text),
@@ -180,17 +216,35 @@ class CommandLineOCRProvider:
     def __init__(self, config: LocalOCRConfig) -> None:
         self.config = config
         command = os.getenv("CLOUDA_LOCAL_OCR_COMMAND", "").strip()
-        self.command = shlex.split(command, posix=os.name != "nt") if command else []
+        if command.startswith("["):
+            value = json.loads(command)
+            if not isinstance(value, list) or not all(
+                isinstance(item, str) and item for item in value
+            ):
+                raise ValueError("OCR command JSON must be a string array")
+            self.command = value
+        else:
+            self.command = (
+                shlex.split(command, posix=os.name != "nt") if command else []
+            )
         if self.command and not Path(self.command[0]).expanduser().is_absolute():
             raise ValueError("OCR executable path must be absolute")
 
     def available(self) -> bool:
-        return self.config.enabled and bool(self.command) and Path(self.command[0]).is_file()
+        return (
+            self.config.enabled
+            and bool(self.command)
+            and Path(self.command[0]).is_file()
+        )
 
     def extract_page(self, *, image_bytes: bytes, page_no: int) -> OCRResult:
         _validate_image(image_bytes, self.config.max_image_pixels)
         if not self.available():
-            return OCRResult(engine_name="command_line_ocr", status=OCR_STATUS_FAILED, error_message="Command-line OCR is unavailable")
+            return OCRResult(
+                engine_name="command_line_ocr",
+                status=OCR_STATUS_FAILED,
+                error_message="Command-line OCR is unavailable",
+            )
         started = time.perf_counter()
         with tempfile.TemporaryDirectory(prefix="clouda-ocr-") as directory:
             image = Path(directory) / f"page-{page_no}.png"
@@ -227,13 +281,23 @@ class CommandLineOCRProvider:
 class TransformersVisionLanguageProvider:
     def __init__(self, config: LocalOCRConfig) -> None:
         self.config = config
-        self.model_path = Path(config.model_path).expanduser().resolve() if config.model_path else None
-        self.processor_path = Path(config.processor_path).expanduser().resolve() if config.processor_path else self.model_path
+        self.model_path = (
+            Path(config.model_path).expanduser().resolve()
+            if config.model_path
+            else None
+        )
+        self.processor_path = (
+            Path(config.processor_path).expanduser().resolve()
+            if config.processor_path
+            else self.model_path
+        )
         self._model: Any = None
         self._processor: Any = None
 
     def available(self) -> bool:
-        return bool(self.config.enabled and self.model_path and self.model_path.is_dir())
+        return bool(
+            self.config.enabled and self.model_path and self.model_path.is_dir()
+        )
 
     def _load(self) -> None:
         if self._model is not None:
@@ -263,8 +327,12 @@ class TransformersVisionLanguageProvider:
                 text=TASK_PROMPTS[self.config.task],
                 return_tensors="pt",
             )
-            output = self._model.generate(**inputs, max_new_tokens=self.config.max_new_tokens)
-            text = self._processor.batch_decode(output, skip_special_tokens=True)[0].strip()
+            output = self._model.generate(
+                **inputs, max_new_tokens=self.config.max_new_tokens
+            )
+            text = self._processor.batch_decode(output, skip_special_tokens=True)[
+                0
+            ].strip()
             if not text:
                 raise ValueError("Local model returned empty text")
             return OCRResult(
@@ -274,7 +342,11 @@ class TransformersVisionLanguageProvider:
                 text=text,
                 confidence=0.5,
                 processing_time=time.perf_counter() - started,
-                metadata={"page_no": page_no, "local_files_only": True, "trust_remote_code": False},
+                metadata={
+                    "page_no": page_no,
+                    "local_files_only": True,
+                    "trust_remote_code": False,
+                },
             )
         except Exception as exc:
             return OCRResult(

@@ -43,7 +43,11 @@ from clouda_data.locations import (
     repository_root,
 )
 from clouda_data.pipeline.profiles import list_profile_paths, load_profile
-from clouda_data.rendering import RenderConfig, render_document, validate_render_manifest
+from clouda_data.rendering import (
+    RenderConfig,
+    render_document,
+    validate_render_manifest,
+)
 from clouda_data.distortion.workflow import (
     generate_preview,
     read_jsonl,
@@ -51,7 +55,11 @@ from clouda_data.distortion.workflow import (
     validate_distortion_manifest,
 )
 from clouda_data.evaluation.execution import evaluate_manifest
-from clouda_data.lifecycle import archive_run, cleanup as lifecycle_cleanup, verify_archive
+from clouda_data.lifecycle import (
+    archive_run,
+    cleanup as lifecycle_cleanup,
+    verify_archive,
+)
 
 
 def _project_root() -> Path:
@@ -315,8 +323,14 @@ def list_profiles(args: argparse.Namespace) -> int:
 
 def describe_profile(args: argparse.Namespace) -> int:
     root = _profile_root(args.config_dir)
-    candidates = [root / f"{args.name}.yaml", root / f"{args.name}.yml", root / f"{args.name}.json"]
-    path = next((candidate for candidate in candidates if candidate.is_file()), candidates[0])
+    candidates = [
+        root / f"{args.name}.yaml",
+        root / f"{args.name}.yml",
+        root / f"{args.name}.json",
+    ]
+    path = next(
+        (candidate for candidate in candidates if candidate.is_file()), candidates[0]
+    )
     profile = load_profile(path)
     print(json.dumps(profile, ensure_ascii=False, indent=2))
     return 0
@@ -473,7 +487,9 @@ def distort_validate_cli(args: argparse.Namespace) -> int:
 
 
 def distort_preview_cli(args: argparse.Namespace) -> int:
-    path = generate_preview(args.manifest, limit=args.limit, difference=not args.no_difference)
+    path = generate_preview(
+        args.manifest, limit=args.limit, difference=not args.no_difference
+    )
     print(str(path))
     return 0
 
@@ -661,8 +677,12 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--output-root")
         p.add_argument("--run-id")
         p.add_argument("--dpi", type=int, default=200)
-        p.add_argument("--output-format", choices=["png", "jpeg", "tiff", "webp"], default="png")
-        p.add_argument("--color-mode", choices=["color", "grayscale", "binary"], default="color")
+        p.add_argument(
+            "--output-format", choices=["png", "jpeg", "tiff", "webp"], default="png"
+        )
+        p.add_argument(
+            "--color-mode", choices=["color", "grayscale", "binary"], default="color"
+        )
         p.add_argument("--max-dimension", type=int, default=8000)
         p.add_argument("--max-pixels", type=int, default=40_000_000)
         p.add_argument("--start-page", type=int, default=1)
@@ -678,7 +698,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("manifest")
     p.set_defaults(func=render_validate_cli)
 
-    for name in ["distort", "distort-page", "distort-batch", "distort-dry-run", "distort-resume"]:
+    for name in [
+        "distort",
+        "distort-page",
+        "distort-batch",
+        "distort-dry-run",
+        "distort-resume",
+    ]:
         p = sub.add_parser(name)
         p.add_argument("input_manifest")
         p.add_argument("--profile", required=True)
@@ -689,15 +715,38 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--end-page", type=int)
         p.add_argument("--include-dataset-ids", nargs="*", default=[])
         p.add_argument("--exclude-dataset-ids", nargs="*", default=[])
-        p.add_argument("--maximum-pages", type=int, default=1 if name == "distort-page" else 100)
+        p.add_argument(
+            "--maximum-pages", type=int, default=1 if name == "distort-page" else 100
+        )
         p.add_argument("--maximum-bytes", type=int, default=1024 * 1024 * 1024)
         p.add_argument("--workers", type=int, default=1)
-        p.add_argument("--overwrite-policy", choices=["reject", "skip_identical", "version_new", "overwrite_only_with_explicit_flag"], default="reject")
-        p.add_argument("--resume", action="store_true", default=name == "distort-resume")
-        p.add_argument("--dry-run", action="store_true", default=name == "distort-dry-run")
+        p.add_argument(
+            "--overwrite-policy",
+            choices=[
+                "reject",
+                "skip_identical",
+                "version_new",
+                "overwrite_only_with_explicit_flag",
+            ],
+            default="reject",
+        )
+        p.add_argument(
+            "--resume", action="store_true", default=name == "distort-resume"
+        )
+        p.add_argument(
+            "--dry-run", action="store_true", default=name == "distort-dry-run"
+        )
         p.add_argument("--fail-fast", action="store_true")
-        p.add_argument("--report-format", choices=["json", "jsonl", "csv", "markdown"], default="jsonl")
-        p.add_argument("--logging-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO")
+        p.add_argument(
+            "--report-format",
+            choices=["json", "jsonl", "csv", "markdown"],
+            default="jsonl",
+        )
+        p.add_argument(
+            "--logging-level",
+            choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+            default="INFO",
+        )
         p.add_argument("--allow-large-run", action="store_true")
         p.add_argument("--interrupt-after", type=int)
         p.set_defaults(func=distort_cli)
@@ -723,7 +772,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("profile")
     p.set_defaults(func=validate_distortion_profile_cli)
 
-    for name in ["evaluate", "evaluate-manifest", "evaluate-run", "evaluation-report", "compare-models"]:
+    for name in [
+        "evaluate",
+        "evaluate-manifest",
+        "evaluate-run",
+        "evaluation-report",
+        "compare-models",
+    ]:
         p = sub.add_parser(name)
         p.add_argument("manifest")
         p.add_argument("--output")

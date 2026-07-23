@@ -25,9 +25,15 @@ def build_parser() -> argparse.ArgumentParser:
     export = subparsers.add_parser("export")
     export.add_argument("manifest", type=Path)
     export.add_argument("--output", required=True, type=Path)
-    export.add_argument("--format", choices=sorted(SUPPORTED_FORMATS), default="generic_jsonl")
+    export.add_argument(
+        "--format", choices=sorted(SUPPORTED_FORMATS), default="generic_jsonl"
+    )
     export.add_argument("--seed", type=int, default=20260723)
-    export.add_argument("--purpose", choices=["commercial_training", "evaluation"], default="commercial_training")
+    export.add_argument(
+        "--purpose",
+        choices=["commercial_training", "evaluation"],
+        default="commercial_training",
+    )
     export.add_argument("--benchmark-exclusion", action="append", default=[])
     validate = subparsers.add_parser("validate")
     validate.add_argument("manifest", type=Path)
@@ -35,7 +41,11 @@ def build_parser() -> argparse.ArgumentParser:
     split.add_argument("manifest", type=Path)
     split.add_argument("--output", required=True, type=Path)
     split.add_argument("--seed", type=int, default=20260723)
-    split.add_argument("--purpose", choices=["commercial_training", "evaluation"], default="commercial_training")
+    split.add_argument(
+        "--purpose",
+        choices=["commercial_training", "evaluation"],
+        default="commercial_training",
+    )
     statistics = subparsers.add_parser("statistics")
     statistics.add_argument("manifest", type=Path)
     estimate = subparsers.add_parser("estimate-storage")
@@ -69,15 +79,19 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "validate":
         result = training_statistics(args.manifest)
-        print(json.dumps({"valid": result["records"] > 0, **result}, ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                {"valid": result["records"] > 0, **result}, ensure_ascii=False, indent=2
+            )
+        )
         return 0 if result["records"] > 0 else 1
     config = load_training_config(args.config)
-    result = plan_training(
+    plan_result = plan_training(
         config,
         roots=StorageRoots.from_env(),
         catalog_path=args.catalog or default_catalog_path(),
     )
-    payload = json.dumps(result.to_dict(), ensure_ascii=False, indent=2)
+    payload = json.dumps(plan_result.to_dict(), ensure_ascii=False, indent=2)
     if args.output:
         output = args.output.expanduser().resolve()
         output.parent.mkdir(parents=True, exist_ok=True)

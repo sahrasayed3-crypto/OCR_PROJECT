@@ -11,10 +11,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-
 SENSITIVE_FIELDS = {
-    "authorization", "cookie", "password", "secret", "token", "api_key",
-    "worker_api_key", "openrouter_api_key",
+    "authorization",
+    "cookie",
+    "password",
+    "secret",
+    "token",
+    "api_key",
+    "worker_api_key",
+    "openrouter_api_key",
 }
 
 
@@ -31,7 +36,9 @@ def redact(value):
 
 def structured_log(event: str, **fields) -> None:
     logging.getLogger("clouda.operations").info(
-        json.dumps({"event": event, **redact(fields)}, ensure_ascii=False, sort_keys=True)
+        json.dumps(
+            {"event": event, **redact(fields)}, ensure_ascii=False, sort_keys=True
+        )
     )
 
 
@@ -88,7 +95,10 @@ class RedisSecurityConfig:
     def from_env(cls) -> "RedisSecurityConfig":
         url = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
         tls_required = os.getenv("CLOUDA_REDIS_TLS_REQUIRED", "").lower() in {
-            "1", "true", "yes", "on"
+            "1",
+            "true",
+            "yes",
+            "on",
         }
         if tls_required and not url.startswith("rediss://"):
             raise ValueError("Redis TLS is required but REDIS_URL is not rediss://")
@@ -96,7 +106,9 @@ class RedisSecurityConfig:
             url=url,
             tls_required=tls_required,
             certificate_reqs=os.getenv("CLOUDA_REDIS_CERT_REQS", "required"),
-            health_check_interval=max(5, int(os.getenv("CLOUDA_REDIS_HEALTH_INTERVAL", "30"))),
+            health_check_interval=max(
+                5, int(os.getenv("CLOUDA_REDIS_HEALTH_INTERVAL", "30"))
+            ),
             retry_on_timeout=True,
         )
 
@@ -135,7 +147,7 @@ class SlidingWindowRateLimiter:
 
 class OperationsMetrics:
     def __init__(self) -> None:
-        self.requests = Counter()
+        self.requests: Counter[tuple[str, int]] = Counter()
         self._lock = threading.Lock()
 
     def observe_request(self, method: str, status: int) -> None:

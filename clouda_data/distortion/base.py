@@ -29,9 +29,7 @@ class DistortionSpec:
             "heavy",
             "extreme",
         }:
-            raise ValueError(
-                f"{self.name}.severity is not supported."
-            )
+            raise ValueError(f"{self.name}.severity is not supported.")
 
 
 class Distortion(ABC):

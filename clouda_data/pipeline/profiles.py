@@ -35,9 +35,16 @@ def load_profile(path: str | Path) -> dict[str, Any]:
 
 def validate_profile(profile: dict[str, Any]) -> None:
     if "profile_id" in profile:
-        schema_path = Path(__file__).resolve().parents[2] / "schemas" / "distortion-profile-v1.schema.json"
+        schema_path = (
+            Path(__file__).resolve().parents[2]
+            / "schemas"
+            / "distortion-profile-v1.schema.json"
+        )
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
-        errors = sorted(Draft202012Validator(schema).iter_errors(profile), key=lambda item: list(item.path))
+        errors = sorted(
+            Draft202012Validator(schema).iter_errors(profile),
+            key=lambda item: list(item.path),
+        )
         if errors:
             raise ValueError("; ".join(error.message for error in errors))
         profile.setdefault("name", profile["profile_id"])
@@ -47,7 +54,9 @@ def validate_profile(profile: dict[str, Any]) -> None:
         profile.setdefault("mutually_exclusive", profile.get("exclusions", []))
         profile.setdefault("maximum_allowed_crop", 0.05)
         profile.setdefault("minimum_readable_text_threshold", 0.7)
-        profile.setdefault("metadata_fields", ["operation_order", "parameters", "random_seed"])
+        profile.setdefault(
+            "metadata_fields", ["operation_order", "parameters", "random_seed"]
+        )
     missing = sorted(REQUIRED_PROFILE_FIELDS - set(profile))
     if missing:
         raise ValueError(f"Profile is missing fields: {', '.join(missing)}")

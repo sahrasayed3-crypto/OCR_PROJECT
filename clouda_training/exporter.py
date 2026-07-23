@@ -82,9 +82,7 @@ def export_training_data(
         else:
             raise ValueError("purpose must be commercial_training or evaluation")
         eligible.append(record)
-    deduped, duplicates = deduplicate_records(
-        eligible, checksum_key="output_checksum"
-    )
+    deduped, duplicates = deduplicate_records(eligible, checksum_key="output_checksum")
     assignments = deterministic_document_split(
         [str(item["source_document_id"]) for item in deduped], seed=seed
     )
@@ -173,7 +171,12 @@ def training_statistics(manifest: str | Path) -> dict[str, Any]:
             Counter(str(item.get("estimated_visual_difficulty")) for item in records)
         ),
         "bytes": sum(
-            (StorageRoots.from_env().dataset_root / str(item["output_uri"]).removeprefix("dataset://")).stat().st_size
+            (
+                StorageRoots.from_env().dataset_root
+                / str(item["output_uri"]).removeprefix("dataset://")
+            )
+            .stat()
+            .st_size
             for item in records
         ),
     }

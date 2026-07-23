@@ -70,7 +70,9 @@ def _normalized(image: Image.Image, config: RenderConfig) -> Image.Image:
             Image.Resampling.LANCZOS,
         )
     if max(image.size) > config.max_dimension:
-        image.thumbnail((config.max_dimension, config.max_dimension), Image.Resampling.LANCZOS)
+        image.thumbnail(
+            (config.max_dimension, config.max_dimension), Image.Resampling.LANCZOS
+        )
     if config.color_mode == "grayscale":
         return image.convert("L")
     if config.color_mode == "binary":
@@ -82,7 +84,9 @@ def _normalized(image: Image.Image, config: RenderConfig) -> Image.Image:
     return image.convert("RGB")
 
 
-def _iter_pages(path: Path, config: RenderConfig) -> Iterator[tuple[int, Image.Image, str, str]]:
+def _iter_pages(
+    path: Path, config: RenderConfig
+) -> Iterator[tuple[int, Image.Image, str, str]]:
     if path.suffix.lower() == ".pdf":
         import pypdfium2 as pdfium
 
@@ -123,14 +127,16 @@ def _iter_pages(path: Path, config: RenderConfig) -> Iterator[tuple[int, Image.I
 
 def _atomic_image_save(image: Image.Image, target: Path, fmt: str, dpi: int) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    fd, temp_name = tempfile.mkstemp(prefix=f".{target.stem}-", suffix=target.suffix, dir=target.parent)
+    fd, temp_name = tempfile.mkstemp(
+        prefix=f".{target.stem}-", suffix=target.suffix, dir=target.parent
+    )
     os.close(fd)
     temp = Path(temp_name)
     try:
-        options: dict[str, object] = {"format": fmt, "dpi": (dpi, dpi)}
         if fmt in {"JPEG", "WEBP"}:
-            options["quality"] = 92
-        image.save(temp, **options)
+            image.save(temp, format=fmt, dpi=(dpi, dpi), quality=92)
+        else:
+            image.save(temp, format=fmt, dpi=(dpi, dpi))
         with temp.open("r+b") as stream:
             stream.flush()
             os.fsync(stream.fileno())
@@ -155,22 +161,37 @@ def render_document(
     if not source_path.is_file():
         raise FileNotFoundError(source_path)
     if not _inside(source_path, roots.dataset_root):
-        raise PermissionError("Render source must be inside the configured dataset root")
-    root = Path(output_root).expanduser().resolve() if output_root else roots.dataset_root / "rendered"
+        raise PermissionError(
+            "Render source must be inside the configured dataset root"
+        )
+    root = (
+        Path(output_root).expanduser().resolve()
+        if output_root
+        else roots.dataset_root / "rendered"
+    )
     if not _inside(root, roots.dataset_root):
-        raise PermissionError("Render output must be inside the configured dataset root")
+        raise PermissionError(
+            "Render output must be inside the configured dataset root"
+        )
     source_checksum = _sha256(source_path)
-    document_id = hashlib.sha256(f"{source_checksum}:{source_path.name}".encode()).hexdigest()[:24]
-    config_hash = hashlib.sha256(json.dumps(asdict(config), sort_keys=True).encode()).hexdigest()
-    run = run_id or hashlib.sha256(f"{document_id}:{config_hash}".encode()).hexdigest()[:20]
+    document_id = hashlib.sha256(
+        f"{source_checksum}:{source_path.name}".encode()
+    ).hexdigest()[:24]
+    config_hash = hashlib.sha256(
+        json.dumps(asdict(config), sort_keys=True).encode()
+    ).hexdigest()
+    run = (
+        run_id
+        or hashlib.sha256(f"{document_id}:{config_hash}".encode()).hexdigest()[:20]
+    )
     run_root = root / run
     manifest = run_root / "render_manifest.v1.jsonl"
     completed: dict[int, dict[str, object]] = {}
     if config.resume and manifest.is_file():
         for line in manifest.read_text(encoding="utf-8").splitlines():
-            record = json.loads(line)
-            if record.get("status") == "complete":
-                completed[int(record["source_page_number"])] = record
+            loaded_record = json.loads(line)
+            if loaded_record.get("status") == "complete":
+                completed[int(loaded_record["source_page_number"])] = loaded_record
     records: list[dict[str, object]] = list(completed.values())
     for page_number, raw, renderer, version in _iter_pages(source_path, config):
         if page_number in completed:
@@ -201,19 +222,40 @@ def render_document(
         record["width"], record["height"] = image.size
         if not config.dry_run:
             if output.exists():
-                if config.resume and _sha256(output) == completed.get(page_number, {}).get("output_checksum"):
+                if config.resume and _sha256(output) == completed.get(
+                    page_number, {}
+                ).get("output_checksum"):
                     continue
                 raise FileExistsError(output)
-            _atomic_image_save(image, output, SUPPORTED_FORMATS[config.output_format], config.dpi)
+            _atomic_image_save(
+                image, output, SUPPORTED_FORMATS[config.output_format], config.dpi
+            )
             record["output_checksum"] = _sha256(output)
         records.append(record)
         run_root.mkdir(parents=True, exist_ok=True)
         temp = manifest.with_suffix(".tmp")
-        temp.write_text("".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in records), encoding="utf-8")
+        temp.write_text(
+            "".join(
+                json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+                for item in records
+            ),
+            encoding="utf-8",
+        )
         temp.replace(manifest)
     completion = run_root / "COMPLETE.v1.json"
     if not config.dry_run:
-        completion.write_text(json.dumps({"schema_version": 1, "run_id": run, "pages": len(records), "host": platform.system()}, indent=2), encoding="utf-8")
+        completion.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "run_id": run,
+                    "pages": len(records),
+                    "host": platform.system(),
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
     return manifest
 
 
@@ -222,7 +264,9 @@ def validate_render_manifest(path: str | Path) -> dict[str, object]:
     roots = StorageRoots.from_env()
     failures: list[dict[str, object]] = []
     total = 0
-    for line_number, line in enumerate(manifest.read_text(encoding="utf-8").splitlines(), 1):
+    for line_number, line in enumerate(
+        manifest.read_text(encoding="utf-8").splitlines(), 1
+    ):
         total += 1
         record = json.loads(line)
         uri = str(record.get("output_uri", ""))
@@ -241,4 +285,9 @@ def validate_render_manifest(path: str | Path) -> dict[str, object]:
                 image.verify()
         except Exception as exc:
             failures.append({"line": line_number, "error": f"decode failed: {exc}"})
-    return {"schema_version": 1, "records": total, "failures": failures, "passed": not failures}
+    return {
+        "schema_version": 1,
+        "records": total,
+        "failures": failures,
+        "passed": not failures,
+    }

@@ -12,6 +12,9 @@ from pdfword.operations import (
     SlidingWindowRateLimiter,
     credential_matches,
     redact,
+    FileSecretSource,
+    OperationsMetrics,
+    structured_log,
 )
 from pdfword.worker_api import app
 
@@ -71,7 +74,11 @@ def test_rate_limiter_is_bounded() -> None:
 
 def test_redaction_and_credential_rotation() -> None:
     value = redact({"api_key": "secret", "nested": {"password": "private"}, "ok": 1})
-    assert value == {"api_key": "[REDACTED]", "nested": {"password": "[REDACTED]"}, "ok": 1}
+    assert value == {
+        "api_key": "[REDACTED]",
+        "nested": {"password": "[REDACTED]"},
+        "ok": 1,
+    }
     assert credential_matches("old", "new", "old")
     assert not credential_matches("wrong", "new", "old")
 
@@ -101,3 +108,30 @@ def test_request_id_security_headers_and_metrics_auth(state: Path) -> None:
     )
     assert metrics.status_code == 200
     assert "clouda_http_requests_total" in metrics.text
+
+
+def test_file_secret_source_stays_inside_root(tmp_path: Path) -> None:
+    root = tmp_path / "secrets"
+    root.mkdir()
+    (root / "WORKER_KEY").write_text("test-value", encoding="utf-8")
+    source = FileSecretSource(root)
+    assert source.get("WORKER_KEY") == "test-value"
+    assert source.get("MISSING") is None
+    with pytest.raises(ValueError):
+        source.get("../escape")
+
+
+def test_structured_logging_redacts(caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level("INFO", logger="clouda.operations")
+    structured_log("test", api_key="private", safe="visible")
+    assert "private" not in caplog.text
+    assert "visible" in caplog.text
+
+
+def test_operations_metrics_prometheus() -> None:
+    metrics = OperationsMetrics()
+    metrics.observe_request("GET", 200)
+    text = metrics.prometheus(queue_depth=3, failed_jobs=2)
+    assert 'method="GET",status="200"' in text
+    assert "clouda_queue_depth 3" in text
+    assert "clouda_failed_jobs 2" in text

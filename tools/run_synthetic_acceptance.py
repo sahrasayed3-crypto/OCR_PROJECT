@@ -20,7 +20,11 @@ from clouda_data.distortion.workflow import (
     validate_distortion_manifest,
 )
 from clouda_data.evaluation.execution import evaluate_records
-from clouda_data.rendering import RenderConfig, render_document, validate_render_manifest
+from clouda_data.rendering import (
+    RenderConfig,
+    render_document,
+    validate_render_manifest,
+)
 from clouda_training.exporter import export_training_data
 from pdfword.docx_export import markdown_to_docx
 from pdfword.local_ocr_adapters import MockOCRProvider
@@ -78,7 +82,9 @@ def _make_page(path: Path, kind: str, text: str, page_number: int) -> None:
         draw.multiline_text((100, 260), text, font=body_font, fill="black", spacing=24)
     elif kind == "near_blank":
         draw.text((450, 1080), text, font=body_font, fill=(80, 80, 80), anchor="mm")
-    draw.text((450, 1120), str(page_number), font=_font(20), fill=(80, 80, 80), anchor="mm")
+    draw.text(
+        (450, 1120), str(page_number), font=_font(20), fill=(80, 80, 80), anchor="mm"
+    )
     image.save(path, "PNG")
 
 
@@ -121,7 +127,10 @@ def run() -> dict[str, object]:
         normalized_records.append(record)
     input_manifest = acceptance_root / "rendered_pages.v1.jsonl"
     input_manifest.write_text(
-        "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in normalized_records),
+        "".join(
+            json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+            for item in normalized_records
+        ),
         encoding="utf-8",
     )
     manifests: list[Path] = []
@@ -129,11 +138,20 @@ def run() -> dict[str, object]:
     resumed = False
     project_root = Path(os.environ["CLOUDA_PROJECT_ROOT"])
     for profile_index, profile in enumerate(PROFILES):
-        profile_path = project_root / "configs" / "data_foundation" / "distortions" / f"{profile}.yaml"
+        profile_path = (
+            project_root
+            / "configs"
+            / "data_foundation"
+            / "distortions"
+            / f"{profile}.yaml"
+        )
         profile_input = acceptance_root / f"{profile}-input.jsonl"
         selected = normalized_records[profile_index * 2 : profile_index * 2 + 2]
         profile_input.write_text(
-            "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in selected),
+            "".join(
+                json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+                for item in selected
+            ),
             encoding="utf-8",
         )
         if profile_index == 0:
@@ -167,12 +185,17 @@ def run() -> dict[str, object]:
             )
         validation = validate_distortion_manifest(manifest, quarantine=True)
         if not validation["passed"]:
-            raise RuntimeError(f"Validation failed for {profile}: {validation['failures']}")
+            raise RuntimeError(
+                f"Validation failed for {profile}: {validation['failures']}"
+            )
         manifests.append(manifest)
     combined = acceptance_root / "distorted_pages.v1.jsonl"
     all_records = [record for manifest in manifests for record in read_jsonl(manifest)]
     combined.write_text(
-        "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in all_records),
+        "".join(
+            json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+            for item in all_records
+        ),
         encoding="utf-8",
     )
     ids = [str(item["generated_page_id"]) for item in all_records]
@@ -188,7 +211,9 @@ def run() -> dict[str, object]:
     )
     ocr_records: list[dict[str, object]] = []
     for item in all_records:
-        image_path = roots.dataset_root / str(item["output_uri"]).removeprefix("dataset://")
+        image_path = roots.dataset_root / str(item["output_uri"]).removeprefix(
+            "dataset://"
+        )
         provider = MockOCRProvider(str(item["ground_truth_text"]), 0.99)
         os.environ["CLOUDA_ALLOW_MOCK_OCR"] = "true"
         result = provider.extract_page(image_bytes=image_path.read_bytes(), page_no=1)
@@ -202,9 +227,13 @@ def run() -> dict[str, object]:
             }
         )
     evaluation = evaluate_records(ocr_records)
-    evaluation_path = roots.artifact_root / "reports" / "acceptance" / f"evaluation-{stamp}.json"
+    evaluation_path = (
+        roots.artifact_root / "reports" / "acceptance" / f"evaluation-{stamp}.json"
+    )
     evaluation_path.parent.mkdir(parents=True, exist_ok=True)
-    evaluation_path.write_text(json.dumps(evaluation, ensure_ascii=False, indent=2), encoding="utf-8")
+    evaluation_path.write_text(
+        json.dumps(evaluation, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     os.environ.update(
         {
             "CLOUDA_LOCAL_OCR_ENABLED": "true",
@@ -234,9 +263,9 @@ def run() -> dict[str, object]:
         for path, checksum in source_hashes.items()
     )
     outputs_inside_state = all(
-        Path(path).resolve().is_relative_to(
-            Path(os.environ["CLOUDA_STATE_HOME"]).resolve()
-        )
+        Path(path)
+        .resolve()
+        .is_relative_to(Path(os.environ["CLOUDA_STATE_HOME"]).resolve())
         for path in [
             *render_manifests,
             *[str(path) for path in manifests],
@@ -246,6 +275,7 @@ def run() -> dict[str, object]:
             str(docx_path),
         ]
     )
+    runtime_metadata = page_results[0].metadata or {}
     report = {
         "schema_version": 1,
         "run_id": stamp,
@@ -260,7 +290,7 @@ def run() -> dict[str, object]:
         "document_leakage": training["document_leakage"],
         "mock_ocr_cer": evaluation["summary"]["cer"],
         "mock_ocr_wer": evaluation["summary"]["wer"],
-        "runtime_mock_status": page_results[0].metadata["page_state"],
+        "runtime_mock_status": runtime_metadata["page_state"],
         "docx": str(docx_path),
         "source_unchanged": source_unchanged,
         "outputs_inside_state": outputs_inside_state,
@@ -272,14 +302,18 @@ def run() -> dict[str, object]:
                 not training["document_leakage"],
                 evaluation["summary"]["cer"] == 0,
                 evaluation["summary"]["wer"] == 0,
-                page_results[0].metadata["page_state"] == "local_model_ocr",
+                runtime_metadata["page_state"] == "local_model_ocr",
                 source_unchanged,
                 outputs_inside_state,
             ]
         ),
     }
-    report_path = roots.artifact_root / "reports" / "acceptance" / f"acceptance-{stamp}.json"
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    report_path = (
+        roots.artifact_root / "reports" / "acceptance" / f"acceptance-{stamp}.json"
+    )
+    report_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     report["report_path"] = str(report_path)
     return report
 

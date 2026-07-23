@@ -39,7 +39,9 @@ class DistortionPipeline:
         current = image
         metadata: list[DistortionMetadata] = []
         for operation, seed in self.replay_plan(page_id):
-            current, op_metadata = MetadataOnlyDistortion(operation).apply(current, seed)
+            current, op_metadata = MetadataOnlyDistortion(operation).apply(
+                current, seed
+            )
             metadata.append(op_metadata)
         return current, metadata
 

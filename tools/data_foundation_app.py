@@ -9,7 +9,11 @@ import streamlit as st
 
 from clouda_contracts.storage import StorageRoots
 from clouda_data.datasets.license_gate import load_catalog
-from clouda_data.distortion.workflow import generate_preview, read_jsonl, run_distortion_batch
+from clouda_data.distortion.workflow import (
+    generate_preview,
+    read_jsonl,
+    run_distortion_batch,
+)
 from clouda_data.locations import default_profile_dir
 from clouda_data.pipeline.profiles import list_profile_paths, load_profile
 from clouda_training.exporter import export_training_data
@@ -92,7 +96,9 @@ if st.button("Generate visual preview", disabled=not distortion_manifest):
     try:
         preview = generate_preview(distortion_manifest, limit=min(int(pages), 20))
         st.success(str(preview))
-        st.components.v1.html(preview.read_text(encoding="utf-8"), height=700, scrolling=True)
+        st.components.v1.html(
+            preview.read_text(encoding="utf-8"), height=700, scrolling=True
+        )
     except Exception as exc:
         st.error(f"{type(exc).__name__}: {exc}")
 
@@ -102,7 +108,11 @@ if distortion_manifest and Path(distortion_manifest).is_file():
     st.subheader("Run status")
     st.json({"records": len(records), "statuses": statuses})
     if st.button("Export evaluation-only training manifest"):
-        output = roots.artifact_root / "training" / f"{Path(distortion_manifest).parent.name}.jsonl"
+        output = (
+            roots.artifact_root
+            / "training"
+            / f"{Path(distortion_manifest).parent.name}.jsonl"
+        )
         try:
             report = export_training_data(
                 distortion_manifest,
@@ -115,9 +125,15 @@ if distortion_manifest and Path(distortion_manifest).is_file():
             st.error(f"{type(exc).__name__}: {exc}")
 
 usage = {
-    "datasets_bytes": sum(path.stat().st_size for path in roots.dataset_root.rglob("*") if path.is_file()),
-    "artifacts_bytes": sum(path.stat().st_size for path in roots.artifact_root.rglob("*") if path.is_file()),
-    "cache_bytes": sum(path.stat().st_size for path in roots.cache_root.rglob("*") if path.is_file()),
+    "datasets_bytes": sum(
+        path.stat().st_size for path in roots.dataset_root.rglob("*") if path.is_file()
+    ),
+    "artifacts_bytes": sum(
+        path.stat().st_size for path in roots.artifact_root.rglob("*") if path.is_file()
+    ),
+    "cache_bytes": sum(
+        path.stat().st_size for path in roots.cache_root.rglob("*") if path.is_file()
+    ),
 }
 st.subheader("Storage usage")
 st.json(usage)

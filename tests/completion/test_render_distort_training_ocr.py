@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import shutil
+import io
+import sys
 from pathlib import Path
 
 import pytest
@@ -17,9 +19,21 @@ from clouda_data.distortion.workflow import (
 )
 from clouda_data.evaluation.execution import evaluate_records
 from clouda_data.pipeline.profiles import list_profile_paths, load_profile
-from clouda_data.rendering import RenderConfig, render_document, validate_render_manifest
+from clouda_data.rendering import (
+    RenderConfig,
+    render_document,
+    validate_render_manifest,
+)
 from clouda_training.exporter import export_training_data
-from pdfword.local_ocr_adapters import LocalHTTPProvider, LocalOCRConfig, MockOCRProvider
+from pdfword.local_ocr_adapters import (
+    CommandLineOCRProvider,
+    LocalHTTPProvider,
+    LocalOCRConfig,
+    MockOCRProvider,
+    TransformersVisionLanguageProvider,
+    model_revision,
+    provider_from_config,
+)
 from pdfword.ocr_pipeline import process_pdf
 
 
@@ -124,7 +138,13 @@ def test_distortion_batch_resume_validate_preview_and_export(state: Path) -> Non
         + "\n",
         encoding="utf-8",
     )
-    profile = Path(__file__).resolve().parents[2] / "configs" / "data_foundation" / "distortions" / "modern_scan_medium.yaml"
+    profile = (
+        Path(__file__).resolve().parents[2]
+        / "configs"
+        / "data_foundation"
+        / "distortions"
+        / "modern_scan_medium.yaml"
+    )
     manifest = run_distortion_batch(
         input_manifest,
         profile,
@@ -221,13 +241,130 @@ def test_mock_local_ocr_runtime_path(monkeypatch: pytest.MonkeyPatch) -> None:
     assert results[0].accepted
 
 
-def test_mock_provider_requires_explicit_test_gate(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_mock_provider_requires_explicit_test_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.delenv("CLOUDA_ALLOW_MOCK_OCR", raising=False)
     assert not MockOCRProvider().available()
 
 
 def test_remote_http_endpoint_requires_opt_in(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("CLOUDA_LOCAL_OCR_ALLOW_REMOTE_ENDPOINT", raising=False)
-    config = LocalOCRConfig(enabled=True, engine="local_http", endpoint="http://example.com")
+    config = LocalOCRConfig(
+        enabled=True, engine="local_http", endpoint="http://example.com"
+    )
     with pytest.raises(ValueError):
         LocalHTTPProvider(config)
+
+
+def _png_bytes() -> bytes:
+    output = io.BytesIO()
+    Image.new("RGB", (16, 16), "white").save(output, "PNG")
+    return output.getvalue()
+
+
+class _Response:
+    def __init__(self, payload: dict) -> None:
+        self.payload = json.dumps(payload).encode()
+        self.length = len(self.payload)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return False
+
+    def read(self, _limit: int) -> bytes:
+        return self.payload
+
+
+def test_local_http_and_openai_compatible_adapters(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config = LocalOCRConfig(
+        enabled=True, engine="local_http", endpoint="http://127.0.0.1:8001/ocr"
+    )
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: _Response({"text": "نص", "confidence": 0.8}),
+    )
+    result = LocalHTTPProvider(config).extract_page(image_bytes=_png_bytes(), page_no=2)
+    assert result.success and result.text == "نص" and result.confidence == 0.8
+    openai = LocalOCRConfig(
+        enabled=True,
+        engine="openai_compatible",
+        endpoint="http://localhost:8001/v1",
+        model_path="local-test",
+    )
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: _Response(
+            {"choices": [{"message": {"content": "markdown"}}], "confidence": 0.7}
+        ),
+    )
+    result = LocalHTTPProvider(openai, openai_compatible=True).extract_page(
+        image_bytes=_png_bytes(), page_no=1
+    )
+    assert result.success and result.text == "markdown"
+
+
+def test_local_http_adapter_returns_explicit_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import urllib.error
+
+    config = LocalOCRConfig(enabled=True, engine="local_http")
+
+    def fail(*_args, **_kwargs):
+        raise urllib.error.URLError("offline")
+
+    monkeypatch.setattr("urllib.request.urlopen", fail)
+    result = LocalHTTPProvider(config).extract_page(image_bytes=_png_bytes(), page_no=1)
+    assert not result.success
+    assert "URLError" in (result.error_message or "")
+
+
+def test_command_line_adapter(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    script = tmp_path / "ocr.py"
+    script.write_text("print('synthetic cli text')\n", encoding="utf-8")
+    monkeypatch.setenv(
+        "CLOUDA_LOCAL_OCR_COMMAND",
+        json.dumps([str(Path(sys.executable).resolve()), str(script)]),
+    )
+    provider = CommandLineOCRProvider(
+        LocalOCRConfig(enabled=True, engine="command_line")
+    )
+    assert provider.available()
+    result = provider.extract_page(image_bytes=_png_bytes(), page_no=3)
+    assert result.success and result.text == "synthetic cli text"
+
+
+def test_transformers_adapter_fails_closed_without_local_model() -> None:
+    provider = TransformersVisionLanguageProvider(
+        LocalOCRConfig(enabled=True, engine="transformers")
+    )
+    assert not provider.available()
+    result = provider.extract_page(image_bytes=_png_bytes(), page_no=1)
+    assert not result.success
+    assert "local model directory" in (result.error_message or "")
+
+
+def test_local_ocr_config_factory_and_revision(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("CLOUDA_LOCAL_OCR_ENABLED", "true")
+    monkeypatch.setenv("CLOUDA_LOCAL_OCR_ENGINE", "mock")
+    config = LocalOCRConfig.from_env()
+    config.validate()
+    assert isinstance(provider_from_config(config), MockOCRProvider)
+    assert model_revision(config) == "test-fixture-v1"
+    model = tmp_path / "model"
+    model.mkdir()
+    configured = LocalOCRConfig(
+        enabled=True, engine="transformers", model_path=str(model)
+    )
+    assert model_revision(configured) != "unresolved"
+    with pytest.raises(ValueError):
+        LocalOCRConfig(enabled=True, engine="unknown").validate()
+    with pytest.raises(ValueError):
+        LocalOCRConfig(enabled=True, engine="mock", batch_size=99).validate()
