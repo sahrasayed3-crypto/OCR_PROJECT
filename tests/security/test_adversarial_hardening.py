@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from hypothesis import HealthCheck, given, settings, strategies as st
 from PIL import Image
 
 from clouda_contracts.archive_security import validate_zip_archive
@@ -397,3 +398,34 @@ def test_deployment_defaults_to_loopback_and_ci_actions_are_pinned() -> None:
     assert '--host="${BIND_ADDRESS}"' in run_api
     assert "actions/checkout@v4" not in workflow
     assert "actions/setup-python@v5" not in workflow
+
+
+@settings(
+    max_examples=100,
+    derandomize=True,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(st.text(max_size=200))
+def test_storage_uri_property_never_resolves_outside_root(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, component: str
+) -> None:
+    roots = _roots(monkeypatch, tmp_path)
+    try:
+        resolved = roots.resolve_uri("dataset://" + component)
+    except (StorageSecurityError, ValueError, OSError):
+        return
+    assert resolved.is_relative_to(roots.dataset_root)
+
+
+@settings(max_examples=100, derandomize=True, deadline=None)
+@given(st.text(max_size=500))
+def test_document_sanitizer_property_emits_valid_xml_text(value: str) -> None:
+    from clouda_contracts.security import sanitize_document_text
+
+    sanitized = sanitize_document_text(value)
+    assert all(ord(character) >= 32 or character in "\t\n\r" for character in sanitized)
+    assert not any(
+        "\u202a" <= character <= "\u202e" or "\u2066" <= character <= "\u2069"
+        for character in sanitized
+    )
