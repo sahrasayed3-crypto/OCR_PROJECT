@@ -11,6 +11,10 @@ class PageMetric:
     severity: str
     cer: float
     wer: float
+    dataset_id: str = "unspecified"
+    document_type: str = "unspecified"
+    quality_class: str = "unspecified"
+    language: str = "ar"
 
 
 def aggregate_metrics(metrics: list[PageMetric]) -> dict[str, float]:
@@ -28,3 +32,16 @@ def group_by_profile(metrics: list[PageMetric]) -> dict[str, dict[str, float]]:
     for metric in metrics:
         grouped.setdefault(metric.profile, []).append(metric)
     return {profile: aggregate_metrics(items) for profile, items in grouped.items()}
+
+
+def group_by_dimension(
+    metrics: list[PageMetric],
+    dimension: str,
+) -> dict[str, dict[str, float]]:
+    allowed = {"dataset_id", "document_type", "quality_class", "language"}
+    if dimension not in allowed:
+        raise ValueError(f"Unsupported evaluation dimension: {dimension}")
+    grouped: dict[str, list[PageMetric]] = {}
+    for metric in metrics:
+        grouped.setdefault(str(getattr(metric, dimension)), []).append(metric)
+    return {key: aggregate_metrics(items) for key, items in grouped.items()}
