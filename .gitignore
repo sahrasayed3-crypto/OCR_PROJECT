@@ -60,6 +60,8 @@ samples/generated/benchmark_report_*.json
 samples/generated/benchmark_report_*.md
 training_data/
 datasets/
+!clouda_data/datasets/
+!clouda_data/datasets/**
 dataset/
 distorted_datasets/
 generated_distorted_datasets/
