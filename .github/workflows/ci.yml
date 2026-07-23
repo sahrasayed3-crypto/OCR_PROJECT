@@ -80,6 +80,12 @@ jobs:
           --cov=pdfword
           --cov-report=term-missing
           --cov-fail-under=80
+      - name: Synthetic OCR data-pipeline acceptance
+        env:
+          CLOUDA_STATE_HOME: ${{ runner.temp }}/clouda-acceptance
+          CLOUDA_PROJECT_ROOT: ${{ github.workspace }}
+          CLOUDA_NO_NETWORK_TESTS: "true"
+        run: python -m tools.run_synthetic_acceptance
       - name: Secret, large-file, and forbidden-path scan
         run: python -m tools.validation.repository_scan --root .
       - name: Build wheel and sdist
