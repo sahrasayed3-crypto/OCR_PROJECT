@@ -5,7 +5,9 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from clouda_contracts.adapters import (
+    dataset_page_reference_from_record,
     model_observation_from_page_result,
+    ocr_observation_from_page_result,
     ocr_observation_from_result,
     page_identity_from_record,
 )
@@ -46,6 +48,8 @@ def test_page_record_and_engine_adapters() -> None:
         text_checksum="a" * 64,
     )
     page = page_identity_from_record(record)
+    reference = dataset_page_reference_from_record(record, dataset_id="synthetic")
+    assert reference.page == page
     result = OCRResult(
         engine_name="test",
         status="pending_ocr_model",
@@ -64,7 +68,9 @@ def test_page_result_adapter_preserves_quality() -> None:
         text_quality_score=0.8,
     )
     observation = model_observation_from_page_result(result, document_id="doc")
+    ocr_observation = ocr_observation_from_page_result(result, document_id="doc")
     assert observation.quality_score == 0.8
+    assert ocr_observation.confidence == 0.8
     assert observation.to_dict()["page"]["page_number"] == 1
 
 

@@ -41,3 +41,6 @@ class Checksum:
         if isinstance(value, str):
             return cls("sha256", value)
         return cls(value.get("algorithm", "sha256"), value["value"])
+
+
+SourceChecksum = Checksum
