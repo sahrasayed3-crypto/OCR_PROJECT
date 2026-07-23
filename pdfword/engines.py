@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import os
 import time
 from dataclasses import dataclass, field
 from typing import Any, Protocol
@@ -91,6 +92,12 @@ class ExtractionEngine(Protocol):
         page_no: int | None = None,
         **kwargs: Any,
     ) -> OCRResult: ...
+
+
+class LocalModelProvider(Protocol):
+    def available(self) -> bool: ...
+
+    def extract_page(self, *, image_bytes: bytes, page_no: int) -> OCRResult: ...
 
 
 class EngineRegistry:
@@ -209,11 +216,134 @@ class FutureOcrEngine:
         )
 
 
+class FeatureFlaggedLocalModelEngine:
+    """Bounded local-model boundary; disabled and provider-free by default."""
+
+    name = "local_model_ocr"
+    engine_type = "local_model"
+
+    def __init__(
+        self,
+        provider: LocalModelProvider | None = None,
+        *,
+        enabled: bool | None = None,
+        model_name: str = "unconfigured",
+        model_revision: str = "unresolved",
+        max_image_bytes: int = 25 * 1024 * 1024,
+        retry_count: int = 1,
+    ) -> None:
+        self.provider = provider
+        self.enabled = (
+            os.getenv("CLOUDA_LOCAL_OCR_ENABLED", "").strip().lower()
+            in {"1", "true", "yes", "on"}
+            if enabled is None
+            else enabled
+        )
+        self.model_name = model_name
+        self.model_revision = model_revision
+        self.max_image_bytes = max(1, max_image_bytes)
+        self.retry_count = max(0, retry_count)
+
+    def available(self) -> bool:
+        return bool(
+            self.enabled
+            and self.provider is not None
+            and self.provider.available()
+            and self.model_revision.casefold() not in {"unresolved", "latest", "main"}
+        )
+
+    def extract_page(
+        self,
+        *,
+        image_bytes: bytes | None = None,
+        image_path: str | None = None,
+        pdf_bytes: bytes | None = None,
+        page_no: int | None = None,
+        **kwargs: Any,
+    ) -> OCRResult:
+        del image_path, pdf_bytes, kwargs
+        started = time.perf_counter()
+        if not self.available():
+            return OCRResult(
+                engine_name=self.name,
+                model_name=self.model_name,
+                status=OCR_STATUS_PENDING_MODEL,
+                processing_time=time.perf_counter() - started,
+                error_message="Local OCR model integration is disabled or unconfigured.",
+            )
+        if image_bytes is None or page_no is None:
+            return OCRResult(
+                engine_name=self.name,
+                model_name=self.model_name,
+                status=OCR_STATUS_FAILED,
+                processing_time=time.perf_counter() - started,
+                error_message="Local OCR requires rendered image bytes and a page number.",
+            )
+        if len(image_bytes) > self.max_image_bytes:
+            return OCRResult(
+                engine_name=self.name,
+                model_name=self.model_name,
+                status=OCR_STATUS_FAILED,
+                processing_time=time.perf_counter() - started,
+                error_message="Rendered page exceeds the local OCR byte limit.",
+            )
+        assert self.provider is not None
+        last_error = "Local OCR provider returned no valid result."
+        for _attempt in range(self.retry_count + 1):
+            try:
+                result = self.provider.extract_page(
+                    image_bytes=image_bytes,
+                    page_no=page_no,
+                )
+            except Exception as exc:
+                last_error = f"{type(exc).__name__}: {exc}"
+                continue
+            valid_confidence = (
+                result.confidence is not None and 0 <= result.confidence <= 1
+            )
+            if result.success and result.text.strip() and valid_confidence:
+                metadata = dict(result.metadata)
+                metadata.update(
+                    {
+                        "model_id": self.model_name,
+                        "model_revision": self.model_revision,
+                    }
+                )
+                return OCRResult(
+                    engine_name=self.name,
+                    model_name=self.model_name,
+                    status=OCR_STATUS_SUCCEEDED,
+                    text=result.text,
+                    processing_time=time.perf_counter() - started,
+                    confidence=result.confidence,
+                    boxes=result.boxes,
+                    reading_order=result.reading_order,
+                    metadata=metadata,
+                )
+            last_error = (
+                result.error_message
+                or "Local OCR returned invalid text or missing quality metadata."
+            )
+        return OCRResult(
+            engine_name=self.name,
+            model_name=self.model_name,
+            status=OCR_STATUS_FAILED,
+            processing_time=time.perf_counter() - started,
+            error_message=last_error,
+            metadata={
+                "model_id": self.model_name,
+                "model_revision": self.model_revision,
+            },
+        )
+
+
 DIRECT_TEXT_ENGINE = DirectPdfTextEngine()
 FUTURE_OCR_ENGINE = FutureOcrEngine()
+LOCAL_MODEL_ENGINE = FeatureFlaggedLocalModelEngine()
 DEFAULT_ENGINE_REGISTRY = EngineRegistry()
 DEFAULT_ENGINE_REGISTRY.register(DIRECT_TEXT_ENGINE)
 DEFAULT_ENGINE_REGISTRY.register(FUTURE_OCR_ENGINE)
+DEFAULT_ENGINE_REGISTRY.register(LOCAL_MODEL_ENGINE)
 
 
 def get_engine_registry() -> EngineRegistry:

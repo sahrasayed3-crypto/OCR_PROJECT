@@ -26,6 +26,7 @@ class RuntimeSettings:
     worker_api_key: str
     worker_name: str
     local_processing_enabled: bool
+    local_ocr_enabled: bool
     storage_root: Path
     temp_root: Path
     database_path: Path
@@ -54,10 +55,9 @@ def runtime_settings() -> RuntimeSettings:
         worker_api_key=os.getenv("WORKER_API_KEY", ""),
         worker_name=os.getenv("WORKER_NAME", "").strip(),
         local_processing_enabled=_env_bool("LOCAL_PROCESSING_ENABLED", False),
+        local_ocr_enabled=_env_bool("CLOUDA_LOCAL_OCR_ENABLED", False),
         storage_root=storage_root,
-        temp_root=Path(
-            os.getenv("TEMP_ROOT", str(storage_root / "temporary"))
-        ),
+        temp_root=Path(os.getenv("TEMP_ROOT", str(storage_root / "temporary"))),
         database_path=Path(
             os.getenv(
                 "CLOUDA_DATABASE_PATH",
@@ -106,7 +106,11 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "max_ocr_attempts": 1,
     "page_timeout_seconds": 300,
     "file_timeout_seconds": 7200,
-    "enabled_engines": ["direct_pdf_text", "future_ocr_engine"],
+    "enabled_engines": [
+        "direct_pdf_text",
+        "local_model_ocr",
+        "future_ocr_engine",
+    ],
     "enabled_models": [],
     "storage_root": "conversions",
     "temporary_retention_hours": 24,
