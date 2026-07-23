@@ -82,6 +82,8 @@ training/
 !configs/training/**
 !tests/training/
 !tests/training/**
+!docs/training/
+!docs/training/**
 clouda_training/**/__pycache__/
 clouda_training/**/*.py[cod]
 tests/training/**/__pycache__/
