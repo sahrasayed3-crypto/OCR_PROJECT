@@ -62,6 +62,8 @@ training_data/
 datasets/
 !clouda_data/datasets/
 !clouda_data/datasets/**
+clouda_data/datasets/__pycache__/
+clouda_data/datasets/**/*.py[cod]
 dataset/
 distorted_datasets/
 generated_distorted_datasets/
