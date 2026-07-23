@@ -4,21 +4,28 @@ import json
 import shutil
 import io
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
 from PIL import Image, ImageChops, ImageDraw
 
 from clouda_data.distortion.base import DistortionSpec
+from clouda_data.distortion.checkpoints import RunCheckpointStore
 from clouda_data.distortion.registry import default_registry
 from clouda_data.distortion.workflow import (
+    classify_visual_difficulty,
     generate_preview,
     read_jsonl,
     run_distortion_batch,
     validate_distortion_manifest,
 )
 from clouda_data.evaluation.execution import evaluate_records
-from clouda_data.pipeline.profiles import list_profile_paths, load_profile
+from clouda_data.pipeline.profiles import (
+    list_profile_paths,
+    load_profile,
+    validate_profile,
+)
 from clouda_data.rendering import (
     RenderConfig,
     render_document,
@@ -77,11 +84,127 @@ def test_all_registered_real_operators_execute_and_are_deterministic() -> None:
 
 def test_required_yaml_profiles_validate() -> None:
     paths = [path for path in list_profile_paths() if path.suffix == ".yaml"]
-    assert len(paths) >= 10
+    assert len(paths) == 18
     for path in paths:
         profile = load_profile(path)
         assert profile["schema_version"] == 1
         assert profile["random_seed_policy"] == "required_deterministic"
+        assert len(profile["transformations"]) <= profile["maximum_chain_length"]
+        assert profile["maximum_severity_budget"] > 0
+
+
+def test_profile_rejects_unknown_operator_and_resource_exhaustion() -> None:
+    base = {
+        "name": "unsafe",
+        "recommended_use": "test",
+        "ordering_constraints": [],
+        "mutually_exclusive": [],
+        "maximum_allowed_crop": 0.05,
+        "minimum_readable_text_threshold": 0.7,
+        "metadata_fields": ["random_seed"],
+        "maximum_chain_length": 1,
+        "maximum_severity_budget": 0.5,
+    }
+    with pytest.raises(ValueError, match="Unknown distortion operator"):
+        validate_profile(
+            {
+                **base,
+                "distortions": [{"name": "not_registered", "severity": "light"}],
+            }
+        )
+    with pytest.raises(ValueError, match="maximum_chain_length"):
+        validate_profile(
+            {
+                **base,
+                "distortions": [
+                    {"name": "rotation", "severity": "light"},
+                    {"name": "gaussian_blur", "severity": "light"},
+                ],
+            }
+        )
+    with pytest.raises(ValueError, match="severity budget"):
+        validate_profile(
+            {
+                **base,
+                "distortions": [{"name": "rotation", "severity": "extreme"}],
+            }
+        )
+
+
+def test_yaml_profile_loader_rejects_python_object_tags(tmp_path: Path) -> None:
+    payload = tmp_path / "unsafe.yaml"
+    payload.write_text(
+        "!!python/object/apply:os.system ['echo unsafe']\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(Exception):
+        load_profile(payload)
+
+
+def test_checkpoint_state_machine_recovers_stale_and_enforces_retry_limit(
+    tmp_path: Path,
+) -> None:
+    store = RunCheckpointStore(tmp_path / "checkpoints.sqlite3")
+    store.start_run(
+        "run-1",
+        input_checksum="input",
+        profile_hash="profile",
+        metadata={"test": True},
+        resume=False,
+    )
+    store.queue_page(
+        run_id="run-1",
+        generated_page_id="page-1",
+        source_page_id="source-1",
+        variant=0,
+        max_retries=1,
+    )
+    assert store.claim_page("page-1")
+    old = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+    with store.connect() as connection, connection:
+        connection.execute(
+            "UPDATE pages SET heartbeat_at = ? WHERE generated_page_id = ?",
+            (old, "page-1"),
+        )
+    assert store.recover_stale(stale_after_seconds=60) == {
+        "requeued": 1,
+        "failed": 0,
+    }
+    assert store.claim_page("page-1")
+    store.finish_page("page-1", status="failed", error="controlled failure")
+    assert not store.claim_page("page-1")
+    assert store.page("page-1")["retry_count"] == 1
+
+
+def test_visual_difficulty_emits_extended_signals() -> None:
+    image = Image.new("RGB", (128, 128), "white")
+    ImageDraw.Draw(image).text((12, 48), "OCR 123", fill="black")
+    metrics = classify_visual_difficulty(
+        image,
+        "medium",
+        {
+            "transformation_chain": ["rotation"],
+            "transformation_parameters": [{"degrees": 3.5}],
+            "regions": [{"bbox": [0, 0, 100, 20]}],
+        },
+    )
+    assert metrics["estimated_visual_difficulty"] in {
+        "easy",
+        "medium",
+        "difficult",
+        "extreme",
+        "invalid",
+    }
+    assert metrics["estimated_skew_degrees"] == 3.5
+    assert metrics["estimated_text_size"] == 20
+    for key in (
+        "blur_score",
+        "noise_level",
+        "edge_density",
+        "compression_artifact_score",
+        "foreground_ratio",
+    ):
+        assert isinstance(metrics[key], float)
 
 
 def test_render_image_is_copy_on_write_and_valid(state: Path) -> None:
@@ -156,6 +279,14 @@ def test_distortion_batch_resume_validate_preview_and_export(state: Path) -> Non
     assert len(first) == 3
     assert all(item["ground_truth_text"] == "نص عربي اصطناعي" for item in first)
     assert all(item["output_checksum"] != source_checksum for item in first)
+    assert all(item["run_id"] and item["variant"] is not None for item in first)
+    assert all(
+        item["parameters"] == item["transformation_parameters"] for item in first
+    )
+    checkpoint = RunCheckpointStore(manifest.parent / "checkpoints.sqlite3")
+    summary = checkpoint.summary(first[0]["run_id"])
+    assert summary["state"] == "complete"
+    assert sum(summary["statuses"].values()) == 3
     resumed = run_distortion_batch(
         input_manifest,
         profile,
@@ -167,8 +298,10 @@ def test_distortion_batch_resume_validate_preview_and_export(state: Path) -> Non
     assert resumed == manifest
     assert len(read_jsonl(resumed)) == 3
     assert validate_distortion_manifest(manifest)["passed"]
-    preview = generate_preview(manifest, limit=2)
+    preview = generate_preview(manifest, limit=2, layout_overlay=True)
     assert preview.is_file()
+    assert (preview.parent / "contact-sheet.jpg").is_file()
+    assert "Seeds" in preview.read_text(encoding="utf-8")
     export = state / "artifacts" / "training" / "synthetic.jsonl"
     summary = export_training_data(
         manifest,
@@ -179,6 +312,45 @@ def test_distortion_batch_resume_validate_preview_and_export(state: Path) -> Non
     assert summary["records"] == 3
     assert not summary["document_leakage"]
     assert summary["training_started"] is False
+    capped = export_training_data(
+        manifest,
+        state / "artifacts" / "training" / "capped.jsonl",
+        purpose="evaluation",
+        max_contribution_per_source=1,
+    )
+    assert capped["records"] == 1
+    assert capped["balanced"] is True
+    perceptual = export_training_data(
+        manifest,
+        state / "artifacts" / "training" / "perceptual.jsonl",
+        purpose="evaluation",
+        perceptual_duplicate=lambda candidate, existing: True,
+    )
+    assert perceptual["records"] == 1
+    assert perceptual["duplicates_rejected"] == 2
+
+    invalid_root = state / "datasets" / "invalid-run"
+    invalid_root.mkdir()
+    invalid_manifest = invalid_root / "distortion_manifest.v1.jsonl"
+    invalid_record = {**first[0], "output_checksum": "0" * 64}
+    invalid_manifest.write_text(
+        json.dumps(invalid_record, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    validation = validate_distortion_manifest(invalid_manifest, quarantine=True)
+    assert not validation["passed"]
+    assert validation["failures"][0]["quarantine_uri"].startswith(
+        "dataset://quarantine/"
+    )
+    quarantine_path = (
+        state
+        / "datasets"
+        / validation["failures"][0]["quarantine_uri"].replace("dataset://", "")
+    )
+    assert quarantine_path.is_file()
+    assert (
+        state / "artifacts" / "reports" / "validation" / "invalid-run.jsonl"
+    ).is_file()
 
 
 def test_commercial_export_fails_closed_for_synthetic(state: Path) -> None:

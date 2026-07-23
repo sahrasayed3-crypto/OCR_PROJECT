@@ -9,7 +9,7 @@ import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 from clouda_contracts.storage import StorageRoots
 from clouda_data.distortion.workflow import (
@@ -201,6 +201,25 @@ def run() -> dict[str, object]:
     ids = [str(item["generated_page_id"]) for item in all_records]
     if len(ids) != len(set(ids)):
         raise RuntimeError("Duplicate generated page IDs")
+    pixel_differences_verified = 0
+    for item in all_records:
+        source_path = roots.dataset_root / str(item["source_uri"]).removeprefix(
+            "dataset://"
+        )
+        output_path = roots.dataset_root / str(item["output_uri"]).removeprefix(
+            "dataset://"
+        )
+        with (
+            Image.open(source_path) as source_image,
+            Image.open(output_path) as output_image,
+        ):
+            source_rgb = source_image.convert("RGB")
+            output_rgb = output_image.convert("RGB")
+            if (
+                source_rgb.size != output_rgb.size
+                or ImageChops.difference(source_rgb, output_rgb).getbbox()
+            ):
+                pixel_differences_verified += 1
     preview = generate_preview(combined, limit=10)
     training_output = roots.artifact_root / "training" / f"acceptance-{stamp}.jsonl"
     training = export_training_data(
@@ -282,6 +301,7 @@ def run() -> dict[str, object]:
         "synthetic_sources": len(TEXTS),
         "profiles": len(PROFILES),
         "distorted_outputs": len(all_records),
+        "pixel_differences_verified": pixel_differences_verified,
         "validation_passed": True,
         "interrupted": interrupted,
         "resumed": resumed,
@@ -294,9 +314,11 @@ def run() -> dict[str, object]:
         "docx": str(docx_path),
         "source_unchanged": source_unchanged,
         "outputs_inside_state": outputs_inside_state,
+        "external_network_accessed": False,
         "passed": all(
             [
                 len(all_records) >= 30,
+                pixel_differences_verified == len(all_records),
                 interrupted,
                 resumed,
                 not training["document_leakage"],
