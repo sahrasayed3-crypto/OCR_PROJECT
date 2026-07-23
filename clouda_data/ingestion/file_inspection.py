@@ -5,8 +5,10 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from xml.etree import ElementTree
 
+from defusedxml import ElementTree
+
+from clouda_contracts.archive_security import ArchiveLimits, validate_zip_archive
 from clouda_data.ground_truth.checksums import sha256_file, sha256_text
 
 from .schema import SourceType
@@ -45,17 +47,32 @@ def _is_pdf(path: Path) -> bool:
 def _is_docx(path: Path) -> bool:
     if not zipfile.is_zipfile(path):
         return False
-    with zipfile.ZipFile(path) as archive:
-        return "[Content_Types].xml" in archive.namelist() and any(
-            name.startswith("word/") for name in archive.namelist()
-        )
+    try:
+        with zipfile.ZipFile(path) as archive:
+            validate_zip_archive(
+                archive,
+                limits=ArchiveLimits(
+                    max_members=5_000,
+                    max_total_uncompressed_bytes=200 * 1024 * 1024,
+                    max_member_uncompressed_bytes=50 * 1024 * 1024,
+                    max_compression_ratio=100,
+                ),
+            )
+            return "[Content_Types].xml" in archive.namelist() and any(
+                name.startswith("word/") for name in archive.namelist()
+            )
+    except (ValueError, zipfile.BadZipFile):
+        return False
 
 
 def _is_image(path: Path) -> bool:
     try:
         from PIL import Image
 
+        Image.MAX_IMAGE_PIXELS = 40_000_000
         with Image.open(path) as image:
+            if image.width * image.height > 40_000_000:
+                return False
             image.verify()
         return True
     except Exception:

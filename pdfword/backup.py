@@ -5,6 +5,8 @@ import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from clouda_contracts.archive_security import ArchiveLimits, validate_zip_archive
+
 from .database import Database
 
 
@@ -69,6 +71,7 @@ def create_backup(
 def validate_backup(archive_path: str | Path) -> dict:
     path = Path(archive_path)
     with zipfile.ZipFile(path, "r") as archive:
+        validate_zip_archive(archive)
         corrupt = archive.testzip()
         names = set(archive.namelist())
     return {
@@ -89,6 +92,7 @@ def restore_backup(archive_path: str | Path, destination: str | Path) -> Path:
         raise FileExistsError("مجلد الاستعادة يجب أن يكون فارغًا")
     target.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(archive, "r") as bundle:
+        validate_zip_archive(bundle, limits=ArchiveLimits())
         for member in bundle.infolist():
             member_target = (target / member.filename).resolve()
             if target != member_target and target not in member_target.parents:

@@ -55,15 +55,25 @@ class TestRuntimeFeatures(unittest.TestCase):
             self.assertEqual(restored[2].text_quality_score, 92.0)
             self.assertFalse(restored[2].requires_manual_review)
 
-    def test_pdf_size_is_unlimited_but_page_limit_is_enforced(self) -> None:
-        limits = ProcessingLimits(max_pdf_pages=2)
+    def test_pdf_byte_and_page_limits_are_enforced(self) -> None:
+        limits = ProcessingLimits(
+            max_pdf_pages=2,
+            max_upload_bytes=200 * 1024 * 1024,
+            max_pdf_bytes=200 * 1024 * 1024,
+        )
         validate_pdf_limits(101 * 1024 * 1024, 2, limits=limits)
         config = tomllib.loads(
             Path(".streamlit/config.toml").read_text(encoding="utf-8")
         )
         self.assertGreater(config["server"]["maxUploadSize"], 100)
-        with self.assertRaisesRegex(ValueError, "صفحات"):
+        with self.assertRaisesRegex(ValueError, "page count"):
             validate_pdf_limits(10, 3, limits=limits)
+        with self.assertRaisesRegex(ValueError, "byte limit"):
+            validate_pdf_limits(
+                101 * 1024 * 1024,
+                2,
+                limits=ProcessingLimits(max_pdf_pages=2),
+            )
 
     def test_queue_limit_and_user_owned_cancel(self) -> None:
         queue = JobQueue(max_workers=2)

@@ -2,6 +2,7 @@ import ast
 import io
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import fakeredis
@@ -17,6 +18,20 @@ from pdfword.worker_api import app
 from pdfword import worker_tasks
 
 API_KEY = "test-worker-secret"
+
+
+def valid_docx_bytes() -> bytes:
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr(
+            "[Content_Types].xml",
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>',
+        )
+        archive.writestr(
+            "word/document.xml",
+            '<document xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>',
+        )
+    return output.getvalue()
 
 
 def create_job(database: Database, storage: Path, job_id: str = "job-a") -> dict:
@@ -255,7 +270,7 @@ def test_worker_api_full_status_flow(api_environment):
         files={
             "result": (
                 "result.docx",
-                io.BytesIO(b"PK\x03\x04test-docx"),
+                io.BytesIO(valid_docx_bytes()),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
         },

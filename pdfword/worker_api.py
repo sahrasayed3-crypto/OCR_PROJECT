@@ -3,20 +3,44 @@ import json
 import os
 import re
 import tempfile
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from clouda_contracts.archive_security import ArchiveLimits, validate_zip_archive
 from .constants import MODEL_ACCURATE_PRIMARY, MODEL_FAST
 from .database import Database, utc_now
+from .limits import limits_from_env
 from .settings import load_settings, runtime_settings
 from .correction_learning import rules_checksum
 
 JOB_ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 app = FastAPI(title="Clouda Worker API", docs_url=None, redoc_url=None)
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=[
+        host.strip()
+        for host in os.getenv(
+            "CLOUDA_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver"
+        ).split(",")
+        if host.strip()
+    ],
+)
+
+
+@app.middleware("http")
+async def security_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
 
 
 class WorkerMessage(BaseModel):
@@ -38,10 +62,14 @@ def _database() -> Database:
 
 def _authenticate(x_worker_api_key: str | None = Header(default=None)) -> None:
     expected = runtime_settings().worker_api_key
+    previous = os.getenv("CLOUDA_WORKER_API_KEY_PREVIOUS", "")
+    accepted = [candidate for candidate in (expected, previous) if candidate]
     if (
-        not expected
+        not accepted
         or not x_worker_api_key
-        or not hmac.compare_digest(expected, x_worker_api_key)
+        or not any(
+            hmac.compare_digest(candidate, x_worker_api_key) for candidate in accepted
+        )
     ):
         raise HTTPException(status_code=401, detail="Invalid worker credentials")
 
@@ -325,9 +353,10 @@ def upload_result(
     ) as temporary:
         temporary_path = Path(temporary.name)
         total = 0
+        limits = limits_from_env()
         while chunk := result.file.read(1024 * 1024):
             total += len(chunk)
-            if total > 100 * 1024 * 1024:
+            if total > limits.max_result_bytes:
                 temporary_path.unlink(missing_ok=True)
                 raise HTTPException(status_code=413, detail="Result is too large")
             temporary.write(chunk)
@@ -336,6 +365,18 @@ def upload_result(
     if total < 4 or temporary_path.read_bytes()[:2] != b"PK":
         temporary_path.unlink(missing_ok=True)
         raise HTTPException(status_code=400, detail="Invalid DOCX content")
+    try:
+        with zipfile.ZipFile(temporary_path) as archive:
+            validate_zip_archive(
+                archive,
+                limits=ArchiveLimits(
+                    max_members=limits.max_archive_members,
+                    max_total_uncompressed_bytes=limits.max_decompressed_bytes,
+                ),
+            )
+    except (ValueError, zipfile.BadZipFile) as exc:
+        temporary_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=400, detail="Unsafe DOCX archive") from exc
     os.replace(temporary_path, target)
     updated = database.transition_conversion(
         job_id,

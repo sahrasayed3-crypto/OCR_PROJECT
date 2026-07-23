@@ -8,7 +8,7 @@ from pypdf import PdfReader
 from pdfword.database import Database, utc_now
 from pdfword.docx_export import markdown_to_docx
 from pdfword.health import system_health
-from pdfword.limits import DEFAULT_LIMITS, validate_pdf_limits
+from pdfword.limits import DEFAULT_LIMITS, limits_from_env, validate_pdf_limits
 from pdfword.ranges import build_output_filename, select_pages
 from pdfword.settings import (
     DEFAULT_SETTINGS,
@@ -93,8 +93,17 @@ with st.sidebar:
 
 def _read_pdf_pages(uploaded_file) -> tuple[bytes, int]:
     uploaded_file.seek(0)
-    pdf_bytes = uploaded_file.read()
+    limits = limits_from_env()
+    output = io.BytesIO()
+    total = 0
+    while chunk := uploaded_file.read(1024 * 1024):
+        total += len(chunk)
+        if total > limits.max_upload_bytes:
+            raise ValueError("PDF exceeds the configured upload byte limit.")
+        output.write(chunk)
+    pdf_bytes = output.getvalue()
     page_count = len(PdfReader(io.BytesIO(pdf_bytes)).pages)
+    validate_pdf_limits(len(pdf_bytes), page_count, limits=limits)
     uploaded_file.seek(0)
     return pdf_bytes, page_count
 
