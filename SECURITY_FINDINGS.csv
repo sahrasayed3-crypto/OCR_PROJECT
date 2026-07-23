@@ -1,0 +1,16 @@
+id,severity,cwe,owasp,title,status,test
+SEC-ADV-001,High,CWE-22,A01:2021,Storage and manifest path escape,fixed,test_preview_rejects_manifest_uri_escape
+SEC-ADV-002,High,CWE-807,A08:2021,Training license gate manifest forgery,fixed,test_manifest_cannot_forge_commercial_training_license
+SEC-ADV-003,High,CWE-502,A08:2021,Unsafe local model boundary,fixed,test_transformers_model_must_stay_in_model_root
+SEC-ADV-004,Medium,CWE-918,A10:2021,Dataset downloader SSRF,fixed,test_downloader_blocks_private_destination_before_network
+SEC-ADV-005,Medium,CWE-78,A03:2021,OCR subprocess environment and output,fixed,test_command_ocr_uses_sanitized_environment_and_bounded_output
+SEC-ADV-006,Medium,CWE-409,A05:2021,Archive collision and extraction,fixed,test_zip_duplicate_and_case_collision_are_rejected
+SEC-ADV-007,Medium,CWE-1236,A03:2021,DOCX and CSV injection,fixed,test_docx_strips_xml_controls_and_has_no_active_relationships
+SEC-ADV-008,Medium,CWE-20,A04:2021,Unbounded rendering request,fixed,test_render_configuration_limits_total_pages
+SEC-ADV-009,Medium,CWE-89,A03:2021,Dynamic SQL field names,fixed,test_dynamic_database_fields_are_allowlisted
+SEC-ADV-010,Medium,CWE-22,A01:2021,Ingestion source path escape,fixed,test_ingestion_manifest_cannot_read_outside_its_root
+SEC-ADV-011,Medium,CWE-732,A05:2021,Deployment exposure defaults,fixed,test_deployment_defaults_to_loopback_and_ci_actions_are_pinned
+SEC-ADV-012,Medium,CWE-829,A08:2021,CI and build supply chain,fixed,test_deployment_defaults_to_loopback_and_ci_actions_are_pinned
+SEC-ADV-013,Medium,CWE-400,A04:2021,API body size early rejection,fixed,test_worker_api_rejects_declared_oversized_body
+SEC-ADV-014,Low,CWE-532,A09:2021,Variant secret redaction,fixed,test_nested_and_variant_secret_names_are_redacted
+SEC-ADV-015,Low,CWE-59,A01:2021,Backup and lifecycle symlinks,fixed,test_backup_restore_refuses_symlinked_destination
