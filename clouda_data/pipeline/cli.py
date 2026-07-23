@@ -51,6 +51,7 @@ from clouda_data.distortion.workflow import (
     validate_distortion_manifest,
 )
 from clouda_data.evaluation.execution import evaluate_manifest
+from clouda_data.lifecycle import archive_run, cleanup as lifecycle_cleanup, verify_archive
 
 
 def _project_root() -> Path:
@@ -488,6 +489,35 @@ def evaluate_cli(args: argparse.Namespace) -> int:
     return 0
 
 
+def lifecycle_cleanup_cli(args: argparse.Namespace) -> int:
+    action = args.command.removeprefix("cleanup-")
+    report = lifecycle_cleanup(
+        action,
+        run_id=args.run_id,
+        older_than_days=args.older_than_days,
+        dry_run=not args.execute,
+        confirmation=args.confirm,
+    )
+    print(json.dumps(report, indent=2))
+    return 0
+
+
+def archive_run_cli(args: argparse.Namespace) -> int:
+    report = archive_run(
+        args.run_root,
+        dry_run=not args.execute,
+        confirmation=args.confirm,
+    )
+    print(json.dumps(report, indent=2))
+    return 0
+
+
+def verify_archive_cli(args: argparse.Namespace) -> int:
+    report = verify_archive(args.archive)
+    print(json.dumps(report, indent=2))
+    return 0 if report["passed"] else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m clouda_data.pipeline.cli")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -696,6 +726,22 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("manifest")
         p.add_argument("--output")
         p.set_defaults(func=evaluate_cli)
+
+    for name in ["cleanup-preview", "cleanup-failed", "cleanup-temp"]:
+        p = sub.add_parser(name)
+        p.add_argument("--run-id")
+        p.add_argument("--older-than-days", type=int, default=0)
+        p.add_argument("--execute", action="store_true")
+        p.add_argument("--confirm")
+        p.set_defaults(func=lifecycle_cleanup_cli)
+    p = sub.add_parser("archive-run")
+    p.add_argument("run_root")
+    p.add_argument("--execute", action="store_true")
+    p.add_argument("--confirm")
+    p.set_defaults(func=archive_run_cli)
+    p = sub.add_parser("verify-archive")
+    p.add_argument("archive")
+    p.set_defaults(func=verify_archive_cli)
 
     return parser
 
