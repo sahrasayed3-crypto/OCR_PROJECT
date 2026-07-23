@@ -187,6 +187,12 @@ def run_distortion_batch(
     fail_fast: bool = False,
     conflict_policy: str = "reject",
     interrupt_after: int | None = None,
+    start_page: int = 1,
+    end_page: int | None = None,
+    include_dataset_ids: set[str] | None = None,
+    exclude_dataset_ids: set[str] | None = None,
+    maximum_output_bytes: int = 1024 * 1024 * 1024,
+    workers: int = 1,
 ) -> Path:
     if max_pages < 1 or variants < 1:
         raise ValueError("max_pages and variants must be positive")
@@ -194,6 +200,10 @@ def run_distortion_batch(
         raise PermissionError("--allow-large-run is required above 100 pages")
     if conflict_policy not in CONFLICT_POLICIES:
         raise ValueError("invalid conflict policy")
+    if not 1 <= workers <= 8:
+        raise ValueError("workers must be between 1 and 8")
+    if maximum_output_bytes < 1:
+        raise ValueError("maximum_output_bytes must be positive")
     roots = StorageRoots.from_env()
     manifest_path = Path(input_manifest).expanduser().resolve()
     if not _inside(manifest_path, roots.dataset_root):
@@ -202,7 +212,21 @@ def run_distortion_batch(
     profile_hash = hashlib.sha256(
         json.dumps(profile, sort_keys=True).encode()
     ).hexdigest()
-    input_records = read_jsonl(manifest_path)[:max_pages]
+    input_records = read_jsonl(manifest_path)
+    input_records = input_records[start_page - 1 : end_page]
+    if include_dataset_ids:
+        input_records = [
+            item
+            for item in input_records
+            if str(item.get("dataset_id")) in include_dataset_ids
+        ]
+    if exclude_dataset_ids:
+        input_records = [
+            item
+            for item in input_records
+            if str(item.get("dataset_id")) not in exclude_dataset_ids
+        ]
+    input_records = input_records[:max_pages]
     material = (
         f"{_sha256(manifest_path)}:{profile['name']}:{profile_hash}:{seed}:{variants}"
     )
@@ -240,10 +264,22 @@ def run_distortion_batch(
                 "max_pages": max_pages,
                 "variants": variants,
                 "dry_run": dry_run,
+                "workers_requested": workers,
+                "execution_mode": "deterministic_sequential",
             },
             indent=2,
         ),
         encoding="utf-8",
+    )
+    output_bytes = sum(
+        (roots.dataset_root / str(item["output_uri"]).removeprefix("dataset://"))
+        .stat()
+        .st_size
+        for item in existing
+        if item.get("output_uri")
+        and (
+            roots.dataset_root / str(item["output_uri"]).removeprefix("dataset://")
+        ).is_file()
     )
     for source in input_records:
         source_uri = str(source.get("output_uri") or source.get("image_uri") or "")
@@ -349,7 +385,19 @@ def run_distortion_batch(
                 "error": None,
             }
             if not dry_run:
+                free_threshold = max(
+                    64 * 1024 * 1024,
+                    int(
+                        os.getenv("CLOUDA_MIN_FREE_DISK_BYTES", str(512 * 1024 * 1024))
+                    ),
+                )
+                if shutil.disk_usage(run_root).free < free_threshold:
+                    raise OSError("Free disk space is below CLOUDA_MIN_FREE_DISK_BYTES")
                 _atomic_save(result, output_path)
+                output_bytes += output_path.stat().st_size
+                if output_bytes > maximum_output_bytes:
+                    output_path.unlink(missing_ok=True)
+                    raise OSError("Run exceeded maximum output bytes")
                 record["output_checksum"] = _sha256(output_path)
                 quality = classify_visual_difficulty(
                     result, str(record["overall_severity"])

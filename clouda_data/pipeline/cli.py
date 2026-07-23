@@ -465,6 +465,12 @@ def distort_cli(args: argparse.Namespace) -> int:
         fail_fast=args.fail_fast,
         conflict_policy=args.overwrite_policy,
         interrupt_after=args.interrupt_after,
+        start_page=args.start_page,
+        end_page=args.end_page,
+        include_dataset_ids=set(args.include_dataset_ids),
+        exclude_dataset_ids=set(args.exclude_dataset_ids),
+        maximum_output_bytes=args.maximum_bytes,
+        workers=args.workers,
     )
     print(str(path))
     return 0
