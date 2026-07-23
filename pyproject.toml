@@ -70,6 +70,12 @@ include = [
 ]
 exclude = ["tests*"]
 
+[tool.setuptools.package-data]
+clouda_data = [
+  "resources/*.json",
+  "resources/distortions/*.json"
+]
+
 [tool.black]
 line-length = 88
 target-version = ["py311"]
