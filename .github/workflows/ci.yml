@@ -4,27 +4,81 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  test:
-    runs-on: windows-latest
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python: ["3.11"]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip; python -m pip install -r requirements-dev.txt
-      - name: Validate fixtures
-        run: python tests/fixtures/generate_fixtures.py
-      - name: Test with coverage
-        run: python -m pytest --cov=pdfword --cov-report=term-missing --cov-fail-under=80
-      - name: Lint
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install tested dependency set
+        run: >-
+          python -m pip install --upgrade pip &&
+          python -m pip install
+          -c constraints/py311.txt
+          -e ".[server,worker,data,training,models,test,dev]"
+      - name: Import and CLI smoke tests
+        run: |
+          python -c "import pdfword, clouda_contracts, clouda_data, clouda_training, clouda_models"
+          python -m clouda_data.pipeline.cli --help
+          python -m clouda_training.cli --help
+      - name: Compile
+        run: >-
+          python -m compileall -q
+          app.py pdfword clouda_contracts clouda_data clouda_training clouda_models
+      - name: Ruff
         run: python -m ruff check .
-      - name: Format check
+      - name: Black
         run: python -m black --check .
-      - name: Type check
-        run: python -m mypy .
-      - name: Build validation
-        run: python -m compileall -q app.py pdfword scripts tests
+      - name: Mypy
+        run: >-
+          python -m mypy
+          pdfword clouda_contracts clouda_data clouda_training clouda_models
+          --ignore-missing-imports
+      - name: Offline test suite and runtime coverage gate
+        env:
+          CLOUDA_STATE_HOME: ${{ runner.temp }}/clouda-state
+          CLOUDA_LOCAL_OCR_ENABLED: "false"
+        run: >-
+          python -m pytest
+          --cov=pdfword
+          --cov-report=term-missing
+          --cov-fail-under=80
+      - name: Secret, large-file, and forbidden-path scan
+        run: python -m tools.validation.repository_scan --root .
+      - name: Build wheel and sdist
+        run: python -m build
       - name: Demo smoke test
         run: python scripts/demo.py
+
+  redis-integration:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install worker test dependencies
+        run: >-
+          python -m pip install
+          -c constraints/py311.txt
+          -e ".[server,worker,test]"
+      - name: Distributed worker integration tests
+        env:
+          REDIS_URL: redis://127.0.0.1:6379/0
+        run: python -m pytest tests/test_distributed_worker.py -q
