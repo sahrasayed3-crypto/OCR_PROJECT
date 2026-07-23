@@ -95,6 +95,24 @@ The demo processes copyright-free local fixtures and writes a DOCX plus per-page
 
 It demonstrates digital text extraction, DOCX generation, a scanned page routed to `pending_ocr_model`, and a blank page routed to `blank_page`.
 
+## Arabic OCR data foundation
+
+The merged repository now includes a real CPU/Pillow image pipeline:
+
+- bounded PDF/image rendering;
+- deterministic real-pixel distortion with versioned YAML profiles;
+- batch checkpoint/resume, validation, quarantine, and HTML previews;
+- CER/WER execution and license-gated training-data export;
+- safe local OCR adapters with feature-flagged runtime integration.
+
+All generated files stay under `CLOUDA_STATE_HOME`. Local OCR and GPU training
+remain disabled by default. Start with:
+
+```powershell
+python -m clouda_data.pipeline.cli --help
+python -m clouda_training.cli --help
+```
+
 ## Example outcome
 
 | Input page | Result | Output |

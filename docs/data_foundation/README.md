@@ -7,7 +7,7 @@
 
 This repository prepares the foundation for a later Arabic OCR training-data pipeline. The future pipeline will distort clean Arabic and Arabic-English document pages while preserving exact ground-truth text and layout metadata.
 
-Current stage: foundation only.
+Current stage: functioning local CPU data-generation and evaluation system.
 
 Implemented:
 
@@ -15,7 +15,8 @@ Implemented:
 - Validated configuration models.
 - Formal clean-page input contract.
 - Ground-truth preservation helpers and checksum checks.
-- Metadata-only distortion engine interfaces.
+- Real deterministic pixel-changing distortion engine; metadata-only mode is
+  retained only for explicit tests.
 - Distortion profiles for clean, modern, historical, scanner, phone, binding, faded, compressed, small-text, mixed-layout, and footnote-heavy scenarios.
 - Layout-region abstractions.
 - Manifest, status, checkpoint, JSONL, and SQLite storage foundations.
@@ -28,12 +29,12 @@ Ingestion preparation now adds copy-only clean source registration, dry-run vali
 
 Dataset acquisition preparation adds a verified candidate-source registry, license matrix, safe sample downloader, download manifests, and sample-to-ingestion validation.
 
-Not implemented in this phase:
+External or intentionally disabled:
 
 - Dataset download.
 - OCR model download.
 - OCR training.
-- Real page distortion generation.
+- Real model-weight selection and GPU training.
 - AWS resource creation.
 
 Useful commands after a real Python 3.10+ interpreter is available:
