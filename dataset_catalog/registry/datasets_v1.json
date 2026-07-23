@@ -31,7 +31,7 @@
       "status": "approved_with_conditions",
       "review_date": "2026-07-23",
       "evidence_reference": "Repository README states 450 images paired with ground truth.; Repository README states PAGE XML ground truth for RASAM 1.; Repository README states Apache License 2.0.",
-      "data_root_uri": "dataset://rasam_dataset/",
+      "data_root_uri": "dataset://data/downloads/rasam_dataset/",
       "schema_version": 1,
       "license_review_required": false,
       "source_classification": "approved_with_conditions"
@@ -57,7 +57,7 @@
       "status": "approved_with_conditions",
       "review_date": "2026-07-23",
       "evidence_reference": "Hugging Face card declares Apache-2.0 license.; Dataset card describes clean synthetic book-layout data with no distortions.",
-      "data_root_uri": "dataset://sard_synthetic_arabic_recognition_dataset/",
+      "data_root_uri": "dataset://data/downloads/sard_synthetic_arabic_recognition_dataset/",
       "schema_version": 1,
       "license_review_required": false,
       "source_classification": "approved_with_conditions"
@@ -83,7 +83,7 @@
       "status": "approved_with_conditions",
       "review_date": "2026-07-23",
       "evidence_reference": "Hugging Face card declares MIT license.; Card lists 8 rows and 2.2 MB sample size.; Card describes PNG images, JSON word labels, and TXT text files.",
-      "data_root_uri": "dataset://craneset_arabic_ocr_hf_sample/",
+      "data_root_uri": "dataset://data/downloads/craneset_arabic_ocr_hf_sample/",
       "schema_version": 1,
       "license_review_required": false,
       "source_classification": "approved_with_conditions"
@@ -109,7 +109,7 @@
       "status": "pending",
       "review_date": "2026-07-23",
       "evidence_reference": "Official page states CC0 1.0 public domain dedication.; Official page describes 10K images and 12 document classes.",
-      "data_root_uri": "dataset://humans_in_the_loop_arabic_documents_ocr/",
+      "data_root_uri": "dataset://data/downloads/humans_in_the_loop_arabic_documents_ocr/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "approved_with_conditions"
@@ -135,7 +135,7 @@
       "status": "research_only",
       "review_date": "2026-07-23",
       "evidence_reference": "Journal page states CC BY-NC-SA license.; Journal page states page images plus ALTO XML and metadata.",
-      "data_root_uri": "dataset://openiti_makhzan/",
+      "data_root_uri": "dataset://data/downloads/openiti_makhzan/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "research_only"
@@ -161,7 +161,7 @@
       "status": "research_only",
       "review_date": "2026-07-23",
       "evidence_reference": "Hugging Face card declares CC-BY-NC-SA-4.0 license.; Card states 24,495 line images with corresponding text.",
-      "data_root_uri": "dataset://muharaf_public/",
+      "data_root_uri": "dataset://data/downloads/muharaf_public/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "research_only"
@@ -187,7 +187,7 @@
       "status": "research_only",
       "review_date": "2026-07-23",
       "evidence_reference": "Official page states CC BY-NC 4.0.; Official page states 5,031 images and CSV labels.",
-      "data_root_uri": "dataset://hicma_dataset/",
+      "data_root_uri": "dataset://data/downloads/hicma_dataset/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "research_only"
@@ -213,7 +213,7 @@
       "status": "pending",
       "review_date": "2026-07-23",
       "evidence_reference": "Official page states OCR text corpus, checksums, and metadata.; Official page states metadata CC0 and no copyright claims to scans/direct reproductions.",
-      "data_root_uri": "dataset://qnl_arabic_ocr_corpus_v2/",
+      "data_root_uri": "dataset://data/downloads/qnl_arabic_ocr_corpus_v2/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "approved_with_conditions"
@@ -239,7 +239,7 @@
       "status": "pending",
       "review_date": "2026-07-23",
       "evidence_reference": "Official page lists font archives and ground-truth text files but no license statement found.",
-      "data_root_uri": "dataset://pats_a01/",
+      "data_root_uri": "dataset://data/downloads/pats_a01/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "unclear_license"
@@ -265,7 +265,7 @@
       "status": "pending",
       "review_date": "2026-07-23",
       "evidence_reference": "LDC catalog states data and LDC User Agreement licensing.",
-      "data_root_uri": "dataset://kafd_ldc2016t21/",
+      "data_root_uri": "dataset://data/downloads/kafd_ldc2016t21/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "approved_with_conditions"
@@ -291,7 +291,7 @@
       "status": "pending",
       "review_date": "2026-07-23",
       "evidence_reference": "Hugging Face card states size, rows, image/text fields but no explicit license found.",
-      "data_root_uri": "dataset://mssqpi_arabic_ocr_dataset/",
+      "data_root_uri": "dataset://data/downloads/mssqpi_arabic_ocr_dataset/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "unclear_license"
@@ -317,7 +317,7 @@
       "status": "blocked",
       "review_date": "2026-07-23",
       "evidence_reference": "Hugging Face card states CC-BY-4.0 and 39.2 GB size; card describes degradation/noise.",
-      "data_root_uri": "dataset://loay_arabic_ocr_synthetic_scans_faker_300k/",
+      "data_root_uri": "dataset://data/downloads/loay_arabic_ocr_synthetic_scans_faker_300k/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "rejected"
@@ -343,7 +343,7 @@
       "status": "blocked",
       "review_date": "2026-07-23",
       "evidence_reference": "Zenodo page describes artificial noise variants and 26 GiB archive.",
-      "data_root_uri": "dataset://noisy_ocr_dataset_nod/",
+      "data_root_uri": "dataset://data/downloads/noisy_ocr_dataset_nod/",
       "schema_version": 1,
       "license_review_required": true,
       "source_classification": "rejected"

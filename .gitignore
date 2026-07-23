@@ -64,6 +64,8 @@ datasets/
 !clouda_data/datasets/**
 clouda_data/datasets/__pycache__/
 clouda_data/datasets/**/*.py[cod]
+!clouda_training/datasets/
+!clouda_training/datasets/**
 dataset/
 distorted_datasets/
 generated_distorted_datasets/
@@ -74,6 +76,16 @@ wandb/
 mlruns/
 train/
 training/
+!clouda_training/
+!clouda_training/**
+!configs/training/
+!configs/training/**
+!tests/training/
+!tests/training/**
+clouda_training/**/__pycache__/
+clouda_training/**/*.py[cod]
+tests/training/**/__pycache__/
+tests/training/**/*.py[cod]
 training_cache/
 training_caches/
 
@@ -137,7 +149,13 @@ training_caches/
 models/
 weights/
 checkpoints/
+!clouda_training/checkpoints/
+!clouda_training/checkpoints/**
 adapters/
+!clouda_contracts/adapters/
+!clouda_contracts/adapters/**
+!clouda_models/adapters/
+!clouda_models/adapters/**
 lora_adapters/
 qlora_adapters/
 *.adapter
