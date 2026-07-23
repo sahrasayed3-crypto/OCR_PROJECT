@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from typing import Literal
 
 TATWEEL = "\u0640"
 ARABIC_DIACRITICS_RE = re.compile(r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]")
@@ -13,7 +14,10 @@ def preserve_original(text: str) -> str:
     return text
 
 
-def normalize_unicode(text: str, form: str = "NFC") -> str:
+def normalize_unicode(
+    text: str,
+    form: Literal["NFC", "NFD", "NFKC", "NFKD"] = "NFC",
+) -> str:
     return unicodedata.normalize(form, text)
 
 

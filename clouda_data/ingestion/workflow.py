@@ -4,6 +4,7 @@ import json
 from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import overload
 
 from clouda_data.ground_truth.checksums import sha256_text
 
@@ -34,6 +35,14 @@ class IngestionPlan:
     created_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )
+
+
+@overload
+def _resolve(base: Path, value: str) -> Path: ...
+
+
+@overload
+def _resolve(base: Path, value: None) -> None: ...
 
 
 def _resolve(base: Path, value: str | None) -> Path | None:

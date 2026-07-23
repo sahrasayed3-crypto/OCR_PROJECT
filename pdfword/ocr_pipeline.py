@@ -345,6 +345,7 @@ def process_pdf(
                 and model_extraction.confidence is not None
             )
             if valid_model_result and model_extraction is not None:
+                assert model_extraction.confidence is not None
                 quality_parts = estimate_quality_components(
                     model_text,
                     base_text_score=float(model_extraction.confidence) * 100,

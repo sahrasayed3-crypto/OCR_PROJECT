@@ -40,7 +40,9 @@ class DownloadResult:
     dry_run: bool
     files: list[DownloadedFile] = field(default_factory=list)
     issues: list[str] = field(default_factory=list)
-    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
 
 
 def safe_filename(name: str) -> str:
@@ -86,7 +88,9 @@ def sha256_file(path: Path) -> str:
 
 
 def content_length(url: str, timeout: int = 20) -> int | None:
-    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "arabic-ocr-dataset-prep/0.1"})
+    request = urllib.request.Request(
+        url, method="HEAD", headers={"User-Agent": "arabic-ocr-dataset-prep/0.1"}
+    )
     try:
         with _urlopen(request, timeout=timeout) as response:
             length = response.headers.get("Content-Length")
@@ -170,7 +174,13 @@ def download_http(
     if expected_sha256 and expected_sha256 != actual_sha:
         raise ValueError("Downloaded checksum mismatch.")
     partial.replace(destination)
-    return DownloadedFile(url=url, path=str(destination), size_bytes=actual_size, checksum_sha256=actual_sha, archive_valid=validate_archive(destination))
+    return DownloadedFile(
+        url=url,
+        path=str(destination),
+        size_bytes=actual_size,
+        checksum_sha256=actual_sha,
+        archive_valid=validate_archive(destination),
+    )
 
 
 def _asset_url(source: dict[str, Any], asset: dict[str, Any]) -> str:
@@ -219,9 +229,16 @@ def download_dataset_sample(
         url = _asset_url(source, asset)
         destination = destination_root / safe_filename(asset.get("filename") or url)
         try:
-            downloaded = download_http(url, destination, max_bytes=max_bytes, expected_sha256=asset.get("sha256"))
+            downloaded = download_http(
+                url,
+                destination,
+                max_bytes=max_bytes,
+                expected_sha256=asset.get("sha256"),
+            )
             duplicate_of = existing.get(downloaded.checksum_sha256)
-            files.append(DownloadedFile(**{**asdict(downloaded), "duplicate_of": duplicate_of}))
+            files.append(
+                DownloadedFile(**{**asdict(downloaded), "duplicate_of": duplicate_of})
+            )
             existing.setdefault(downloaded.checksum_sha256, downloaded.path)
         except Exception as exc:
             issues.append(f"{url}: {exc}")
@@ -238,11 +255,15 @@ def download_dataset_sample(
     return result
 
 
-def create_ingestion_manifest_for_download(source: dict[str, Any], result: DownloadResult, project_root: Path) -> Path | None:
+def create_ingestion_manifest_for_download(
+    source: dict[str, Any], result: DownloadResult, project_root: Path
+) -> Path | None:
     from clouda_data.ground_truth.checksums import sha256_text
     from clouda_data.ingestion.file_inspection import text_from_ground_truth
 
-    xml_file = next((item for item in result.files if item.path.lower().endswith(".xml")), None)
+    xml_file = next(
+        (item for item in result.files if item.path.lower().endswith(".xml")), None
+    )
     if xml_file is None:
         return None
     xml_path = Path(xml_file.path)
@@ -279,14 +300,20 @@ def create_ingestion_manifest_for_download(source: dict[str, Any], result: Downl
 
 
 def write_download_manifest(result: DownloadResult, project_root: Path) -> Path:
-    out = project_root / "data/manifests/download_manifests" / f"{result.source_id}.json"
+    out = (
+        project_root / "data/manifests/download_manifests" / f"{result.source_id}.json"
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(asdict(result), ensure_ascii=False, indent=2), encoding="utf-8")
+    out.write_text(
+        json.dumps(asdict(result), ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     return out
 
 
 def write_license_metadata(source: dict[str, Any], project_root: Path) -> Path:
-    out = project_root / "data/downloads" / source["source_id"] / "LICENSE_METADATA.json"
+    out = (
+        project_root / "data/downloads" / source["source_id"] / "LICENSE_METADATA.json"
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "source_id": source["source_id"],
@@ -304,9 +331,13 @@ def write_license_metadata(source: dict[str, Any], project_root: Path) -> Path:
 
 
 def verify_download(source_id: str, *, project_root: Path) -> DownloadResult:
-    manifest_path = project_root / "data/manifests/download_manifests" / f"{source_id}.json"
+    manifest_path = (
+        project_root / "data/manifests/download_manifests" / f"{source_id}.json"
+    )
     if not manifest_path.exists():
-        return DownloadResult(source_id, False, False, issues=["missing_download_manifest"])
+        return DownloadResult(
+            source_id, False, False, issues=["missing_download_manifest"]
+        )
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     files: list[DownloadedFile] = []
     issues: list[str] = []

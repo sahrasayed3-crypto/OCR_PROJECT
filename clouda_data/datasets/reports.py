@@ -7,7 +7,10 @@ from typing import Any
 from .registry import list_sources, verify_license
 
 
-def generate_download_report(project_root: Path, output: str | Path = "outputs/reports/dataset_download_report.json") -> Path:
+def generate_download_report(
+    project_root: Path,
+    output: str | Path = "outputs/reports/dataset_download_report.json",
+) -> Path:
     manifests = []
     for path in (project_root / "data/manifests/download_manifests").glob("*.json"):
         manifests.append(json.loads(path.read_text(encoding="utf-8")))
@@ -18,7 +21,9 @@ def generate_download_report(project_root: Path, output: str | Path = "outputs/r
     return out
 
 
-def license_matrix_rows(registry_path: str | Path = "data/manifests/dataset_registry.json") -> list[dict[str, Any]]:
+def license_matrix_rows(
+    registry_path: str | Path = "data/manifests/dataset_registry.json",
+) -> list[dict[str, Any]]:
     rows = []
     for source in list_sources(registry_path):
         result = verify_license(source)

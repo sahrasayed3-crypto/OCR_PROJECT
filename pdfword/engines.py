@@ -239,7 +239,7 @@ class FeatureFlaggedLocalModelEngine:
             if enabled is None
             else enabled
         )
-        self.model_name = model_name
+        self.model_name: str | None = model_name
         self.model_revision = model_revision
         self.max_image_bytes = max(1, max_image_bytes)
         self.retry_count = max(0, retry_count)

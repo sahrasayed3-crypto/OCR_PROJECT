@@ -74,7 +74,9 @@ def _profile_root(value: str | None) -> Path:
 
 
 def inspect_config(args: argparse.Namespace) -> int:
-    config = load_config(args.config or default_data_config_path(), _dataset_workspace())
+    config = load_config(
+        args.config or default_data_config_path(), _dataset_workspace()
+    )
     print(
         json.dumps(
             {
@@ -146,9 +148,7 @@ def list_ingested(args: argparse.Namespace) -> int:
 
 
 def find_duplicates(args: argparse.Namespace) -> int:
-    registry = read_registry(
-        _dataset_workspace() / "data/manifests/file_registry.json"
-    )
+    registry = read_registry(_dataset_workspace() / "data/manifests/file_registry.json")
     by_checksum: dict[str, list[dict]] = {}
     for item in registry:
         by_checksum.setdefault(item["checksum"], []).append(item)

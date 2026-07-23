@@ -14,7 +14,6 @@ from clouda_training.sampling.splits import (
     deterministic_sample,
 )
 
-
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "dataset_catalog" / "registry" / "datasets_v1.json"
 
@@ -43,7 +42,11 @@ def test_split_is_document_level_and_deterministic() -> None:
 
 
 def test_exact_hash_deduplication() -> None:
-    records = [{"image_checksum": "a"}, {"image_checksum": "a"}, {"image_checksum": "b"}]
+    records = [
+        {"image_checksum": "a"},
+        {"image_checksum": "a"},
+        {"image_checksum": "b"},
+    ]
     kept, rejected = deduplicate_records(records)
     assert len(kept) == 2
     assert len(rejected) == 1

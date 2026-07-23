@@ -20,9 +20,7 @@ def test_scan_accepts_explicit_test_placeholder(tmp_path: Path) -> None:
 
 def test_scan_detects_private_key_without_exposing_value(tmp_path: Path) -> None:
     marker = "-----BEGIN " + "PRIVATE KEY-----"
-    report = scan_repository(
-        _repository(tmp_path, f"{marker}\nnot-printed")
-    )
+    report = scan_repository(_repository(tmp_path, f"{marker}\nnot-printed"))
     assert report["passed"] is False
     assert report["secret_findings"] == [
         {"path": "file.txt", "rule": "private_key", "line": 1}

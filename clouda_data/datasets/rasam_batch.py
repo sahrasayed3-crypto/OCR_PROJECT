@@ -13,7 +13,13 @@ from xml.etree import ElementTree
 
 from PIL import Image
 
-from clouda_data.datasets.downloader import DownloadedFile, content_length, disk_free_bytes, download_http, sha256_file
+from clouda_data.datasets.downloader import (
+    DownloadedFile,
+    content_length,
+    disk_free_bytes,
+    download_http,
+    sha256_file,
+)
 from clouda_data.ground_truth.checksums import sha256_text
 from clouda_data.ingestion.file_inspection import text_from_ground_truth
 
@@ -84,7 +90,9 @@ class RasamBatchResult:
 def _fetch_bytes(url: str) -> bytes:
     from clouda_data.datasets.downloader import _urlopen
 
-    request = urllib.request.Request(url, headers={"User-Agent": "arabic-ocr-dataset-prep/0.1"})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "arabic-ocr-dataset-prep/0.1"}
+    )
     with _urlopen(request, timeout=60) as response:
         return response.read()
 
@@ -130,7 +138,10 @@ def load_image_index() -> dict[str, dict[str, str]]:
 def _github_page_entries(subset: str) -> list[dict[str, Any]]:
     url = f"{RASAM_API}/contents/page/{subset}?ref=main"
     entries = _fetch_json(url)
-    return sorted([entry for entry in entries if entry["name"].lower().endswith(".xml")], key=lambda item: item["name"])
+    return sorted(
+        [entry for entry in entries if entry["name"].lower().endswith(".xml")],
+        key=lambda item: item["name"],
+    )
 
 
 def _is_public_domain(rights: str, license_value: str) -> bool:
@@ -143,7 +154,10 @@ def select_rasam_pages(batch_size: int = 100) -> list[RasamPageCandidate]:
         raise ValueError("batch_size must be positive.")
     image_index = load_image_index()
     selected: list[RasamPageCandidate] = []
-    subset_targets = [("rasam1", batch_size // 2), ("rasam2", batch_size - (batch_size // 2))]
+    subset_targets = [
+        ("rasam1", batch_size // 2),
+        ("rasam2", batch_size - (batch_size // 2)),
+    ]
     manifest_cache: dict[str, tuple[str, str]] = {}
     for subset, target in subset_targets:
         for entry in _github_page_entries(subset):
@@ -153,7 +167,9 @@ def select_rasam_pages(batch_size: int = 100) -> list[RasamPageCandidate]:
                 continue
             manifest_url = image_row["IIIF manifest"]
             if manifest_url not in manifest_cache:
-                manifest_cache[manifest_url] = _manifest_rights(_fetch_json(manifest_url))
+                manifest_cache[manifest_url] = _manifest_rights(
+                    _fetch_json(manifest_url)
+                )
             rights, license_value = manifest_cache[manifest_url]
             image_id = image_row["IIIF image ID"]
             width = int(image_row["Width (px)"])
@@ -190,7 +206,9 @@ def _batch_root(project_root: Path) -> Path:
     return project_root / "data/downloads/rasam_dataset/first_batch"
 
 
-def plan_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max_bytes: int = ONE_GB) -> RasamBatchPlan:
+def plan_rasam_first_batch(
+    project_root: Path, *, batch_size: int = 100, max_bytes: int = ONE_GB
+) -> RasamBatchPlan:
     pages = select_rasam_pages(batch_size)
     created_at = datetime.now(timezone.utc).isoformat()
     root = _batch_root(project_root)
@@ -202,7 +220,12 @@ def plan_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max_byt
         project_root / "data/manifests",
         project_root / "outputs/reports",
     ]
-    metadata_files = ["metadata/LICENSE", "metadata/README.md", "metadata/contributing.md", "metadata/list-images.tsv"]
+    metadata_files = [
+        "metadata/LICENSE",
+        "metadata/README.md",
+        "metadata/contributing.md",
+        "metadata/list-images.tsv",
+    ]
     page_files = [f"page_xml/{page.page_id}.xml" for page in pages]
     image_files = [f"images/{page.page_id}.jpg" for page in pages]
     manifest_files = [
@@ -213,12 +236,20 @@ def plan_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max_byt
         "../../../outputs/reports/rasam_first_batch_quality.json",
         "../../../docs/RASAM_FIRST_BATCH_REPORT.md",
     ]
-    estimated = sum(page.page_xml_size_bytes + (page.estimated_image_size_bytes or 0) for page in pages)
-    estimated += sum(content_length(url) or 0 for url in [LICENSE_URL, README_URL, CONTRIBUTING_URL, LIST_IMAGES_URL])
+    estimated = sum(
+        page.page_xml_size_bytes + (page.estimated_image_size_bytes or 0)
+        for page in pages
+    )
+    estimated += sum(
+        content_length(url) or 0
+        for url in [LICENSE_URL, README_URL, CONTRIBUTING_URL, LIST_IMAGES_URL]
+    )
     issues: list[str] = []
     if len(pages) != batch_size:
         issues.append(f"selected_page_count_mismatch:{len(pages)}")
-    if any(not _is_public_domain(page.image_rights, page.image_license) for page in pages):
+    if any(
+        not _is_public_domain(page.image_rights, page.image_license) for page in pages
+    ):
         issues.append("image_license_not_public_domain_for_all_pages")
     if any(page.estimated_image_size_bytes is None for page in pages):
         issues.append("missing_image_content_length")
@@ -230,7 +261,13 @@ def plan_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max_byt
     license_summary = {
         "repository_files": {
             "covered_by": "Apache-2.0",
-            "files": ["README.md", "contributing.md", "list-images.tsv", "page/rasam1/*.xml", "page/rasam2/*.xml"],
+            "files": [
+                "README.md",
+                "contributing.md",
+                "list-images.tsv",
+                "page/rasam1/*.xml",
+                "page/rasam2/*.xml",
+            ],
             "commercial_use": "permitted",
             "redistribution": "permitted_with_Apache_2_0_notice",
         },
@@ -267,7 +304,9 @@ def _relative(path: Path, base: Path) -> str:
     return path.resolve().relative_to(base.resolve()).as_posix()
 
 
-def _download_asset(url: str, destination: Path, *, remaining_bytes: int) -> DownloadedFile:
+def _download_asset(
+    url: str, destination: Path, *, remaining_bytes: int
+) -> DownloadedFile:
     if destination.exists():
         return DownloadedFile(
             url=url,
@@ -281,17 +320,41 @@ def _download_asset(url: str, destination: Path, *, remaining_bytes: int) -> Dow
 
 def _page_xml_features(path: Path) -> dict[str, Any]:
     root = ElementTree.parse(path).getroot()
-    page = next((element for element in root.iter() if element.tag.rsplit("}", 1)[-1] == "Page"), None)
+    page = next(
+        (
+            element
+            for element in root.iter()
+            if element.tag.rsplit("}", 1)[-1] == "Page"
+        ),
+        None,
+    )
     if page is None:
         raise ValueError("missing_page_element")
-    regions = [element for element in page.iter() if element.tag.rsplit("}", 1)[-1].endswith("TextRegion")]
-    lines = [element for element in page.iter() if element.tag.rsplit("}", 1)[-1].endswith("TextLine")]
+    regions = [
+        element
+        for element in page.iter()
+        if element.tag.rsplit("}", 1)[-1].endswith("TextRegion")
+    ]
+    lines = [
+        element
+        for element in page.iter()
+        if element.tag.rsplit("}", 1)[-1].endswith("TextLine")
+    ]
     reading_refs = []
     for element in root.iter():
         if element.tag.rsplit("}", 1)[-1] == "RegionRefIndexed":
-            reading_refs.append({"index": element.attrib.get("index"), "regionRef": element.attrib.get("regionRef")})
+            reading_refs.append(
+                {
+                    "index": element.attrib.get("index"),
+                    "regionRef": element.attrib.get("regionRef"),
+                }
+            )
     region_ids = {element.attrib.get("id") for element in regions}
-    invalid_reading_order = [item for item in reading_refs if item["regionRef"] not in region_ids or item["index"] is None]
+    invalid_reading_order = [
+        item
+        for item in reading_refs
+        if item["regionRef"] not in region_ids or item["index"] is None
+    ]
     text = text_from_ground_truth(path, "page_xml")
     layout_types = []
     for region in regions:
@@ -310,10 +373,27 @@ def _page_xml_features(path: Path) -> dict[str, Any]:
     }
 
 
-def download_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max_bytes: int = ONE_GB) -> RasamBatchResult:
-    plan = plan_rasam_first_batch(project_root, batch_size=batch_size, max_bytes=max_bytes)
+def download_rasam_first_batch(
+    project_root: Path, *, batch_size: int = 100, max_bytes: int = ONE_GB
+) -> RasamBatchResult:
+    plan = plan_rasam_first_batch(
+        project_root, batch_size=batch_size, max_bytes=max_bytes
+    )
     if not plan.ok:
-        return RasamBatchResult(False, plan.batch_id, 0, 0, plan.page_count, 0, plan.page_count, "", "", "", "", plan.issues)
+        return RasamBatchResult(
+            False,
+            plan.batch_id,
+            0,
+            0,
+            plan.page_count,
+            0,
+            plan.page_count,
+            "",
+            "",
+            "",
+            "",
+            plan.issues,
+        )
     root = _batch_root(project_root)
     for directory in plan.directories_to_create:
         Path(directory).mkdir(parents=True, exist_ok=True)
@@ -338,7 +418,20 @@ def download_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max
             downloaded.append(item)
             remaining -= item.size_bytes
             if remaining < 0:
-                return RasamBatchResult(False, plan.batch_id, max_bytes - remaining, 0, plan.page_count, 0, plan.page_count, "", "", "", "", ["download_exceeded_limit"])
+                return RasamBatchResult(
+                    False,
+                    plan.batch_id,
+                    max_bytes - remaining,
+                    0,
+                    plan.page_count,
+                    0,
+                    plan.page_count,
+                    "",
+                    "",
+                    "",
+                    "",
+                    ["download_exceeded_limit"],
+                )
     download_manifest = {
         "source_id": RASAM_SOURCE_ID,
         "batch_id": plan.batch_id,
@@ -348,13 +441,20 @@ def download_rasam_first_batch(project_root: Path, *, batch_size: int = 100, max
         "estimated_download_size_bytes": plan.estimated_download_size_bytes,
         "files": [asdict(item) for item in downloaded],
     }
-    out = project_root / "data/manifests/download_manifests/rasam_dataset_first_batch.json"
+    out = (
+        project_root
+        / "data/manifests/download_manifests/rasam_dataset_first_batch.json"
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(download_manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    out.write_text(
+        json.dumps(download_manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     return verify_rasam_first_batch(project_root, plan=plan)
 
 
-def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None = None) -> RasamBatchResult:
+def verify_rasam_first_batch(
+    project_root: Path, *, plan: RasamBatchPlan | None = None
+) -> RasamBatchResult:
     if plan is None:
         plan = plan_rasam_first_batch(project_root)
     root = _batch_root(project_root)
@@ -390,13 +490,19 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
                     reasons.append("empty_ground_truth")
                 if features["invalid_reading_order"]:
                     reasons.append("invalid_reading_order")
-                if features["image_filename"] and Path(features["image_filename"]).stem != page.page_id:
+                if (
+                    features["image_filename"]
+                    and Path(features["image_filename"]).stem != page.page_id
+                ):
                     reasons.append("page_xml_image_filename_mismatch")
                 with Image.open(image_path) as image:
                     image.verify()
                 with Image.open(image_path) as image:
                     image_width, image_height = image.size
-                if (image_width, image_height) != (features["image_width"], features["image_height"]):
+                if (image_width, image_height) != (
+                    features["image_width"],
+                    features["image_height"],
+                ):
                     reasons.append("image_xml_dimension_mismatch")
                 widths.append(image_width)
                 heights.append(image_height)
@@ -411,8 +517,16 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
             "subset": page.subset,
             "manuscript": page.manuscript,
             "page_number": page_number,
-            "page_xml_path": _relative(xml_path, project_root) if xml_path.exists() else str(xml_path),
-            "image_path": _relative(image_path, project_root) if image_path.exists() else str(image_path),
+            "page_xml_path": (
+                _relative(xml_path, project_root)
+                if xml_path.exists()
+                else str(xml_path)
+            ),
+            "image_path": (
+                _relative(image_path, project_root)
+                if image_path.exists()
+                else str(image_path)
+            ),
             "page_xml_checksum_sha256": xml_checksum,
             "image_checksum_sha256": image_checksum,
             "image_width": features.get("image_width", page.image_width),
@@ -447,8 +561,14 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
                     "reading_order": [],
                 }
             )
-    downloaded_size += sum((root / f"metadata/{name}").stat().st_size for name in ["LICENSE", "README.md", "contributing.md", "list-images.tsv"] if (root / f"metadata/{name}").exists())
-    reason_counts = Counter(reason for item in manifest_records for reason in item["rejection_reasons"])
+    downloaded_size += sum(
+        (root / f"metadata/{name}").stat().st_size
+        for name in ["LICENSE", "README.md", "contributing.md", "list-images.tsv"]
+        if (root / f"metadata/{name}").exists()
+    )
+    reason_counts = Counter(
+        reason for item in manifest_records for reason in item["rejection_reasons"]
+    )
     total_files = sum(1 for path in root.rglob("*") if path.is_file())
     source_manifest = {
         "documents": [
@@ -464,14 +584,22 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
         "pages": source_pages,
     }
     source_manifest_path = root / "source_manifest.json"
-    source_manifest_path.write_text(json.dumps(source_manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    batch_manifest_path = project_root / "data/manifests/rasam_first_batch_manifest.json"
+    source_manifest_path.write_text(
+        json.dumps(source_manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    batch_manifest_path = (
+        project_root / "data/manifests/rasam_first_batch_manifest.json"
+    )
     batch_manifest_path.parent.mkdir(parents=True, exist_ok=True)
     batch_manifest = {
         "schema_version": "0.1.0",
         "batch_id": "rasam_first_batch",
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "source": {"source_id": RASAM_SOURCE_ID, "repository_url": RASAM_REPO, "image_provider": "BULAC BiNA IIIF"},
+        "source": {
+            "source_id": RASAM_SOURCE_ID,
+            "repository_url": RASAM_REPO,
+            "image_provider": "BULAC BiNA IIIF",
+        },
         "downloaded_size_bytes": downloaded_size,
         "extracted_size_bytes": downloaded_size,
         "total_files": total_files,
@@ -481,9 +609,19 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
         "rejected_pages": len(rejections),
         "missing_ground_truth": reason_counts.get("missing_ground_truth", 0),
         "empty_ground_truth": reason_counts.get("empty_ground_truth", 0),
-        "invalid_page_xml": sum(count for reason, count in reason_counts.items() if reason.startswith("corrupt_or_invalid") or reason == "invalid_reading_order"),
-        "image_xml_mismatches": reason_counts.get("page_xml_image_filename_mismatch", 0) + reason_counts.get("image_xml_dimension_mismatch", 0),
-        "duplicate_pages": sum(count for reason, count in reason_counts.items() if reason.startswith("duplicate_file")),
+        "invalid_page_xml": sum(
+            count
+            for reason, count in reason_counts.items()
+            if reason.startswith("corrupt_or_invalid")
+            or reason == "invalid_reading_order"
+        ),
+        "image_xml_mismatches": reason_counts.get("page_xml_image_filename_mismatch", 0)
+        + reason_counts.get("image_xml_dimension_mismatch", 0),
+        "duplicate_pages": sum(
+            count
+            for reason, count in reason_counts.items()
+            if reason.startswith("duplicate_file")
+        ),
         "ground_truth_coverage": f"{valid_pages}/{len(manifest_records)}",
         "layout_annotation_coverage": f"{sum(1 for item in manifest_records if item['layout_annotation_present'])}/{len(manifest_records)}",
         "languages": sorted(languages),
@@ -498,17 +636,28 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
             "source_kind": "BULAC/BiNA IIIF full-page JPEG images",
             "image_decode": "passed for all valid pages",
             "dimension_alignment": "PAGE XML dimensions match decoded images for all valid pages",
-            "corrupt_images": sum(count for reason, count in reason_counts.items() if reason.startswith("corrupt_or_invalid")),
+            "corrupt_images": sum(
+                count
+                for reason, count in reason_counts.items()
+                if reason.startswith("corrupt_or_invalid")
+            ),
         },
         "license_status": "approved_with_conditions: Apache-2.0 repository annotations/metadata; selected BULAC/BiNA IIIF images verified as public-domain rights.",
         "records": manifest_records,
     }
-    batch_manifest_path.write_text(json.dumps(batch_manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    batch_manifest_path.write_text(
+        json.dumps(batch_manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     rejections_path = project_root / "data/manifests/rasam_first_batch_rejections.jsonl"
-    rejections_path.write_text("".join(json.dumps(item, ensure_ascii=False) + "\n" for item in rejections), encoding="utf-8")
+    rejections_path.write_text(
+        "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in rejections),
+        encoding="utf-8",
+    )
     quality_report = project_root / "outputs/reports/rasam_first_batch_quality.json"
     quality_report.parent.mkdir(parents=True, exist_ok=True)
-    quality_report.write_text(json.dumps(batch_manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    quality_report.write_text(
+        json.dumps(batch_manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     report_path = write_rasam_first_batch_report(project_root, batch_manifest, plan)
     return RasamBatchResult(
         ok=not issues,
@@ -526,7 +675,9 @@ def verify_rasam_first_batch(project_root: Path, *, plan: RasamBatchPlan | None 
     )
 
 
-def write_rasam_first_batch_report(project_root: Path, summary: dict[str, Any], plan: RasamBatchPlan) -> Path:
+def write_rasam_first_batch_report(
+    project_root: Path, summary: dict[str, Any], plan: RasamBatchPlan
+) -> Path:
     out = project_root / "docs/RASAM_FIRST_BATCH_REPORT.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     lines = [
