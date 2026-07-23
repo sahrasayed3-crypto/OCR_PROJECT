@@ -2,7 +2,7 @@
 
 ## النتائج النهائية
 
-- Full pytest: 298 passed, 0 failed, 2 skipped.
+- Full pytest النهائي: 300 passed, 0 failed, 2 skipped.
 - Security suite بعد إضافة property tests: 22 passed, 0 failed, 2 skipped.
 - Coverage: 75.12% total; 79.11% statements; 60.60% branches.
 - Ruff: pass.
