@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "features": [
+    {"feature":"real_pixel_distortion","status":"complete","default":"enabled"},
+    {"feature":"metadata_only_distortion","status":"complete","default":"explicit_test_only"},
+    {"feature":"rendering","status":"complete","formats":["pdf","png","jpeg","tiff","webp"]},
+    {"feature":"distortion_profiles","status":"complete","count":18},
+    {"feature":"batch_resume","status":"complete"},
+    {"feature":"validation_quarantine","status":"complete"},
+    {"feature":"preview","status":"complete"},
+    {"feature":"quality_classification","status":"complete","field":"estimated_visual_difficulty"},
+    {"feature":"cer_wer_evaluation","status":"complete"},
+    {"feature":"training_export","status":"complete","training_started":false},
+    {"feature":"local_ocr_adapters","status":"complete","real_model":"external_blocker"},
+    {"feature":"runtime_ocr_mock","status":"complete","default":"disabled"},
+    {"feature":"data_lifecycle","status":"complete","default":"dry_run"},
+    {"feature":"administration_ui","status":"complete","exposure":"local_only"},
+    {"feature":"redis_metrics_tls_hooks","status":"complete","production_redis":"external"},
+    {"feature":"parallel_distortion","status":"partially_complete","execution":"deterministic_sequential"},
+    {"feature":"gpu_training","status":"disabled","blocker":"legal_model_hardware"},
+    {"feature":"production_oidc_tls","status":"external_blocker"}
+  ]
+}
