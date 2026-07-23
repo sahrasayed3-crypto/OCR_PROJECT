@@ -36,7 +36,8 @@ data = [
   "jsonschema==4.23.0"
 ]
 training = [
-  "PyYAML==6.0.2"
+  "PyYAML==6.0.2",
+  "jsonschema==4.23.0"
 ]
 models = [
   "requests>=2.32.0"

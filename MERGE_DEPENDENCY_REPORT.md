@@ -7,6 +7,7 @@ python-docx, and requests. Optional groups isolate:
 - server: FastAPI, Starlette, python-multipart, Streamlit, Uvicorn;
 - worker: Redis and RQ;
 - data: PyYAML, defusedxml, jsonschema;
+- training: PyYAML and jsonschema (the license-gate dependency);
 - tests: pytest, pytest-cov, HTTPX, fakeredis, PyMuPDF, pdfplumber;
 - development: Ruff, Black, mypy, build.
 
