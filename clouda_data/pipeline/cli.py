@@ -43,6 +43,13 @@ from clouda_data.locations import (
     repository_root,
 )
 from clouda_data.pipeline.profiles import list_profile_paths, load_profile
+from clouda_data.rendering import RenderConfig, render_document, validate_render_manifest
+from clouda_data.distortion.workflow import (
+    generate_preview,
+    read_jsonl,
+    run_distortion_batch,
+    validate_distortion_manifest,
+)
 
 
 def _project_root() -> Path:
@@ -305,7 +312,9 @@ def list_profiles(args: argparse.Namespace) -> int:
 
 
 def describe_profile(args: argparse.Namespace) -> int:
-    path = _profile_root(args.config_dir) / f"{args.name}.json"
+    root = _profile_root(args.config_dir)
+    candidates = [root / f"{args.name}.yaml", root / f"{args.name}.yml", root / f"{args.name}.json"]
+    path = next((candidate for candidate in candidates if candidate.is_file()), candidates[0])
     profile = load_profile(path)
     print(json.dumps(profile, ensure_ascii=False, indent=2))
     return 0
@@ -373,6 +382,102 @@ def system_inspection(args: argparse.Namespace) -> int:
         "tesseract": shutil.which("tesseract"),
     }
     print(json.dumps(payload, indent=2))
+    return 0
+
+
+def render_cli(args: argparse.Namespace) -> int:
+    config = RenderConfig(
+        dpi=args.dpi,
+        output_format=args.output_format,
+        color_mode=args.color_mode,
+        max_dimension=args.max_dimension,
+        max_pixels=args.max_pixels,
+        start_page=args.start_page,
+        end_page=args.end_page,
+        dry_run=args.dry_run,
+        resume=args.resume,
+    )
+    path = render_document(
+        args.source,
+        output_root=args.output_root,
+        config=config,
+        run_id=args.run_id,
+    )
+    print(str(path))
+    return 0
+
+
+def render_status_cli(args: argparse.Namespace) -> int:
+    records = read_jsonl(args.manifest)
+    counts: dict[str, int] = {}
+    for record in records:
+        key = str(record.get("status", "unknown"))
+        counts[key] = counts.get(key, 0) + 1
+    print(json.dumps({"records": len(records), "statuses": counts}, indent=2))
+    return 0
+
+
+def render_validate_cli(args: argparse.Namespace) -> int:
+    report = validate_render_manifest(args.manifest)
+    print(json.dumps(report, indent=2))
+    return 0 if report["passed"] else 1
+
+
+def _resolve_profile(value: str) -> Path:
+    candidate = Path(value).expanduser()
+    if candidate.is_file():
+        return candidate.resolve()
+    root = default_profile_dir()
+    choices = [root / f"{value}.yaml", root / f"{value}.yml", root / f"{value}.json"]
+    result = next((path for path in choices if path.is_file()), None)
+    if result is None:
+        raise FileNotFoundError(f"Unknown distortion profile: {value}")
+    return result.resolve()
+
+
+def distort_cli(args: argparse.Namespace) -> int:
+    path = run_distortion_batch(
+        args.input_manifest,
+        _resolve_profile(args.profile),
+        output_root=args.output_root,
+        seed=args.seed,
+        variants=args.variants,
+        max_pages=args.maximum_pages,
+        allow_large_run=args.allow_large_run,
+        dry_run=args.dry_run,
+        resume=args.resume,
+        fail_fast=args.fail_fast,
+        conflict_policy=args.overwrite_policy,
+    )
+    print(str(path))
+    return 0
+
+
+def distort_status_cli(args: argparse.Namespace) -> int:
+    records = read_jsonl(args.manifest)
+    counts: dict[str, int] = {}
+    for record in records:
+        key = str(record.get("status", "unknown"))
+        counts[key] = counts.get(key, 0) + 1
+    print(json.dumps({"records": len(records), "statuses": counts}, indent=2))
+    return 0
+
+
+def distort_validate_cli(args: argparse.Namespace) -> int:
+    report = validate_distortion_manifest(args.manifest, quarantine=args.quarantine)
+    print(json.dumps(report, indent=2))
+    return 0 if report["passed"] else 1
+
+
+def distort_preview_cli(args: argparse.Namespace) -> int:
+    path = generate_preview(args.manifest, limit=args.limit, difference=not args.no_difference)
+    print(str(path))
+    return 0
+
+
+def validate_distortion_profile_cli(args: argparse.Namespace) -> int:
+    profile = load_profile(_resolve_profile(args.profile))
+    print(json.dumps({"profile_id": profile["name"], "valid": True}, indent=2))
     return 0
 
 
@@ -512,14 +617,72 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("inspect-system")
     p.set_defaults(func=system_inspection)
 
-    for future in ["render", "distort", "validate", "evaluate", "resume"]:
-        p = sub.add_parser(future)
-        p.set_defaults(
-            func=lambda args, name=future: (
-                print(f"{name} is reserved for a later phase."),
-                2,
-            )[1]
-        )
+    for name in ["render", "render-resume"]:
+        p = sub.add_parser(name)
+        p.add_argument("source")
+        p.add_argument("--output-root")
+        p.add_argument("--run-id")
+        p.add_argument("--dpi", type=int, default=200)
+        p.add_argument("--output-format", choices=["png", "jpeg", "tiff", "webp"], default="png")
+        p.add_argument("--color-mode", choices=["color", "grayscale", "binary"], default="color")
+        p.add_argument("--max-dimension", type=int, default=8000)
+        p.add_argument("--max-pixels", type=int, default=40_000_000)
+        p.add_argument("--start-page", type=int, default=1)
+        p.add_argument("--end-page", type=int)
+        p.add_argument("--dry-run", action="store_true")
+        p.add_argument("--resume", action="store_true", default=name == "render-resume")
+        p.set_defaults(func=render_cli)
+
+    p = sub.add_parser("render-status")
+    p.add_argument("manifest")
+    p.set_defaults(func=render_status_cli)
+    p = sub.add_parser("render-validate")
+    p.add_argument("manifest")
+    p.set_defaults(func=render_validate_cli)
+
+    for name in ["distort", "distort-page", "distort-batch", "distort-dry-run", "distort-resume"]:
+        p = sub.add_parser(name)
+        p.add_argument("input_manifest")
+        p.add_argument("--profile", required=True)
+        p.add_argument("--output-root")
+        p.add_argument("--seed", type=int, required=True)
+        p.add_argument("--variants", type=int, default=1)
+        p.add_argument("--start-page", type=int, default=1)
+        p.add_argument("--end-page", type=int)
+        p.add_argument("--include-dataset-ids", nargs="*", default=[])
+        p.add_argument("--exclude-dataset-ids", nargs="*", default=[])
+        p.add_argument("--maximum-pages", type=int, default=1 if name == "distort-page" else 100)
+        p.add_argument("--maximum-bytes", type=int, default=1024 * 1024 * 1024)
+        p.add_argument("--workers", type=int, default=1)
+        p.add_argument("--overwrite-policy", choices=["reject", "skip_identical", "version_new", "overwrite_only_with_explicit_flag"], default="reject")
+        p.add_argument("--resume", action="store_true", default=name == "distort-resume")
+        p.add_argument("--dry-run", action="store_true", default=name == "distort-dry-run")
+        p.add_argument("--fail-fast", action="store_true")
+        p.add_argument("--report-format", choices=["json", "jsonl", "csv", "markdown"], default="jsonl")
+        p.add_argument("--logging-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO")
+        p.add_argument("--allow-large-run", action="store_true")
+        p.set_defaults(func=distort_cli)
+
+    p = sub.add_parser("distort-status")
+    p.add_argument("manifest")
+    p.set_defaults(func=distort_status_cli)
+    for name in ["distort-validate", "validate"]:
+        p = sub.add_parser(name)
+        p.add_argument("manifest")
+        p.add_argument("--quarantine", action="store_true")
+        p.set_defaults(func=distort_validate_cli)
+    for name in ["distort-preview", "preview-run"]:
+        p = sub.add_parser(name)
+        p.add_argument("manifest")
+        p.add_argument("--limit", type=int, default=10)
+        p.add_argument("--no-difference", action="store_true")
+        p.set_defaults(func=distort_preview_cli)
+    p = sub.add_parser("list-distortion-profiles")
+    p.add_argument("--config-dir")
+    p.set_defaults(func=list_profiles)
+    p = sub.add_parser("validate-distortion-profile")
+    p.add_argument("profile")
+    p.set_defaults(func=validate_distortion_profile_cli)
 
     return parser
 

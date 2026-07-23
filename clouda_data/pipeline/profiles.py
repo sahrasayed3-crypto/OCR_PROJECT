@@ -6,6 +6,8 @@ from typing import Any
 
 from clouda_data.distortion.base import DistortionSpec
 from clouda_data.locations import default_profile_dir
+from jsonschema import Draft202012Validator
+import yaml
 
 REQUIRED_PROFILE_FIELDS = {
     "name",
@@ -20,12 +22,32 @@ REQUIRED_PROFILE_FIELDS = {
 
 
 def load_profile(path: str | Path) -> dict[str, Any]:
-    profile = json.loads(Path(path).read_text(encoding="utf-8"))
+    profile_path = Path(path)
+    text = profile_path.read_text(encoding="utf-8")
+    profile = (
+        yaml.safe_load(text)
+        if profile_path.suffix.lower() in {".yaml", ".yml"}
+        else json.loads(text)
+    )
     validate_profile(profile)
     return profile
 
 
 def validate_profile(profile: dict[str, Any]) -> None:
+    if "profile_id" in profile:
+        schema_path = Path(__file__).resolve().parents[2] / "schemas" / "distortion-profile-v1.schema.json"
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        errors = sorted(Draft202012Validator(schema).iter_errors(profile), key=lambda item: list(item.path))
+        if errors:
+            raise ValueError("; ".join(error.message for error in errors))
+        profile.setdefault("name", profile["profile_id"])
+        profile.setdefault("recommended_use", profile["intended_use"])
+        profile.setdefault("distortions", profile["transformations"])
+        profile.setdefault("ordering_constraints", [])
+        profile.setdefault("mutually_exclusive", profile.get("exclusions", []))
+        profile.setdefault("maximum_allowed_crop", 0.05)
+        profile.setdefault("minimum_readable_text_threshold", 0.7)
+        profile.setdefault("metadata_fields", ["operation_order", "parameters", "random_seed"])
     missing = sorted(REQUIRED_PROFILE_FIELDS - set(profile))
     if missing:
         raise ValueError(f"Profile is missing fields: {', '.join(missing)}")
@@ -59,4 +81,4 @@ def profile_to_specs(profile: dict[str, Any]) -> list[DistortionSpec]:
 
 def list_profile_paths(config_dir: str | Path | None = None) -> list[Path]:
     root = Path(config_dir) if config_dir is not None else default_profile_dir()
-    return sorted(root.glob("*.json"))
+    return sorted([*root.glob("*.json"), *root.glob("*.yaml"), *root.glob("*.yml")])

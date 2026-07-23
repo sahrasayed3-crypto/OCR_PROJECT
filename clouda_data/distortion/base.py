@@ -21,9 +21,16 @@ class DistortionSpec:
             raise ValueError("Distortion name is required.")
         if not 0.0 <= self.probability <= 1.0:
             raise ValueError(f"{self.name}.probability must be between 0 and 1.")
-        if self.severity not in {"none", "light", "medium", "heavy"}:
+        if self.severity not in {
+            "none",
+            "minimal",
+            "light",
+            "medium",
+            "heavy",
+            "extreme",
+        }:
             raise ValueError(
-                f"{self.name}.severity must be none, light, medium, or heavy."
+                f"{self.name}.severity is not supported."
             )
 
 
@@ -35,7 +42,9 @@ class Distortion(ABC):
         self.spec = spec
 
     @abstractmethod
-    def apply(self, image: Any, seed: int) -> tuple[Any, DistortionMetadata]:
+    def apply(
+        self, image: Any, seed: int, context: dict[str, Any] | None = None
+    ) -> tuple[Any, DistortionMetadata]:
         """Apply a distortion to an in-memory page object."""
 
     def validate_input(self, image: Any) -> None:
@@ -44,8 +53,11 @@ class Distortion(ABC):
 
 
 class MetadataOnlyDistortion(Distortion):
-    def apply(self, image: Any, seed: int) -> tuple[Any, DistortionMetadata]:
+    def apply(
+        self, image: Any, seed: int, context: dict[str, Any] | None = None
+    ) -> tuple[Any, DistortionMetadata]:
         self.validate_input(image)
+        del context
         metadata = DistortionMetadata(
             name=self.spec.name,
             version=self.spec.version,
