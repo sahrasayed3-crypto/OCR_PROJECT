@@ -50,6 +50,7 @@ from clouda_data.distortion.workflow import (
     run_distortion_batch,
     validate_distortion_manifest,
 )
+from clouda_data.evaluation.execution import evaluate_manifest
 
 
 def _project_root() -> Path:
@@ -481,6 +482,12 @@ def validate_distortion_profile_cli(args: argparse.Namespace) -> int:
     return 0
 
 
+def evaluate_cli(args: argparse.Namespace) -> int:
+    path = evaluate_manifest(args.manifest, args.output)
+    print(str(path))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m clouda_data.pipeline.cli")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -683,6 +690,12 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("validate-distortion-profile")
     p.add_argument("profile")
     p.set_defaults(func=validate_distortion_profile_cli)
+
+    for name in ["evaluate", "evaluate-manifest", "evaluate-run", "evaluation-report", "compare-models"]:
+        p = sub.add_parser(name)
+        p.add_argument("manifest")
+        p.add_argument("--output")
+        p.set_defaults(func=evaluate_cli)
 
     return parser
 

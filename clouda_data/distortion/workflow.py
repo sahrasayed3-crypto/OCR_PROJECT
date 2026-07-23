@@ -275,6 +275,8 @@ def run_distortion_batch(
                 "output_uri": f"dataset://{output_path.relative_to(roots.dataset_root).as_posix()}",
                 "output_checksum": None,
                 "ground_truth_reference": source.get("ground_truth_reference", "synthetic://unchanged"),
+                "ground_truth_text": source.get("ground_truth_text"),
+                "attribution": source.get("attribution", ""),
                 "profile_id": profile["name"],
                 "profile_version": profile.get("schema_version", 1),
                 "profile_hash": profile_hash,
