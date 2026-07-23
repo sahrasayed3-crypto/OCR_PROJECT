@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "policy": "copy-allowlist",
+  "excluded_from_merged_git": [
+    ".env",
+    ".env.* except .env.example",
+    ".secrets/",
+    "credentials/",
+    ".venv*/",
+    "__pycache__/",
+    ".pytest_cache/",
+    ".mypy_cache/",
+    ".ruff_cache/",
+    "bundled Python runtimes",
+    "bundled Poppler runtimes",
+    "SQLite databases and WAL/SHM files",
+    "runtime conversions and user uploads",
+    "runtime logs and backups",
+    "downloaded and raw datasets",
+    "full ground-truth manifests",
+    "model weights and checkpoints",
+    "coverage and benchmark outputs",
+    "temporary files",
+    "_git_metadata_backup/"
+  ],
+  "source_a_export": "tracked commit b6e548a853991b872d804f5e71238d17fa7103a7",
+  "source_b_code_export": "allowlisted code, tests, configs, tools, documentation, and safe catalog metadata only",
+  "restricted_assets_committed": false,
+  "secrets_copied": false
+}
