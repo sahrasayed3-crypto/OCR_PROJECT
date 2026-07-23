@@ -131,7 +131,8 @@ def _atomic_image_save(image: Image.Image, target: Path, fmt: str, dpi: int) -> 
         if fmt in {"JPEG", "WEBP"}:
             options["quality"] = 92
         image.save(temp, **options)
-        with temp.open("rb") as stream:
+        with temp.open("r+b") as stream:
+            stream.flush()
             os.fsync(stream.fileno())
         if target.exists():
             raise FileExistsError(f"Refusing to overwrite {target}")

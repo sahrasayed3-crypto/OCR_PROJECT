@@ -188,7 +188,7 @@ class RealImageDistortion(Distortion):
                 draw.ellipse((x - radius, y - radius, x + radius, y + radius), fill=color)
             return result, affected, {"point_count": count}
 
-        if name in {"row_noise", "column_noise", "banding", "streaks", "scanner_lines", "scratches", "fold_marks", "creases"}:
+        if name in {"row_noise", "column_noise", "banding", "streaks", "scanner_lines", "scratches", "fold_marks", "creases", "wrinkles"}:
             result = image.copy()
             draw = ImageDraw.Draw(result, "RGBA")
             count = max(1, int(2 + 12 * strength))
