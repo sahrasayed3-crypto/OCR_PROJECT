@@ -1,0 +1,21 @@
+{
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "executable": "E:\\new ocr project\\.venv\\Scripts\\python.exe",
+  "pip_freeze": [
+    "attrs==26.1.0",
+    "colorama==0.4.6",
+    "iniconfig==2.3.0",
+    "jsonschema==4.23.0",
+    "jsonschema-specifications==2025.9.1",
+    "packaging==26.2",
+    "pillow==10.4.0",
+    "pluggy==1.6.0",
+    "pytest==8.3.3",
+    "PyYAML==6.0.2",
+    "referencing==0.37.0",
+    "rpds-py==2026.6.3",
+    "ruff==0.6.9",
+    "typing_extensions==4.16.0"
+  ]
+}
