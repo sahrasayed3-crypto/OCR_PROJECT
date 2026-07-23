@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from clouda_contracts.storage import StorageRoots
+
 from .database import Database
 from .engines import get_engine_registry
 
@@ -38,7 +40,10 @@ class RuntimeSettings:
 
 
 def runtime_settings() -> RuntimeSettings:
-    storage_root = Path(os.getenv("STORAGE_ROOT", "conversions"))
+    roots = StorageRoots.from_env()
+    storage_root = Path(
+        os.getenv("STORAGE_ROOT", str(roots.runtime_root / "conversions"))
+    )
     return RuntimeSettings(
         app_role=os.getenv("APP_ROLE", "server").strip().lower(),
         redis_url=os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0").strip(),
@@ -50,9 +55,14 @@ def runtime_settings() -> RuntimeSettings:
         worker_name=os.getenv("WORKER_NAME", "").strip(),
         local_processing_enabled=_env_bool("LOCAL_PROCESSING_ENABLED", False),
         storage_root=storage_root,
-        temp_root=Path(os.getenv("TEMP_ROOT", str(storage_root / "temporary"))),
+        temp_root=Path(
+            os.getenv("TEMP_ROOT", str(storage_root / "temporary"))
+        ),
         database_path=Path(
-            os.getenv("DATABASE_PATH", str(Path("data") / "clouda.sqlite3"))
+            os.getenv(
+                "CLOUDA_DATABASE_PATH",
+                os.getenv("DATABASE_PATH", str(roots.database_path)),
+            )
         ),
         worker_concurrency=max(1, int(os.getenv("WORKER_CONCURRENCY", "1"))),
         job_timeout_seconds=max(60, int(os.getenv("JOB_TIMEOUT_SECONDS", "7200"))),

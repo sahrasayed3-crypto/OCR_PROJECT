@@ -34,6 +34,17 @@ def default_catalog_path() -> Path:
     return root / "dataset_catalog" / "registry" / "datasets_v1.json"
 
 
+def default_data_config_path() -> Path:
+    root = repository_root()
+    if root is not None:
+        candidate = root / "configs" / "data_foundation" / "example.yaml"
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError(
+        "The data foundation config requires CLOUDA_PROJECT_ROOT or an explicit --config."
+    )
+
+
 def default_profile_dir() -> Path:
     root = repository_root()
     if root is not None:

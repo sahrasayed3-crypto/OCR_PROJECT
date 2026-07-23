@@ -5,7 +5,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator
 
-DEFAULT_DB_PATH = Path("data") / "clouda.sqlite3"
+from clouda_contracts.storage import StorageRoots
+
+DEFAULT_DB_PATH = StorageRoots.from_env().database_path
 SCHEMA_VERSION = 3
 FINAL_STATUSES = {"completed", "failed", "manual_review", "cancelled"}
 ALLOWED_STATUS_TRANSITIONS = {
@@ -24,7 +26,11 @@ def utc_now() -> str:
 
 class Database:
     def __init__(self, path: str | Path | None = None) -> None:
-        configured_path = path if path is not None else os.getenv("DATABASE_PATH")
+        configured_path = (
+            path
+            if path is not None
+            else os.getenv("CLOUDA_DATABASE_PATH") or os.getenv("DATABASE_PATH")
+        )
         self.path = Path(configured_path or DEFAULT_DB_PATH)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.initialize()

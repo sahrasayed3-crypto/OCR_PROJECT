@@ -8,6 +8,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from clouda_contracts.storage import StorageRoots
 from clouda_data.config.loader import load_config
 from clouda_data.datasets.downloader import (
     download_dataset_sample,
@@ -36,6 +37,7 @@ from clouda_data.ingestion.workflow import (
     validate_source_manifest_file,
 )
 from clouda_data.locations import (
+    default_data_config_path,
     default_foundation_registry_path,
     default_profile_dir,
     repository_root,
@@ -45,6 +47,18 @@ from clouda_data.pipeline.profiles import list_profile_paths, load_profile
 
 def _project_root() -> Path:
     return repository_root() or Path.cwd().resolve()
+
+
+def _dataset_workspace() -> Path:
+    return StorageRoots.from_env().dataset_root
+
+
+def _artifact_workspace() -> Path:
+    return StorageRoots.from_env().artifact_root
+
+
+def _cache_workspace() -> Path:
+    return StorageRoots.from_env().cache_root
 
 
 def _catalog_path(value: str | None) -> Path:
@@ -60,7 +74,7 @@ def _profile_root(value: str | None) -> Path:
 
 
 def inspect_config(args: argparse.Namespace) -> int:
-    config = load_config(args.config, _project_root())
+    config = load_config(args.config or default_data_config_path(), _dataset_workspace())
     print(
         json.dumps(
             {
@@ -102,19 +116,21 @@ def inspect_source(args: argparse.Namespace) -> int:
 
 
 def validate_source(args: argparse.Namespace) -> int:
-    plan = validate_source_manifest_file(args.manifest, _project_root())
+    plan = validate_source_manifest_file(args.manifest, _dataset_workspace())
     print(json.dumps(plan_to_dict(plan), ensure_ascii=False, indent=2))
     return 0 if plan.ok else 1
 
 
 def ingest(args: argparse.Namespace) -> int:
-    plan = ingest_source_manifest(args.manifest, _project_root(), dry_run=args.dry_run)
+    plan = ingest_source_manifest(
+        args.manifest, _dataset_workspace(), dry_run=args.dry_run
+    )
     print(json.dumps(plan_to_dict(plan), ensure_ascii=False, indent=2))
     return 0 if plan.ok else 1
 
 
 def list_ingested(args: argparse.Namespace) -> int:
-    root = _project_root()
+    root = _dataset_workspace()
     page_manifest = root / "data/manifests/page_manifest.json"
     registry = root / "data/manifests/file_registry.json"
     payload = {
@@ -130,7 +146,9 @@ def list_ingested(args: argparse.Namespace) -> int:
 
 
 def find_duplicates(args: argparse.Namespace) -> int:
-    registry = read_registry(_project_root() / "data/manifests/file_registry.json")
+    registry = read_registry(
+        _dataset_workspace() / "data/manifests/file_registry.json"
+    )
     by_checksum: dict[str, list[dict]] = {}
     for item in registry:
         by_checksum.setdefault(item["checksum"], []).append(item)
@@ -144,7 +162,7 @@ def find_duplicates(args: argparse.Namespace) -> int:
 
 
 def generate_ingestion_report(args: argparse.Namespace) -> int:
-    root = _project_root()
+    root = _dataset_workspace()
     if args.manifest:
         plan = validate_source_manifest_file(args.manifest, root)
         payload = plan_to_dict(plan)
@@ -161,7 +179,11 @@ def generate_ingestion_report(args: argparse.Namespace) -> int:
             ),
             "files": read_registry(root / "data/manifests/file_registry.json"),
         }
-    out = Path(args.output)
+    out = (
+        Path(args.output).expanduser().resolve()
+        if args.output
+        else _artifact_workspace() / "reports" / "ingestion_report.json"
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(str(out))
@@ -223,7 +245,7 @@ def estimate_download(args: argparse.Namespace) -> int:
 def download_dataset_sample_cli(args: argparse.Namespace) -> int:
     result = download_dataset_sample(
         args.source_id,
-        project_root=_project_root(),
+        project_root=_dataset_workspace(),
         registry_path=_catalog_path(args.registry),
         max_bytes=args.max_bytes,
         dry_run=args.dry_run,
@@ -237,20 +259,25 @@ def resume_download(args: argparse.Namespace) -> int:
 
 
 def verify_download_cli(args: argparse.Namespace) -> int:
-    result = verify_download(args.source_id, project_root=_project_root())
+    result = verify_download(args.source_id, project_root=_dataset_workspace())
     print(json.dumps(result_to_dict(result), ensure_ascii=False, indent=2))
     return 0 if result.ok else 1
 
 
 def generate_download_report_cli(args: argparse.Namespace) -> int:
-    out = generate_download_report(_project_root(), args.output)
+    output = (
+        Path(args.output).expanduser().resolve()
+        if args.output
+        else _artifact_workspace() / "reports" / "dataset_download_report.json"
+    )
+    out = generate_download_report(_dataset_workspace(), output)
     print(str(out))
     return 0
 
 
 def plan_rasam_first_batch_cli(args: argparse.Namespace) -> int:
     plan = plan_rasam_first_batch(
-        _project_root(), batch_size=args.pages, max_bytes=args.max_bytes
+        _dataset_workspace(), batch_size=args.pages, max_bytes=args.max_bytes
     )
     print(json.dumps(rasam_plan_to_dict(plan), ensure_ascii=False, indent=2))
     return 0 if plan.ok else 1
@@ -258,14 +285,14 @@ def plan_rasam_first_batch_cli(args: argparse.Namespace) -> int:
 
 def download_rasam_first_batch_cli(args: argparse.Namespace) -> int:
     result = download_rasam_first_batch(
-        _project_root(), batch_size=args.pages, max_bytes=args.max_bytes
+        _dataset_workspace(), batch_size=args.pages, max_bytes=args.max_bytes
     )
     print(json.dumps(rasam_result_to_dict(result), ensure_ascii=False, indent=2))
     return 0 if result.ok else 1
 
 
 def verify_rasam_first_batch_cli(args: argparse.Namespace) -> int:
-    result = verify_rasam_first_batch(_project_root())
+    result = verify_rasam_first_batch(_dataset_workspace())
     print(json.dumps(rasam_result_to_dict(result), ensure_ascii=False, indent=2))
     return 0 if result.ok else 1
 
@@ -291,7 +318,7 @@ def preview(args: argparse.Namespace) -> int:
             file=sys.stderr,
         )
         return 2
-    out = _project_root() / "outputs" / "previews" / "synthetic_preview.txt"
+    out = _artifact_workspace() / "previews" / "synthetic_preview.txt"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(
         "Synthetic preview placeholder only. No real distorted page was generated.\n",
@@ -320,7 +347,7 @@ def status(args: argparse.Namespace) -> int:
 
 
 def cleanup(args: argparse.Namespace) -> int:
-    targets = [_project_root() / "temp"]
+    targets = [_cache_workspace() / "temporary"]
     for target in targets:
         if target.exists():
             for child in target.iterdir():
@@ -354,7 +381,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     p = sub.add_parser("inspect-config")
-    p.add_argument("--config", default="config.example.yaml")
+    p.add_argument("--config")
     p.set_defaults(func=inspect_config)
 
     p = sub.add_parser("validate-project")
@@ -398,7 +425,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("generate-ingestion-report")
     p.add_argument("--manifest")
-    p.add_argument("--output", default="outputs/reports/ingestion_report.json")
+    p.add_argument("--output")
     p.set_defaults(func=generate_ingestion_report)
 
     p = sub.add_parser("list-dataset-sources")
@@ -441,7 +468,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=verify_download_cli)
 
     p = sub.add_parser("generate-download-report")
-    p.add_argument("--output", default="outputs/reports/dataset_download_report.json")
+    p.add_argument("--output")
     p.set_defaults(func=generate_download_report_cli)
 
     p = sub.add_parser("plan-rasam-first-batch")
