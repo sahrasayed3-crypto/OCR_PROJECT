@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from PIL import Image, ImageChops, ImageStat
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageStat
 
 from clouda_contracts.storage import StorageRoots
 from clouda_contracts.security import sanitize_spreadsheet_cell
@@ -23,6 +23,7 @@ from clouda_data.datasets.license_gate import decide_dataset_use
 from clouda_data.pipeline.profiles import load_profile, profile_to_specs
 
 from .pipeline import DistortionPipeline
+from .checkpoints import RunCheckpointStore
 
 PAGE_STATES = {
     "queued",
@@ -129,7 +130,11 @@ def _safe_generated_id(value: object) -> str:
     return identifier
 
 
-def classify_visual_difficulty(image: Image.Image, severity: str) -> dict[str, Any]:
+def classify_visual_difficulty(
+    image: Image.Image,
+    severity: str,
+    distortion_metadata: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     gray = image.convert("L")
     stat = ImageStat.Stat(gray)
     mean = float(stat.mean[0])
@@ -141,14 +146,73 @@ def classify_visual_difficulty(image: Image.Image, severity: str) -> dict[str, A
     )
     white_ratio = sum(histogram[250:]) / pixels
     black_ratio = sum(histogram[:6]) / pixels
+    edges = gray.filter(ImageFilter.FIND_EDGES)
+    edge_histogram = edges.histogram()
+    edge_density = sum(edge_histogram[32:]) / pixels
+    edge_variance = float(ImageStat.Stat(edges).var[0])
+    blur_score = 1.0 / (1.0 + edge_variance / 1000.0)
+    median = gray.filter(ImageFilter.MedianFilter(3))
+    noise_image = ImageChops.difference(gray, median)
+    noise_level = float(ImageStat.Stat(noise_image).mean[0]) / 255.0
+    foreground_ratio = 1.0 - white_ratio
+    boundary_differences: list[float] = []
+    sample = gray.resize(
+        (min(gray.width, 1024), min(gray.height, 1024)), Image.Resampling.BILINEAR
+    )
+    for x in range(8, sample.width, 8):
+        boundary_differences.append(
+            float(
+                ImageStat.Stat(
+                    ImageChops.difference(
+                        sample.crop((x - 1, 0, x, sample.height)),
+                        sample.crop((x, 0, x + 1, sample.height)),
+                    )
+                ).mean[0]
+            )
+        )
+    compression_artifact_score = (
+        sum(boundary_differences) / len(boundary_differences) / 255.0
+        if boundary_differences
+        else 0.0
+    )
+    metadata = distortion_metadata or {}
+    transformations = [str(item) for item in metadata.get("transformation_chain", [])]
+    parameters = metadata.get("transformation_parameters", [])
+    skew_degrees = 0.0
+    for name, values in zip(transformations, parameters):
+        if name in {"rotation", "small_rotation", "skew", "page_misalignment"}:
+            skew_degrees = max(
+                skew_degrees,
+                (
+                    abs(float(values.get("degrees", 0.0)))
+                    if isinstance(values, dict)
+                    else 0
+                ),
+            )
+    region_heights = [
+        abs(float(region["bbox"][3]) - float(region["bbox"][1]))
+        for region in metadata.get("regions", [])
+        if isinstance(region, dict)
+        and isinstance(region.get("bbox"), (list, tuple))
+        and len(region["bbox"]) == 4
+    ]
+    estimated_text_size = (
+        sum(region_heights) / len(region_heights) if region_heights else 0.0
+    )
     score = {"minimal": 0, "light": 1, "medium": 2, "heavy": 3, "extreme": 4}.get(
         severity, 2
     )
     if stddev < 5 or white_ratio > 0.9999 or black_ratio > 0.995 or entropy < 0.05:
         label = "invalid"
-    elif score >= 4 or stddev < 30:
+    elif (
+        score >= 4
+        or stddev < 30
+        or blur_score > 0.92
+        or noise_level > 0.14
+        or compression_artifact_score > 0.22
+    ):
         label = "extreme"
-    elif score >= 3:
+    elif score >= 3 or blur_score > 0.78 or noise_level > 0.08 or skew_degrees > 4:
         label = "difficult"
     elif score >= 2:
         label = "medium"
@@ -161,6 +225,13 @@ def classify_visual_difficulty(image: Image.Image, severity: str) -> dict[str, A
         "page_entropy": entropy,
         "blankness": white_ratio,
         "blackness": black_ratio,
+        "blur_score": blur_score,
+        "noise_level": noise_level,
+        "edge_density": edge_density,
+        "compression_artifact_score": compression_artifact_score,
+        "foreground_ratio": foreground_ratio,
+        "estimated_skew_degrees": skew_degrees,
+        "estimated_text_size": estimated_text_size,
     }
 
 
@@ -187,10 +258,19 @@ def _validate_asset(
         errors.append("decode_failed")
     if image.width < 1 or image.height < 1:
         errors.append("invalid_dimensions")
-    if record.get("transformation_chain") and _sha256(source_path) == _sha256(
-        output_path
-    ):
-        errors.append("identical_to_source")
+    if image.width * image.height > 100_000_000:
+        errors.append("maximum_pixels_exceeded")
+    if max(image.size) > 20_000:
+        errors.append("maximum_dimension_exceeded")
+    if record.get("transformation_chain"):
+        with Image.open(source_path) as source_image:
+            source_pixels = source_image.convert("RGB")
+            output_pixels = image.convert("RGB")
+            if (
+                source_pixels.size == output_pixels.size
+                and not ImageChops.difference(source_pixels, output_pixels).getbbox()
+            ):
+                errors.append("identical_to_source")
     difficulty = classify_visual_difficulty(
         image, str(record.get("overall_severity", "medium"))
     )
@@ -204,6 +284,23 @@ def _validate_asset(
         errors.append("missing_profile_hash")
     if not record.get("ground_truth_reference"):
         errors.append("missing_ground_truth_reference")
+    if not record.get("run_id"):
+        errors.append("missing_run_id")
+    if not record.get("transformation_parameters"):
+        errors.append("missing_transformation_parameters")
+    if not record.get("affected_regions"):
+        errors.append("missing_affected_regions")
+    if record.get("license_status") in {"blocked", "pending", "expired"}:
+        errors.append("license_not_eligible")
+    if record.get("run_id") and record.get("variant") is not None:
+        expected_id = hashlib.sha256(
+            (
+                f"{record['run_id']}:{record.get('source_page_id')}:"
+                f"{record['variant']}"
+            ).encode()
+        ).hexdigest()[:32]
+        if expected_id != record.get("generated_page_id"):
+            errors.append("non_deterministic_generated_id")
     return errors
 
 
@@ -227,6 +324,8 @@ def run_distortion_batch(
     exclude_dataset_ids: set[str] | None = None,
     maximum_output_bytes: int = 1024 * 1024 * 1024,
     workers: int = 1,
+    max_retries: int = 2,
+    stale_after_seconds: int = 300,
 ) -> Path:
     if max_pages < 1 or variants < 1:
         raise ValueError("max_pages and variants must be positive")
@@ -238,6 +337,10 @@ def run_distortion_batch(
         raise ValueError("workers must be between 1 and 8")
     if maximum_output_bytes < 1:
         raise ValueError("maximum_output_bytes must be positive")
+    if not 0 <= max_retries <= 10:
+        raise ValueError("max_retries must be between 0 and 10")
+    if stale_after_seconds < 1:
+        raise ValueError("stale_after_seconds must be positive")
     roots = StorageRoots.from_env()
     manifest_path = Path(input_manifest).expanduser().resolve()
     if not _inside(manifest_path, roots.dataset_root):
@@ -285,6 +388,21 @@ def run_distortion_batch(
         base_seed=seed,
     )
     run_root.mkdir(parents=True, exist_ok=True)
+    checkpoints = RunCheckpointStore(run_root / "checkpoints.sqlite3")
+    checkpoints.start_run(
+        run_id,
+        input_checksum=_sha256(manifest_path),
+        profile_hash=profile_hash,
+        metadata={
+            "profile_id": profile["name"],
+            "max_pages": max_pages,
+            "variants": variants,
+            "seed": seed,
+        },
+        resume=resume,
+    )
+    if resume:
+        checkpoints.recover_stale(stale_after_seconds=stale_after_seconds)
     run_manifest = run_root / "run_manifest.v1.json"
     run_manifest.write_text(
         json.dumps(
@@ -350,19 +468,53 @@ def run_distortion_batch(
                 "skipped",
             }:
                 continue
+            checkpoint_status = checkpoints.queue_page(
+                run_id=run_id,
+                generated_page_id=generated_id,
+                source_page_id=source_page_id,
+                variant=variant,
+                max_retries=max_retries,
+            )
+            if checkpoint_status in {
+                "complete",
+                "manual_review",
+                "quarantined",
+                "skipped",
+                "cancelled",
+            }:
+                continue
+            if not checkpoints.claim_page(generated_id):
+                if fail_fast:
+                    raise RuntimeError(
+                        f"Page {generated_id} cannot be claimed for processing"
+                    )
+                continue
             output_path = run_root / "pages" / f"{generated_id}.png"
             if output_path.exists() and not resume:
                 raise FileExistsError(output_path)
             started = time.perf_counter()
-            with Image.open(source_path) as opened:
-                opened.load()
-                result, transformations = pipeline.run(
-                    opened,
-                    f"{source_page_id}:{variant}",
-                    context={"regions": source.get("regions", [])},
+            try:
+                with Image.open(source_path) as opened:
+                    opened.load()
+                    source_dimensions = list(opened.size)
+                    result, transformations = pipeline.run(
+                        opened,
+                        f"{source_page_id}:{variant}",
+                        context={"regions": source.get("regions", [])},
+                    )
+            except Exception as exc:
+                checkpoints.finish_page(
+                    generated_id,
+                    status="failed",
+                    error=f"{type(exc).__name__}: {str(exc)[:500]}",
                 )
+                if fail_fast:
+                    raise
+                continue
             record: dict[str, Any] = {
                 "schema_version": 1,
+                "run_id": run_id,
+                "variant": variant,
                 "generated_page_id": generated_id,
                 "source_page_id": source_page_id,
                 "source_document_id": source.get("source_document_id"),
@@ -386,11 +538,13 @@ def run_distortion_batch(
                 "transformation_parameters": [
                     item.parameters for item in transformations
                 ],
+                "parameters": [item.parameters for item in transformations],
                 "seeds": [item.random_seed for item in transformations],
                 "severity_per_transformation": [
                     item.severity for item in transformations
                 ],
                 "overall_severity": profile.get("severity", "medium"),
+                "severity": profile.get("severity", "medium"),
                 "layout_mode": (
                     "regions" if source.get("regions") else "whole_page_fallback"
                 ),
@@ -399,7 +553,7 @@ def run_distortion_batch(
                     for item in transformations
                     for region in item.output_metadata.get("affected_regions", [])
                 ],
-                "source_dimensions": list(opened.size),
+                "source_dimensions": source_dimensions,
                 "output_dimensions": list(result.size),
                 "created_at": datetime.now(timezone.utc).isoformat(),
                 "software_version": "clouda-pdf/0.2.0",
@@ -408,40 +562,76 @@ def run_distortion_batch(
                 "host": {"system": platform.system(), "machine": platform.machine()},
                 "license_status": license_status,
                 "commercial_training_allowed": commercial_allowed,
-                "status": "planned" if dry_run else "processing",
+                "status": "skipped" if dry_run else "processing",
                 "retry_count": 0,
                 "processing_seconds": time.perf_counter() - started,
                 "warning_list": [],
+                "warnings": [],
                 "error": None,
             }
-            if not dry_run:
-                free_threshold = max(
-                    64 * 1024 * 1024,
-                    int(
-                        os.getenv("CLOUDA_MIN_FREE_DISK_BYTES", str(512 * 1024 * 1024))
-                    ),
+            try:
+                if not dry_run:
+                    free_threshold = max(
+                        64 * 1024 * 1024,
+                        int(
+                            os.getenv(
+                                "CLOUDA_MIN_FREE_DISK_BYTES",
+                                str(512 * 1024 * 1024),
+                            )
+                        ),
+                    )
+                    if shutil.disk_usage(run_root).free < free_threshold:
+                        raise OSError(
+                            "Free disk space is below CLOUDA_MIN_FREE_DISK_BYTES"
+                        )
+                    _atomic_save(result, output_path)
+                    output_bytes += output_path.stat().st_size
+                    if output_bytes > maximum_output_bytes:
+                        output_path.unlink(missing_ok=True)
+                        raise OSError("Run exceeded maximum output bytes")
+                    record["output_checksum"] = _sha256(output_path)
+                    quality = classify_visual_difficulty(
+                        result, str(record["overall_severity"]), record
+                    )
+                    record.update(quality)
+                    errors = _validate_asset(
+                        record,
+                        roots=roots,
+                        source_path=source_path,
+                        output_path=output_path,
+                        image=result,
+                    )
+                    record["status"] = "manual_review" if errors else "complete"
+                    record["warning_list"] = errors
+                    record["warnings"] = errors
+                else:
+                    record["warning_list"] = ["dry_run"]
+                    record["warnings"] = ["dry_run"]
+            except Exception as exc:
+                checkpoints.finish_page(
+                    generated_id,
+                    status="failed",
+                    output_uri=str(record["output_uri"]),
+                    error=f"{type(exc).__name__}: {str(exc)[:500]}",
                 )
-                if shutil.disk_usage(run_root).free < free_threshold:
-                    raise OSError("Free disk space is below CLOUDA_MIN_FREE_DISK_BYTES")
-                _atomic_save(result, output_path)
-                output_bytes += output_path.stat().st_size
-                if output_bytes > maximum_output_bytes:
-                    output_path.unlink(missing_ok=True)
-                    raise OSError("Run exceeded maximum output bytes")
-                record["output_checksum"] = _sha256(output_path)
-                quality = classify_visual_difficulty(
-                    result, str(record["overall_severity"])
-                )
-                record.update(quality)
-                errors = _validate_asset(
-                    record,
-                    roots=roots,
-                    source_path=source_path,
-                    output_path=output_path,
-                    image=result,
-                )
-                record["status"] = "manual_review" if errors else "complete"
-                record["warning_list"] = errors
+                if fail_fast:
+                    raise
+                continue
+            checkpoints.finish_page(
+                generated_id,
+                status=str(record["status"]),
+                output_uri=str(record["output_uri"]),
+                output_checksum=(
+                    str(record["output_checksum"])
+                    if record["output_checksum"] is not None
+                    else None
+                ),
+                error=(
+                    ";".join(str(item) for item in record["warning_list"])
+                    if record["warning_list"]
+                    else None
+                ),
+            )
             records.append(record)
             by_id[generated_id] = record
             _write_jsonl_atomic(output_manifest, records)
@@ -455,13 +645,14 @@ def run_distortion_batch(
                     }
                 )
                 run_manifest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                checkpoints.finish_run(run_id, "interrupted")
                 raise RunInterrupted(
                     f"Intentional interruption after {len(records)} records"
                 )
     status = (
         "complete"
         if all(
-            item.get("status") in {"complete", "manual_review", "planned"}
+            item.get("status") in {"complete", "manual_review", "skipped"}
             for item in records
         )
         else "failed"
@@ -475,6 +666,7 @@ def run_distortion_batch(
         }
     )
     run_manifest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    checkpoints.finish_run(run_id, status)
     if not dry_run:
         (run_root / "COMPLETE.v1.json").write_text(
             json.dumps(
@@ -497,6 +689,7 @@ def validate_distortion_manifest(
         raise PermissionError("Distortion manifest must stay inside dataset root")
     records = read_jsonl(path)
     failures: list[dict[str, Any]] = []
+    validation_records: list[dict[str, Any]] = []
     for record in records:
         source = _dataset_uri_path(roots, record["source_uri"])
         output = _dataset_uri_path(roots, record["output_uri"])
@@ -513,9 +706,10 @@ def validate_distortion_manifest(
         except Exception as exc:
             errors = [f"decode_failed:{type(exc).__name__}"]
         if errors:
-            failures.append(
-                {"generated_page_id": record["generated_page_id"], "errors": errors}
-            )
+            failure: dict[str, Any] = {
+                "generated_page_id": record["generated_page_id"],
+                "errors": errors,
+            }
             if quarantine and output.is_file():
                 destination = (
                     roots.dataset_root / "quarantine" / path.parent.name / output.name
@@ -523,6 +717,23 @@ def validate_distortion_manifest(
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 if not destination.exists():
                     shutil.copy2(output, destination)
+                failure["quarantine_uri"] = (
+                    f"dataset://{destination.relative_to(roots.dataset_root).as_posix()}"
+                )
+                failure["quarantine_checksum"] = _sha256(destination)
+            failures.append(failure)
+            validation_records.append(
+                {
+                    **record,
+                    "status": "quarantined" if quarantine else "failed",
+                    "validation_errors": errors,
+                    "quarantine_uri": failure.get("quarantine_uri"),
+                }
+            )
+        else:
+            validation_records.append(
+                {**record, "validation_errors": [], "validated": True}
+            )
     report = {
         "schema_version": 1,
         "records": len(records),
@@ -535,6 +746,7 @@ def validate_distortion_manifest(
     (report_root / f"{stem}.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
+    _write_jsonl_atomic(report_root / f"{stem}.jsonl", validation_records)
     with (report_root / f"{stem}.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
@@ -555,7 +767,11 @@ def validate_distortion_manifest(
 
 
 def generate_preview(
-    manifest: str | Path, *, limit: int = 10, difference: bool = True
+    manifest: str | Path,
+    *,
+    limit: int = 10,
+    difference: bool = True,
+    layout_overlay: bool = False,
 ) -> Path:
     roots = StorageRoots.from_env()
     manifest_path = Path(manifest).expanduser().resolve()
@@ -565,6 +781,7 @@ def generate_preview(
     preview_root = roots.artifact_root / "previews" / manifest_path.parent.name
     preview_root.mkdir(parents=True, exist_ok=True)
     rows: list[str] = []
+    contact_images: list[tuple[str, Image.Image]] = []
     for record in records:
         source = _dataset_uri_path(roots, record["source_uri"])
         output = _dataset_uri_path(roots, record["output_uri"])
@@ -572,6 +789,16 @@ def generate_preview(
         with Image.open(source) as src_file, Image.open(output) as dst_file:
             src = src_file.convert("RGB")
             dst = dst_file.convert("RGB")
+            if layout_overlay:
+                overlay = ImageDraw.Draw(dst)
+                for region in record.get("regions", []):
+                    bbox = region.get("bbox") if isinstance(region, dict) else None
+                    if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                        overlay.rectangle(
+                            tuple(int(float(value)) for value in bbox),
+                            outline=(220, 20, 60),
+                            width=3,
+                        )
             thumb_size = (640, 640)
             src.thumbnail(thumb_size)
             dst.thumbnail(thumb_size)
@@ -585,28 +812,49 @@ def generate_preview(
                 diff.save(preview_root / f"{generated_id}-diff.png")
             preview = preview_root / f"{generated_id}.jpg"
             canvas.save(preview, "JPEG", quality=85)
+            contact = canvas.copy()
+            contact.thumbnail((400, 260))
+            contact_images.append((generated_id, contact))
+        seeds = ", ".join(str(value) for value in record.get("seeds", []))
         rows.append(
             f"<tr><td>{html.escape(str(record['source_page_id']))}</td>"
             f"<td>{html.escape(str(record['generated_page_id']))}</td>"
             f"<td>{html.escape(str(record['profile_id']))}</td>"
             f"<td>{html.escape(str(record.get('overall_severity')))}</td>"
+            f"<td>{html.escape(seeds)}</td>"
             f"<td><img loading='lazy' width='640' src='{preview.name}'></td></tr>"
         )
+    if contact_images:
+        columns = 4
+        cell_width, cell_height = 420, 300
+        selected = contact_images[:25]
+        rows_count = math.ceil(len(selected) / columns)
+        sheet = Image.new(
+            "RGB", (cell_width * columns, cell_height * rows_count), "white"
+        )
+        draw = ImageDraw.Draw(sheet)
+        for contact_index, (identifier, contact) in enumerate(selected):
+            x = (contact_index % columns) * cell_width
+            y = (contact_index // columns) * cell_height
+            sheet.paste(contact, (x + 10, y + 28))
+            draw.text((x + 10, y + 8), identifier[:48], fill="black")
+        sheet.save(preview_root / "contact-sheet.jpg", "JPEG", quality=85)
     document = (
         "<!doctype html><meta charset='utf-8'><title>Clouda distortion preview</title>"
         "<h1>Distortion preview</h1><table><thead><tr><th>Source</th><th>Generated</th>"
-        "<th>Profile</th><th>Severity</th><th>Preview</th></tr></thead><tbody>"
+        "<th>Profile</th><th>Severity</th><th>Seeds</th><th>Preview</th></tr></thead><tbody>"
         + "".join(rows)
         + "</tbody></table>"
     )
-    index = preview_root / "index.html"
-    index.write_text(document, encoding="utf-8")
+    index_path = preview_root / "index.html"
+    index_path.write_text(document, encoding="utf-8")
     (preview_root / "README.md").write_text(
         "# Preview index\n\n"
+        "- [Contact sheet](contact-sheet.jpg)\n\n"
         + "\n".join(
             f"- `{record['generated_page_id']}` — {record['profile_id']}"
             for record in records
         ),
         encoding="utf-8",
     )
-    return index
+    return index_path

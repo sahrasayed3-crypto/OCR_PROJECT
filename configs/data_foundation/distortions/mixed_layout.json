@@ -2,7 +2,7 @@
   "name": "mixed_layout",
   "recommended_use": "Arabic-English, tables, columns, and varied text zones.",
   "distortions": [
-    {"name": "layout_aware_noise", "probability": 0.45, "severity": "medium", "parameters": {"low_priority_regions": true}},
+    {"name": "gaussian_noise", "probability": 0.45, "severity": "medium", "parameters": {"low_priority_regions": true}},
     {"name": "partial_clipping", "probability": 0.18, "severity": "light", "parameters": {"avoid_regions": ["title", "page_number"]}},
     {"name": "scanner_noise", "probability": 0.35, "severity": "light", "parameters": {"amount": [0.01, 0.03]}}
   ],
@@ -12,4 +12,3 @@
   "minimum_readable_text_threshold": 0.93,
   "metadata_fields": ["layout_metadata", "operation_order", "parameters", "random_seed"]
 }
-

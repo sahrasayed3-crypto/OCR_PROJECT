@@ -35,6 +35,8 @@ def build_parser() -> argparse.ArgumentParser:
         default="commercial_training",
     )
     export.add_argument("--benchmark-exclusion", action="append", default=[])
+    export.add_argument("--max-contribution-per-source", type=int, default=100)
+    export.add_argument("--no-balance", action="store_true")
     validate = subparsers.add_parser("validate")
     validate.add_argument("manifest", type=Path)
     split = subparsers.add_parser("split")
@@ -63,6 +65,10 @@ def main(argv: list[str] | None = None) -> int:
             seed=args.seed,
             purpose=args.purpose,
             benchmark_exclusions=set(getattr(args, "benchmark_exclusion", [])),
+            max_contribution_per_source=getattr(
+                args, "max_contribution_per_source", 100
+            ),
+            balance=not getattr(args, "no_balance", False),
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0 if not result["document_leakage"] else 1

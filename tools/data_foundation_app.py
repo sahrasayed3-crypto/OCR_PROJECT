@@ -13,7 +13,9 @@ from clouda_data.distortion.workflow import (
     generate_preview,
     read_jsonl,
     run_distortion_batch,
+    validate_distortion_manifest,
 )
+from clouda_data.distortion.checkpoints import RunCheckpointStore
 from clouda_data.locations import default_profile_dir
 from clouda_data.pipeline.profiles import list_profile_paths, load_profile
 from clouda_training.exporter import export_training_data
@@ -69,23 +71,34 @@ manifest_value = st.text_input(
     value=str(roots.dataset_root / "rendered" / "MANIFEST.jsonl"),
 )
 seed = st.number_input("Deterministic seed", min_value=0, value=20260723)
-pages = st.number_input("Maximum pages", min_value=1, max_value=100, value=10)
+pages = st.number_input("Maximum pages", min_value=1, max_value=1000, value=10)
 variants = st.number_input("Variants per page", min_value=1, max_value=5, value=1)
-confirm = st.checkbox("I confirm this limited local run (maximum 100 pages)")
+large_run = int(pages) > 100
+if large_run:
+    st.error("This exceeds the safe default of 100 pages.")
+confirm = st.checkbox(
+    "I confirm this local run"
+    + (" and explicitly authorize a large run" if large_run else "")
+)
 
 if st.button("Launch limited run", disabled=not confirm):
     manifest = Path(manifest_value).expanduser().resolve()
+    progress = st.progress(0, text="Validating configuration")
     try:
+        progress.progress(10, text="Starting deterministic distortion run")
         path = run_distortion_batch(
             manifest,
             profiles[profile_id],
             seed=int(seed),
             variants=int(variants),
             max_pages=int(pages),
+            allow_large_run=large_run and confirm,
         )
+        progress.progress(100, text="Run complete")
         st.success(f"Run completed: {path}")
         st.session_state["distortion_manifest"] = str(path)
     except Exception as exc:
+        progress.empty()
         st.error(f"{type(exc).__name__}: {exc}")
 
 distortion_manifest = st.text_input(
@@ -107,6 +120,23 @@ if distortion_manifest and Path(distortion_manifest).is_file():
     statuses = Counter(str(item.get("status")) for item in records)
     st.subheader("Run status")
     st.json({"records": len(records), "statuses": statuses})
+    checkpoint_path = Path(distortion_manifest).parent / "checkpoints.sqlite3"
+    if records and checkpoint_path.is_file():
+        checkpoint = RunCheckpointStore(checkpoint_path)
+        st.json({"checkpoint": checkpoint.summary(str(records[0]["run_id"]))})
+    if st.button("Validate and report"):
+        try:
+            validation = validate_distortion_manifest(
+                distortion_manifest,
+                quarantine=False,
+            )
+            if validation["passed"]:
+                st.success("Validation passed")
+            else:
+                st.error(f"{len(validation['failures'])} validation failures")
+            st.json(validation)
+        except Exception as exc:
+            st.error(f"{type(exc).__name__}: {exc}")
     if st.button("Export evaluation-only training manifest"):
         output = (
             roots.artifact_root
@@ -121,6 +151,9 @@ if distortion_manifest and Path(distortion_manifest).is_file():
             )
             st.success(str(output))
             st.json(report)
+            preview_records = read_jsonl(output)[:10]
+            st.subheader("Training export preview (first 10 records)")
+            st.dataframe(preview_records, use_container_width=True, hide_index=True)
         except Exception as exc:
             st.error(f"{type(exc).__name__}: {exc}")
 

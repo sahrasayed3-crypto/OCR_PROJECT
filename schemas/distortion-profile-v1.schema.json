@@ -6,7 +6,8 @@
   "required": [
     "profile_id", "schema_version", "description", "intended_use", "severity",
     "random_seed_policy", "transformations", "parameter_ranges", "probabilities",
-    "exclusions", "maximum_output_dimensions", "expected_output_count_per_source_page",
+    "exclusions", "maximum_chain_length", "maximum_severity_budget",
+    "maximum_output_dimensions", "expected_output_count_per_source_page",
     "license_restrictions", "quality_class_label"
   ],
   "properties": {
@@ -32,6 +33,8 @@
     "parameter_ranges": {"type": "object"},
     "probabilities": {"type": "object"},
     "exclusions": {"type": "array", "items": {"type": "string"}},
+    "maximum_chain_length": {"type": "integer", "minimum": 1, "maximum": 32},
+    "maximum_severity_budget": {"type": "number", "minimum": 0, "maximum": 32},
     "maximum_output_dimensions": {
       "type": "array", "prefixItems": [{"type":"integer","minimum":256},{"type":"integer","minimum":256}],
       "minItems": 2, "maxItems": 2

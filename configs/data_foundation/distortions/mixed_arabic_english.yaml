@@ -8,6 +8,8 @@ transformations: [{name: small_rotation, probability: 0.5, severity: light}, {na
 parameter_ranges: {}
 probabilities: {mixed: 1.0}
 exclusions: [preserve_reading_order]
+maximum_chain_length: 8
+maximum_severity_budget: 16
 maximum_output_dimensions: [8000, 8000]
 expected_output_count_per_source_page: 3
 license_restrictions: Approved datasets only for training.

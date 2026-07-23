@@ -159,6 +159,8 @@ weights/
 checkpoints/
 !clouda_training/checkpoints/
 !clouda_training/checkpoints/**
+clouda_training/checkpoints/**/__pycache__/
+clouda_training/checkpoints/**/*.py[cod]
 adapters/
 !clouda_contracts/adapters/
 !clouda_contracts/adapters/**

@@ -125,6 +125,7 @@ def scan_repository(root: str | Path, *, max_bytes: int = 5 * 1024 * 1024) -> di
             "MERGE_FILE_MAP.json",
             "MERGE_SOURCE_INVENTORY.json",
             "MERGE_SOURCE_HASHES.json",
+            "SECURITY_SCOPE.md",
         }:
             for needle in ("E:\\new ocr project", "E:\\project_collected"):
                 if needle.casefold() in content.casefold():

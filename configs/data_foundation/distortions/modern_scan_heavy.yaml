@@ -8,6 +8,8 @@ transformations: [{name: page_misalignment, probability: 0.8, severity: heavy}, 
 parameter_ranges: {}
 probabilities: {geometric: 0.8, compression: 0.8}
 exclusions: []
+maximum_chain_length: 8
+maximum_severity_budget: 16
 maximum_output_dimensions: [8000, 8000]
 expected_output_count_per_source_page: 3
 license_restrictions: Approved datasets only for training.

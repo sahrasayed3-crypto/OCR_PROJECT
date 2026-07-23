@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from collections import Counter
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -48,9 +49,16 @@ def export_training_data(
     seed: int = 20260723,
     purpose: str = "commercial_training",
     benchmark_exclusions: set[str] | None = None,
+    max_contribution_per_source: int = 100,
+    balance: bool = True,
+    perceptual_duplicate: (
+        Callable[[dict[str, Any], dict[str, Any]], bool] | None
+    ) = None,
 ) -> dict[str, Any]:
     if export_format not in SUPPORTED_FORMATS:
         raise ValueError(f"Unsupported export format: {export_format}")
+    if not 1 <= max_contribution_per_source <= 100_000:
+        raise ValueError("max_contribution_per_source is outside safe limits")
     roots = StorageRoots.from_env()
     input_path = Path(manifest).expanduser().resolve()
     output_path = Path(output).expanduser().resolve()
@@ -119,7 +127,42 @@ def export_training_data(
                 "commercial_training_allowed": commercial_allowed,
             }
         )
-    deduped, duplicates = deduplicate_records(eligible, checksum_key="output_checksum")
+    deduped, duplicates = deduplicate_records(
+        eligible,
+        checksum_key="output_checksum",
+        perceptual_duplicate=perceptual_duplicate,
+    )
+    ranked = sorted(
+        deduped,
+        key=lambda item: hashlib.sha256(
+            f"{seed}:{item.get('generated_page_id')}".encode()
+        ).digest(),
+    )
+    source_counts: Counter[str] = Counter()
+    capped: list[dict[str, Any]] = []
+    for item in ranked:
+        source_id = str(item["source_document_id"])
+        if source_counts[source_id] >= max_contribution_per_source:
+            continue
+        source_counts[source_id] += 1
+        capped.append(item)
+    if balance:
+        buckets: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+        for item in capped:
+            key = (
+                str(item.get("dataset_id", "unspecified")),
+                str(item.get("profile_id", "unspecified")),
+                str(item.get("estimated_visual_difficulty", "unspecified")),
+            )
+            buckets.setdefault(key, []).append(item)
+        balanced: list[dict[str, Any]] = []
+        while any(buckets.values()):
+            for key in sorted(buckets):
+                if buckets[key]:
+                    balanced.append(buckets[key].pop(0))
+        deduped = balanced
+    else:
+        deduped = capped
     assignments = deterministic_document_split(
         [str(item["source_document_id"]) for item in deduped], seed=seed
     )
@@ -194,6 +237,10 @@ def export_training_data(
         "sha256": hashlib.sha256(output_path.read_bytes()).hexdigest(),
         "purpose": purpose,
         "training_started": False,
+        "balanced": balance,
+        "max_contribution_per_source": max_contribution_per_source,
+        "datasets": dict(Counter(str(item["dataset_id"]) for item in records)),
+        "profiles": dict(Counter(str(item["profile_id"]) for item in records)),
     }
     return summary
 

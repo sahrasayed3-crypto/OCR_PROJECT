@@ -54,6 +54,7 @@ from clouda_data.distortion.workflow import (
     run_distortion_batch,
     validate_distortion_manifest,
 )
+from clouda_data.distortion.checkpoints import RunCheckpointStore
 from clouda_data.evaluation.execution import evaluate_manifest
 from clouda_data.lifecycle import (
     archive_run,
@@ -471,6 +472,8 @@ def distort_cli(args: argparse.Namespace) -> int:
         exclude_dataset_ids=set(args.exclude_dataset_ids),
         maximum_output_bytes=args.maximum_bytes,
         workers=args.workers,
+        max_retries=args.max_retries,
+        stale_after_seconds=args.stale_after_seconds,
     )
     print(str(path))
     return 0
@@ -482,7 +485,16 @@ def distort_status_cli(args: argparse.Namespace) -> int:
     for record in records:
         key = str(record.get("status", "unknown"))
         counts[key] = counts.get(key, 0) + 1
-    print(json.dumps({"records": len(records), "statuses": counts}, indent=2))
+    payload: dict[str, object] = {"records": len(records), "statuses": counts}
+    checkpoint_path = Path(args.manifest).resolve().parent / "checkpoints.sqlite3"
+    if checkpoint_path.is_file():
+        run_manifest = checkpoint_path.parent / "run_manifest.v1.json"
+        if run_manifest.is_file():
+            run_id = str(
+                json.loads(run_manifest.read_text(encoding="utf-8")).get("run_id", "")
+            )
+            payload["checkpoint"] = RunCheckpointStore(checkpoint_path).summary(run_id)
+    print(json.dumps(payload, indent=2))
     return 0
 
 
@@ -494,7 +506,10 @@ def distort_validate_cli(args: argparse.Namespace) -> int:
 
 def distort_preview_cli(args: argparse.Namespace) -> int:
     path = generate_preview(
-        args.manifest, limit=args.limit, difference=not args.no_difference
+        args.manifest,
+        limit=args.limit,
+        difference=not args.no_difference,
+        layout_overlay=args.layout_overlay,
     )
     print(str(path))
     return 0
@@ -726,6 +741,8 @@ def build_parser() -> argparse.ArgumentParser:
         )
         p.add_argument("--maximum-bytes", type=int, default=1024 * 1024 * 1024)
         p.add_argument("--workers", type=int, default=1)
+        p.add_argument("--max-retries", type=int, default=2)
+        p.add_argument("--stale-after-seconds", type=int, default=300)
         p.add_argument(
             "--overwrite-policy",
             choices=[
@@ -770,6 +787,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("manifest")
         p.add_argument("--limit", type=int, default=10)
         p.add_argument("--no-difference", action="store_true")
+        p.add_argument("--layout-overlay", action="store_true")
         p.set_defaults(func=distort_preview_cli)
     p = sub.add_parser("list-distortion-profiles")
     p.add_argument("--config-dir")

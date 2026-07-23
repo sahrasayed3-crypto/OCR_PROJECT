@@ -8,6 +8,8 @@ transformations: [{name: old_paper_texture, probability: 1.0, severity: heavy}, 
 parameter_ranges: {}
 probabilities: {aging: 1.0}
 exclusions: []
+maximum_chain_length: 8
+maximum_severity_budget: 16
 maximum_output_dimensions: [8000, 8000]
 expected_output_count_per_source_page: 3
 license_restrictions: Approved datasets only for training.

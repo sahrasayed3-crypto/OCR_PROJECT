@@ -8,6 +8,8 @@ transformations: [{name: skew, probability: 0.6, severity: medium}, {name: scann
 parameter_ranges: {}
 probabilities: {noise: 0.7, compression: 0.8}
 exclusions: []
+maximum_chain_length: 8
+maximum_severity_budget: 16
 maximum_output_dimensions: [8000, 8000]
 expected_output_count_per_source_page: 3
 license_restrictions: Approved datasets only for training.

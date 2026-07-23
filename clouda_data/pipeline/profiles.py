@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from clouda_data.distortion.base import DistortionSpec
+from clouda_data.distortion.registry import default_registry
 from clouda_data.locations import default_profile_dir
 from jsonschema import Draft202012Validator
 import yaml
@@ -18,6 +19,14 @@ REQUIRED_PROFILE_FIELDS = {
     "maximum_allowed_crop",
     "minimum_readable_text_threshold",
     "metadata_fields",
+}
+_SEVERITY_COST = {
+    "none": 0.0,
+    "minimal": 0.25,
+    "light": 0.5,
+    "medium": 1.0,
+    "heavy": 2.0,
+    "extreme": 4.0,
 }
 
 
@@ -66,7 +75,14 @@ def validate_profile(profile: dict[str, Any]) -> None:
         raise ValueError("minimum_readable_text_threshold must be between 0 and 1.")
     if not isinstance(profile["distortions"], list):
         raise ValueError("distortions must be a list.")
+    maximum_chain_length = int(profile.get("maximum_chain_length", 32))
+    if len(profile["distortions"]) > maximum_chain_length:
+        raise ValueError("Profile exceeds maximum_chain_length")
+    known_operators = set(default_registry().names())
+    severity_budget = 0.0
     for item in profile["distortions"]:
+        if item["name"] not in known_operators:
+            raise ValueError(f"Unknown distortion operator: {item['name']}")
         spec = DistortionSpec(
             name=item["name"],
             probability=float(item.get("probability", 1.0)),
@@ -74,6 +90,13 @@ def validate_profile(profile: dict[str, Any]) -> None:
             parameters=item.get("parameters", {}),
         )
         spec.validate()
+        severity_budget += _SEVERITY_COST[spec.severity] * spec.probability
+    maximum_severity_budget = float(profile.get("maximum_severity_budget", 32))
+    if severity_budget > maximum_severity_budget:
+        raise ValueError(
+            f"Profile severity budget {severity_budget:.2f} exceeds "
+            f"{maximum_severity_budget:.2f}"
+        )
 
 
 def profile_to_specs(profile: dict[str, Any]) -> list[DistortionSpec]:

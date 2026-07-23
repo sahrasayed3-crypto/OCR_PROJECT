@@ -8,6 +8,8 @@ transformations: [{name: perspective, probability: 1.0, severity: extreme}, {nam
 parameter_ranges: {}
 probabilities: {extreme: 1.0}
 exclusions: [commercial_training]
+maximum_chain_length: 8
+maximum_severity_budget: 16
 maximum_output_dimensions: [8000, 8000]
 expected_output_count_per_source_page: 3
 license_restrictions: Evaluation only; manual review required.
