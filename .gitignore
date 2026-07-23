@@ -147,6 +147,12 @@ training_caches/
 *.gguf
 *.model
 models/
+!configs/models/
+!configs/models/**
+!tests/models/
+!tests/models/**
+tests/models/**/__pycache__/
+tests/models/**/*.py[cod]
 weights/
 checkpoints/
 !clouda_training/checkpoints/
