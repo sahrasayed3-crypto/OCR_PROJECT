@@ -1,14 +1,14 @@
-# Local OCR integration
+# تكامل OCR المحلي أثناء التشغيل
 
-Status: **complete behind a disabled-by-default feature flag**.
+يبقى استخراج PDF الرقمي كما هو، ولا يستبدل OCR النص الرقمي بصمت. الصفحة الممسوحة تبقى `pending_ocr_model` عندما يكون `CLOUDA_LOCAL_OCR_ENABLED=false`.
 
-Digital PDF text extraction remains first and unchanged. When a scanned page
-is detected and local OCR is enabled, the page is rendered within limits,
-passed to the configured adapter, checked for non-empty text and bounded
-confidence, and recorded with model identity, revision, time, and quality
-metadata. Low-quality or failed results require manual review. Mixed PDFs keep
-their original page order.
+عند التفعيل:
 
-Without a configured, available, pinned local engine, scanned pages remain
-`pending_ocr_model`. No real model is selected or downloaded automatically.
+1. تُصيّر الصفحة ضمن الحدود.
+2. يُستدعى المحول المحدد.
+3. يرفض النص الفارغ.
+4. تسجل الهوية والمراجعة والزمن والجودة.
+5. يحافظ على ترتيب الصفحات وعلى RTL في DOCX.
+6. تتحول الجودة المنخفضة أو الفشل إلى manual review.
 
+الاختبارات تستخدم mock فقط. النماذج الحقيقية لا تعمل إلا بإعداد صريح لمسار محلي موثوق.

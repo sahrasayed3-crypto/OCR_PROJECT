@@ -1,14 +1,12 @@
-# Validation pipeline
+# مسار التحقق والحجر
 
-Status: **complete**.
+يفحص التحقق: الوجود، SHA-256، فك الصورة، الأبعاد والبكسلات، الأسود/الأبيض/الفراغ غير المتوقع، التطابق البكسلي مع المصدر، entropy، ground truth، profile hash، المعرّف الحتمي، URI الآمن، الترخيص، seed والمعاملات والمناطق.
 
-Validation checks root boundaries, file existence, SHA-256, decoding,
-dimensions, source/output identity, visual plausibility, deterministic seed,
-profile hash, ground-truth reference, and metadata completeness. Blank and
-near-blank synthetic pages are handled explicitly.
+المخرجات:
 
-Reports are written externally as JSON, CSV, and Markdown. `--quarantine`
-copies invalid assets into the external quarantine area; it does not delete or
-overwrite the original. Visual difficulty is rule-based and named
-`estimated_visual_difficulty`, never accuracy.
+- JSON summary؛
+- JSONL لكل سجل وحالته؛
+- CSV محايد ضد صيغ الجداول؛
+- Markdown.
 
+عند `--quarantine` تنسخ الملفات غير الصالحة إلى `dataset://quarantine/...` مع checksum. لا تحذف نسخة المصدر أو المخرج الأصلي أثناء التحقق.

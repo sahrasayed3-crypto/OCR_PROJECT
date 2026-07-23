@@ -1,18 +1,13 @@
-# Real distortion engine
+# محرك التشويه الحقيقي
 
-Status: **complete for CPU/Pillow operators**. `RealImageDistortion` changes
-pixels and is the default registry implementation; `metadata_only` remains an
-explicit test operator. The registry exposes deterministic geometric, blur,
-noise, compression, illumination, aging, printing, scanning, and Arabic
-text-degradation operators.
+يستخدم المحرك سجلًا ذا إصدار وواجهة مشتركة تطبق التحويل على `PIL.Image` مع seed حتمي. السجل الحالي يحوي 107 مشغلات تغيّر البكسلات؛ `metadata_only` لا يُستخدم إلا صراحة في الاختبارات.
 
-Every operation records its name, implementation version, parameters,
-probability, severity, derived seed, affected regions, and dimensions.
-`DistortionPipeline` derives independent seeds from the run seed, page ID,
-operator name, and order. It guarantees that a non-empty selected profile
-applies at least one operator.
+كل نتيجة تسجل اسم المشغل وإصداره ومعاملاته وشدته وseed والمناطق المتأثرة. المصدر copy-on-write ولا يُكتب فوقه. حدود الصفحات والأبعاد والبكسلات والحجم والعاملين تمنع استهلاك الموارد غير المحدود.
 
-Ground-truth text is copied unchanged into external manifests. Pixel outputs
-use copy-on-write atomic PNG creation and never overwrite an existing file.
-Unknown operators fail explicitly.
+عند توفر مناطق التخطيط تمرر إلى pipeline. عند غيابها يسجل manifest:
 
+```text
+layout_mode = whole_page_fallback
+```
+
+تشمل الفئات الهندسة والتركيز والضوضاء والضغط والإضاءة والورق القديم والطباعة وتدهور النص العربي.

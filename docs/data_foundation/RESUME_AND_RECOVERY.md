@@ -1,16 +1,16 @@
-# Resume and recovery
+# الاستئناف والاسترداد
 
-Status: **complete for rendering and distortion runs**.
+يحتفظ كل تشغيل تشويه بـJSONL محمول و`checkpoints.sqlite3` بمعاملات WAL.
 
-Each run has a deterministic ID, run manifest, page records, heartbeat/update
-timestamps, atomic JSONL writes, and a completion marker. Final states are
-`complete`, `manual_review`, `quarantined`, and `skipped`; resuming does not
-regenerate them.
+حالات الصفحة: queued، processing، complete، failed، skipped، quarantined، cancelled وmanual_review.
 
-An explicit interruption hook is available for recovery testing. Partial files
-use hidden temporary names and are never treated as complete. Duplicate IDs
-and existing output collisions fail closed.
+يوفر SQLite:
 
-Resume with the exact original manifest, profile, seed, variant count, and page
-limit plus `distort-resume`.
+- معرّف تشغيل حتمي وكشف provenance المتعارض؛
+- claim ذري للصفحة؛
+- heartbeat؛
+- اكتشاف العامل الخامل وإعادة الصف أو الفشل عند الحد؛
+- retry count وmaximum retries؛
+- ملخص حالة التشغيل.
 
+الاستئناف يقرأ JSONL وSQLite ولا يعيد توليد complete/manual_review/quarantined/skipped. الملفات تكتب ذريًا، وcompletion marker لا ينشأ إلا بعد انتهاء التشغيل. الاستثناء يحول checkpoint إلى failed بدل تركه processing.

@@ -1,13 +1,7 @@
-# Local model adapters
+# محولات النموذج المحلي
 
-Status: **safe adapters complete; real model selection is externally blocked**.
+المحولات المتاحة: mock، command line، local HTTP، OpenAI-compatible local، Transformers VLM وQwen-VL-compatible.
 
-Adapters exist for a local HTTP service, an OpenAI-compatible local endpoint,
-an absolute-path command-line engine, Transformers vision-language models,
-Qwen-VL-compatible Transformers loading, and a gated synthetic mock.
+الضوابط: disabled افتراضيًا، endpoint محلي إلا بموافقة، command allowlist، model path boundary، `local_files_only`، `trust_remote_code=false`، safetensors مفضل، وحد للصورة والتوكن والدفعة والمهلة.
 
-Transformers loading is local-only, uses `trust_remote_code=False`, and never
-downloads weights. Remote HTTP endpoints require explicit opt-in. Command
-arguments use a JSON string array or parsed argument list and `shell=False`.
-The mock requires `CLOUDA_ALLOW_MOCK_OCR=true` and is test-only.
-
+لا يتم تنزيل نموذج تلقائيًا. يسجل الناتج اسم النموذج والمراجعة وchecksum عندما يتوفر. mock محجوب خلف `CLOUDA_ALLOW_MOCK_OCR=true` للاختبار.

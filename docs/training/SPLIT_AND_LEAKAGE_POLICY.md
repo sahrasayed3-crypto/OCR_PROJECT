@@ -1,13 +1,14 @@
-# Split and leakage policy
+# سياسة التقسيم ومنع التسرب
 
-Status: **complete**.
+التقسيم حتمي ومبني على `source_document_id`، لا الصفحة. لذلك تنتقل كل صفحات ومتغيرات الوثيقة إلى train أو validation أو test معًا.
 
-Train/validation/test assignment hashes the deterministic seed with the source
-document ID. All pages and clean/distorted variants of a document therefore
-remain in one split. Exact image hashes are deduplicated before splitting.
-Perceptual deduplication remains an injectable hook.
+بعد التصدير تُحسب تقاطعات مجموعات الوثائق؛ وجود أي تقاطع يجعل CLI يفشل. يسبق التقسيم:
 
-Exports report split counts, rejected duplicates, SHA-256, and any document
-leakage. Any leakage makes the CLI fail. Benchmark document exclusions can be
-provided repeatedly.
+- استبعاد benchmark؛
+- حاجز الترخيص؛
+- exact checksum dedup؛
+- perceptual duplicate hook اختياري؛
+- حد مساهمة المصدر؛
+- توازن round-robin حسب dataset/profile/difficulty.
 
+قبول النهاية أعاد `document_leakage=[]`.

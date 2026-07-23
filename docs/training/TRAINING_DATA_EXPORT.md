@@ -1,13 +1,9 @@
-# Training data export
+# تصدير بيانات التدريب
 
-Status: **complete for preparation; GPU training remains disabled**.
+يدعم `clouda_training` generic JSONL، multimodal conversation، plain OCR، Markdown، layout، reading order وword bounding boxes.
 
-Exports support generic JSONL, multimodal conversation JSONL, plain OCR,
-Markdown, layout, word bounding boxes, and reading order. Each record retains
-image URI, instruction, exact target, dataset/document/page/generated IDs,
-profile, license, attribution, split, checksum, and schema version.
+كل سجل يتضمن image URI والتعليمة والهدف وdataset/document/page/generated IDs وprofile وsplit وchecksum والترخيص والإسناد وschema.
 
-Commercial export fails closed unless the catalog status and explicit
-commercial flag both allow it. Synthetic acceptance data may be exported only
-with `--purpose evaluation`. Export never starts training.
+يفرض المصدر وجود الصورة وتطابق checksum وحاجز الترخيص. بيانات synthetic evaluation مسموحة للتقييم فقط، ولا يمكن أن تدخل التدريب التجاري. التصدير لا يبدأ GPU أو تدريبًا.
 
+خيارات مهمة: `--seed`، `--purpose`، `--benchmark-exclusion`، `--max-contribution-per-source`، `--no-balance`.

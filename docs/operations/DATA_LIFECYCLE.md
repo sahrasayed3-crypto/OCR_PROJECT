@@ -1,13 +1,7 @@
-# Data lifecycle
+# دورة حياة البيانات
 
-Status: **complete for preview, failed-output, temporary, and archive flows**.
+الأوامر: `cleanup-preview`، `cleanup-failed`، `cleanup-temp`، `archive-run` و`verify-archive`.
 
-Cleanup is dry-run by default and prints a target-specific confirmation token.
-Execution moves files into recoverable external lifecycle trash; source data
-and manifests are never deleted. Audit reports preserve original paths,
-sizes, and SHA-256.
+التنظيف dry-run افتراضيًا ويتطلب confirmation token للتغيير. لا يتبع symlink/junction خارج الجذور، ولا يستهدف source data، ويحافظ على manifests وchecksums.
 
-Run archives contain every asset plus `ARCHIVE_MANIFEST.v1.json`. Verification
-checks safe ZIP structure and every member checksum. Existing archives are
-never overwritten.
-
+الأرشيف يسجل checksum ومعلومات rollback ويجب التحقق منه قبل السماح بإزالة نسخة التشغيل. retention يعتمد على العمر والحالة. راجع الناتج قبل تنفيذ أي أمر تغيير، ولا تستخدم هذه الأوامر على المشاريع الأصلية.

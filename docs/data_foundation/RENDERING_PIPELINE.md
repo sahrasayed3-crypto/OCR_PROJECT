@@ -1,14 +1,7 @@
-# Rendering pipeline
+# مسار التصيير
 
-Status: **complete** for PDF, PNG, JPEG, TIFF, and WEBP inputs.
+`clouda_data.rendering` يصيّر PDF أو يعيد ترميز PNG/JPEG/TIFF/WEBP بأمان.
 
-The renderer processes pages incrementally, applies EXIF orientation, flattens
-alpha safely, supports color/grayscale/binary output, constrains DPI,
-dimensions, and pixels, and writes atomically under the dataset state root.
-Multi-frame TIFF and PDF page ranges are supported. Source and output SHA-256,
-renderer version, config hash, dimensions, and status are recorded in a
-versioned JSONL manifest.
+الخصائص: نطاق صفحات، DPI، PNG/JPEG/TIFF/WEBP، color/grayscale/binary، EXIF orientation، alpha، حدود أبعاد وبكسلات، كشف تلف، كتابة ذرية، SHA-256، Unicode، no-overwrite، dry-run واستئناف.
 
-Existing outputs are never overwritten. `--dry-run` plans work and
-`render-resume` skips checksum-verified completed pages.
-
+المصدر يجب أن يكون داخل الجذر المسموح، والمخرجات تبقى داخل `dataset_root`. يسجل manifest مصدر كل صفحة وchecksum والإعدادات والمخرج. `render-validate` يعيد التحقق من الملف وchecksum.

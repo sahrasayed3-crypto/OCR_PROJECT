@@ -1,19 +1,16 @@
-# Distortion profiles
+# ملفات تعريف التشويه
 
-Status: **complete**. Version-1 YAML profiles live in
-`configs/data_foundation/distortions` and validate against
-`schemas/distortion-profile-v1.schema.json`.
+المجموعة الإلزامية 18 ملف YAML تحت `configs/data_foundation/distortions`. تتحقق بواسطة `schemas/distortion-profile-v1.schema.json`.
 
-Profiles declare purpose, severity, deterministic seed policy, transformations,
-probabilities, parameter ranges, exclusions, maximum dimensions, expected
-variants, license restrictions, and visual-quality class. Profiles include
-modern scans, old books, weak scans, tiny Arabic text, footnotes, margins,
-binding shadows, photocopies, JPEG damage, low DPI, mixed language, and
-extreme manual review.
+يفرض المحمل:
 
-Validate a profile:
+- مشغلات مسجلة فقط؛
+- `maximum_chain_length`؛
+- `maximum_severity_budget`؛
+- الأبعاد القصوى؛
+- schema version وseed policy؛
+- الاحتمالات والشدة الصحيحة.
 
-```powershell
-python -m clouda_data.pipeline.cli validate-distortion-profile modern_scan_medium
-```
+تغطي الملفات clean control، المسح الحديث، الكتب القديمة، العربية الضعيفة، النص الصغير، الحواشي والهوامش، binding shadow، photocopy، JPEG، DPI المنخفض، المختلط، والمراجعة القصوى.
 
+ملفات JSON القديمة ما زالت للتوافق، لكن أسماء المشغلات الوهمية استبدلت بمشغلات حقيقية مسجلة.
