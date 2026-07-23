@@ -66,4 +66,10 @@ class DistortionPipeline:
                 current, seed, context
             )
             metadata.append(op_metadata)
+        if self.operations and not metadata:
+            operation, seed = self.replay_plan(page_id)[0]
+            current, op_metadata = self.registry.create(operation).apply(
+                current, seed, context
+            )
+            metadata.append(op_metadata)
         return current, metadata

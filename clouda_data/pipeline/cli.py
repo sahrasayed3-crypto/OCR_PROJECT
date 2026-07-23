@@ -450,6 +450,7 @@ def distort_cli(args: argparse.Namespace) -> int:
         resume=args.resume,
         fail_fast=args.fail_fast,
         conflict_policy=args.overwrite_policy,
+        interrupt_after=args.interrupt_after,
     )
     print(str(path))
     return 0
@@ -698,6 +699,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--report-format", choices=["json", "jsonl", "csv", "markdown"], default="jsonl")
         p.add_argument("--logging-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO")
         p.add_argument("--allow-large-run", action="store_true")
+        p.add_argument("--interrupt-after", type=int)
         p.set_defaults(func=distort_cli)
 
     p = sub.add_parser("distort-status")

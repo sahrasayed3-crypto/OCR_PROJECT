@@ -31,6 +31,10 @@ CONFLICT_POLICIES = {
 }
 
 
+class RunInterrupted(RuntimeError):
+    """Raised only when an explicit interruption hook is requested."""
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -95,7 +99,7 @@ def classify_visual_difficulty(image: Image.Image, severity: str) -> dict[str, A
     white_ratio = sum(histogram[250:]) / pixels
     black_ratio = sum(histogram[:6]) / pixels
     score = {"minimal": 0, "light": 1, "medium": 2, "heavy": 3, "extreme": 4}.get(severity, 2)
-    if stddev < 18 or white_ratio > 0.998 or black_ratio > 0.98 or entropy < 0.4:
+    if stddev < 5 or white_ratio > 0.9999 or black_ratio > 0.995 or entropy < 0.05:
         label = "invalid"
     elif score >= 4 or stddev < 30:
         label = "extreme"
@@ -141,7 +145,10 @@ def _validate_asset(
     if record.get("transformation_chain") and _sha256(source_path) == _sha256(output_path):
         errors.append("identical_to_source")
     difficulty = classify_visual_difficulty(image, str(record.get("overall_severity", "medium")))
-    if difficulty["estimated_visual_difficulty"] == "invalid":
+    if (
+        difficulty["estimated_visual_difficulty"] == "invalid"
+        and record.get("page_type") not in {"blank", "near_blank"}
+    ):
         errors.append("invalid_visual_quality")
     if not record.get("seeds"):
         errors.append("missing_seed")
@@ -165,6 +172,7 @@ def run_distortion_batch(
     resume: bool = False,
     fail_fast: bool = False,
     conflict_policy: str = "reject",
+    interrupt_after: int | None = None,
 ) -> Path:
     if max_pages < 1 or variants < 1:
         raise ValueError("max_pages and variants must be positive")
@@ -251,7 +259,12 @@ def run_distortion_batch(
             generated_id = hashlib.sha256(
                 f"{run_id}:{source_page_id}:{variant}".encode()
             ).hexdigest()[:32]
-            if generated_id in by_id and by_id[generated_id].get("status") == "complete":
+            if generated_id in by_id and by_id[generated_id].get("status") in {
+                "complete",
+                "manual_review",
+                "quarantined",
+                "skipped",
+            }:
                 continue
             output_path = run_root / "pages" / f"{generated_id}.png"
             if output_path.exists() and not resume:
@@ -277,6 +290,9 @@ def run_distortion_batch(
                 "ground_truth_reference": source.get("ground_truth_reference", "synthetic://unchanged"),
                 "ground_truth_text": source.get("ground_truth_text"),
                 "attribution": source.get("attribution", ""),
+                "page_type": source.get("page_type", "body"),
+                "language": source.get("language", "ar"),
+                "regions": source.get("regions", []),
                 "profile_id": profile["name"],
                 "profile_version": profile.get("schema_version", 1),
                 "profile_hash": profile_hash,
@@ -323,6 +339,17 @@ def run_distortion_batch(
             records.append(record)
             by_id[generated_id] = record
             _write_jsonl_atomic(output_manifest, records)
+            if interrupt_after is not None and len(records) >= interrupt_after:
+                payload = json.loads(run_manifest.read_text(encoding="utf-8"))
+                payload.update(
+                    {
+                        "state": "interrupted",
+                        "interrupted_at": datetime.now(timezone.utc).isoformat(),
+                        "records": len(records),
+                    }
+                )
+                run_manifest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                raise RunInterrupted(f"Intentional interruption after {len(records)} records")
     status = "complete" if all(item.get("status") in {"complete", "manual_review", "planned"} for item in records) else "failed"
     payload = json.loads(run_manifest.read_text(encoding="utf-8"))
     payload.update({"state": status, "completed_at": datetime.now(timezone.utc).isoformat(), "records": len(records)})
