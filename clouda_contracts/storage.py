@@ -82,9 +82,11 @@ class StorageRoots:
         cache_root = configured("CLOUDA_CACHE_ROOT", home / "cache")
         database_path = configured(
             "CLOUDA_DATABASE_PATH",
-            Path(values.get("DATABASE_PATH", "").strip())
-            if values.get("DATABASE_PATH", "").strip()
-            else runtime_root / "databases" / "clouda.sqlite3",
+            (
+                Path(values.get("DATABASE_PATH", "").strip())
+                if values.get("DATABASE_PATH", "").strip()
+                else runtime_root / "databases" / "clouda.sqlite3"
+            ),
         )
         manifest_database = configured(
             "CLOUDA_DATASET_MANIFEST_DATABASE_PATH",
@@ -144,14 +146,18 @@ class StorageRoots:
         try:
             return roots[scheme]
         except KeyError as exc:
-            raise StorageSecurityError(f"Unsupported storage URI scheme: {scheme}") from exc
+            raise StorageSecurityError(
+                f"Unsupported storage URI scheme: {scheme}"
+            ) from exc
 
     def resolve_uri(self, value: str) -> Path:
         parsed = urlparse(value)
         if parsed.scheme not in {"runtime", "dataset", "artifact", "model", "cache"}:
             raise StorageSecurityError(f"Unsupported storage URI: {value}")
         if parsed.params or parsed.query or parsed.fragment:
-            raise StorageSecurityError("Storage URIs cannot contain params, query, or fragment.")
+            raise StorageSecurityError(
+                "Storage URIs cannot contain params, query, or fragment."
+            )
         relative_text = "/".join(
             part for part in (parsed.netloc, parsed.path.lstrip("/")) if part
         )

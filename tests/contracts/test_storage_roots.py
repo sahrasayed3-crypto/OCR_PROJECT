@@ -26,14 +26,13 @@ def test_roots_do_not_write_by_default(tmp_path: Path) -> None:
 
 
 def test_explicit_creation_stays_inside_roots(tmp_path: Path) -> None:
-    roots = StorageRoots.from_env(
-        _environment(tmp_path), read_only=False, create=True
-    )
+    roots = StorageRoots.from_env(_environment(tmp_path), read_only=False, create=True)
     assert roots.database_path.parent.is_dir()
     assert roots.dataset_manifest_database_path.parent.is_dir()
-    assert roots.resolve_uri("dataset://raw/صفحة.png") == (
-        roots.dataset_root / "raw" / "صفحة.png"
-    ).resolve()
+    assert (
+        roots.resolve_uri("dataset://raw/صفحة.png")
+        == (roots.dataset_root / "raw" / "صفحة.png").resolve()
+    )
 
 
 @pytest.mark.parametrize(
@@ -56,4 +55,3 @@ def test_database_must_remain_under_runtime_root(tmp_path: Path) -> None:
     environment["CLOUDA_DATABASE_PATH"] = str(tmp_path / "outside.sqlite3")
     with pytest.raises(StorageSecurityError):
         StorageRoots.from_env(environment)
-
