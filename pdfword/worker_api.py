@@ -4,11 +4,12 @@ import os
 import re
 import tempfile
 import zipfile
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
@@ -18,6 +19,12 @@ from .database import Database, utc_now
 from .limits import limits_from_env
 from .settings import load_settings, runtime_settings
 from .correction_learning import rules_checksum
+from .operations import (
+    OperationsMetrics,
+    RedisSecurityConfig,
+    SlidingWindowRateLimiter,
+    structured_log,
+)
 
 JOB_ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 app = FastAPI(title="Clouda Worker API", docs_url=None, redoc_url=None)
@@ -31,15 +38,37 @@ app.add_middleware(
         if host.strip()
     ],
 )
+_rate_limiter = SlidingWindowRateLimiter(
+    limit=max(1, int(os.getenv("CLOUDA_INTERNAL_RATE_LIMIT_PER_MINUTE", "120")))
+)
+_operations_metrics = OperationsMetrics()
 
 
 @app.middleware("http")
 async def security_headers(request, call_next):
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+    client = request.client.host if request.client else "unknown"
+    if not _rate_limiter.allow(client):
+        structured_log("rate_limit_exceeded", request_id=request_id, client=client)
+        return JSONResponse(
+            {"detail": "Rate limit exceeded", "request_id": request_id},
+            status_code=429,
+            headers={"X-Request-ID": request_id, "Retry-After": "60"},
+        )
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["X-Request-ID"] = request_id
+    _operations_metrics.observe_request(request.method, response.status_code)
+    structured_log(
+        "http_request",
+        request_id=request_id,
+        method=request.method,
+        path=request.url.path,
+        status=response.status_code,
+    )
     return response
 
 
@@ -107,12 +136,8 @@ def _get_job(job_id: str) -> tuple[Database, dict]:
 def _redis_client():
     from redis import Redis
 
-    return Redis.from_url(
-        runtime_settings().redis_url,
-        decode_responses=True,
-        socket_connect_timeout=2,
-        socket_timeout=2,
-    )
+    config = RedisSecurityConfig.from_env()
+    return Redis.from_url(config.url, **config.client_kwargs())
 
 
 def _worker_status_payload(*, message: str = "") -> dict:
@@ -160,6 +185,34 @@ def public_health() -> dict:
         "role": config.app_role,
         "local_processing_enabled": config.local_processing_enabled,
     }
+
+
+@app.get("/ready")
+def readiness() -> dict:
+    try:
+        with _database().connect() as connection:
+            connection.execute("SELECT 1").fetchone()
+        return {"status": "ready"}
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="Service is not ready") from exc
+
+
+@app.get("/internal/metrics", dependencies=[Depends(_authenticate)])
+def metrics() -> Response:
+    queue_depth = 0
+    failed_jobs = 0
+    try:
+        redis = _redis_client()
+        queue_depth = int(redis.llen(f"rq:queue:{runtime_settings().rq_queue_name}"))
+        failed_jobs = int(redis.zcard("rq:failed"))
+    except Exception:
+        pass
+    return Response(
+        _operations_metrics.prometheus(
+            queue_depth=queue_depth, failed_jobs=failed_jobs
+        ),
+        media_type="text/plain; version=0.0.4",
+    )
 
 
 @app.get("/internal/health", dependencies=[Depends(_authenticate)])
