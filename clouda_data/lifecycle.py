@@ -61,8 +61,12 @@ def cleanup(
     now = datetime.now(timezone.utc).timestamp()
     if root.exists():
         for path in root.rglob("*"):
+            if path.is_symlink():
+                raise PermissionError("Lifecycle cleanup refuses symbolic links")
             if not path.is_file():
                 continue
+            if not _inside(path, root):
+                raise PermissionError("Lifecycle cleanup candidate escaped root")
             if run_id and run_id not in path.parts:
                 continue
             if older_than_days and now - path.stat().st_mtime < older_than_days * 86400:
@@ -118,7 +122,14 @@ def archive_run(
     source = Path(run_root).expanduser().resolve()
     if not _inside(source, roots.dataset_root) or not source.is_dir():
         raise PermissionError("Run archive source must be a dataset-state directory")
-    files = [path for path in source.rglob("*") if path.is_file()]
+    files: list[Path] = []
+    for path in source.rglob("*"):
+        if path.is_symlink():
+            raise PermissionError("Run archive refuses symbolic links")
+        if path.is_file():
+            if not _inside(path, source):
+                raise PermissionError("Run archive member escaped source root")
+            files.append(path)
     manifest = [
         {
             "path": path.relative_to(source).as_posix(),

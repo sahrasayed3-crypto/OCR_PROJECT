@@ -47,6 +47,25 @@ _operations_metrics = OperationsMetrics()
 @app.middleware("http")
 async def security_headers(request, call_next):
     request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+    maximum_request_bytes = max(
+        1024, int(os.getenv("CLOUDA_MAX_REQUEST_BYTES", str(110 * 1024 * 1024)))
+    )
+    content_length = request.headers.get("Content-Length")
+    if content_length:
+        try:
+            declared_length = int(content_length)
+        except ValueError:
+            return JSONResponse(
+                {"detail": "Invalid Content-Length", "request_id": request_id},
+                status_code=400,
+                headers={"X-Request-ID": request_id},
+            )
+        if declared_length < 0 or declared_length > maximum_request_bytes:
+            return JSONResponse(
+                {"detail": "Request body is too large", "request_id": request_id},
+                status_code=413,
+                headers={"X-Request-ID": request_id},
+            )
     client = request.client.host if request.client else "unknown"
     if not _rate_limiter.allow(client):
         structured_log("rate_limit_exceeded", request_id=request_id, client=client)

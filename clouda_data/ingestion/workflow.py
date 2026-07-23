@@ -52,6 +52,14 @@ def _resolve(base: Path, value: str | None) -> Path | None:
     return path if path.is_absolute() else (base / path).resolve()
 
 
+def _inside_manifest_root(path: Path, manifest_root: Path) -> bool:
+    try:
+        path.resolve().relative_to(manifest_root.resolve())
+        return True
+    except ValueError:
+        return False
+
+
 def _page_ground_truth(page: SourcePage, manifest_dir: Path) -> tuple[str, str | None]:
     if page.clean_text is not None:
         return page.clean_text, None
@@ -93,6 +101,16 @@ def validate_source_manifest_file(
                 )
             )
             continue
+        if not _inside_manifest_root(doc_path, manifest_dir):
+            issues.append(
+                IngestionIssue(
+                    "unsafe_source_path",
+                    "Document source_path must remain inside the manifest directory.",
+                    str(doc_path),
+                    document.document_id,
+                )
+            )
+            continue
         inspection = inspect_file(doc_path, document.source_type)
         if not inspection.ok:
             issues.extend(
@@ -131,6 +149,16 @@ def validate_source_manifest_file(
                     "missing_source_path",
                     "Page source_path is required.",
                     page_id=page.page_id,
+                )
+            )
+            continue
+        if not _inside_manifest_root(source_path, manifest_dir):
+            issues.append(
+                IngestionIssue(
+                    "unsafe_source_path",
+                    "Page source_path must remain inside the manifest directory.",
+                    str(source_path),
+                    page.page_id,
                 )
             )
             continue
@@ -180,6 +208,16 @@ def validate_source_manifest_file(
             )
         if page.ground_truth_path:
             gt_path_obj = _resolve(manifest_dir, page.ground_truth_path)
+            if gt_path_obj and not _inside_manifest_root(gt_path_obj, manifest_dir):
+                issues.append(
+                    IngestionIssue(
+                        "unsafe_source_path",
+                        "Ground-truth path must remain inside the manifest directory.",
+                        str(gt_path_obj),
+                        page.page_id,
+                    )
+                )
+                continue
             gt_inspection = inspect_file(gt_path_obj) if gt_path_obj else None
             if gt_inspection and not gt_inspection.ok:
                 issues.extend(

@@ -7,6 +7,7 @@ import json
 import math
 import os
 import platform
+import re
 import shutil
 import tempfile
 import time
@@ -17,6 +18,7 @@ from typing import Any, Iterable
 from PIL import Image, ImageChops, ImageStat
 
 from clouda_contracts.storage import StorageRoots
+from clouda_contracts.security import sanitize_spreadsheet_cell
 from clouda_data.datasets.license_gate import decide_dataset_use
 from clouda_data.pipeline.profiles import load_profile, profile_to_specs
 
@@ -87,12 +89,44 @@ def _write_jsonl_atomic(path: Path, records: Iterable[dict[str, Any]]) -> None:
     temp.replace(path)
 
 
-def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
-    return [
-        json.loads(line)
-        for line in Path(path).read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+def read_jsonl(
+    path: str | Path,
+    *,
+    max_bytes: int = 64 * 1024 * 1024,
+    max_records: int = 100_000,
+    max_line_bytes: int = 2 * 1024 * 1024,
+) -> list[dict[str, Any]]:
+    source = Path(path)
+    if source.stat().st_size > max_bytes:
+        raise ValueError("JSONL manifest exceeds the configured byte limit")
+    records: list[dict[str, Any]] = []
+    with source.open("r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            if not line.strip():
+                continue
+            if len(line.encode("utf-8")) > max_line_bytes:
+                raise ValueError(f"JSONL line {line_number} exceeds the byte limit")
+            value = json.loads(line)
+            if not isinstance(value, dict):
+                raise ValueError(f"JSONL line {line_number} must be an object")
+            records.append(value)
+            if len(records) > max_records:
+                raise ValueError("JSONL manifest contains too many records")
+    return records
+
+
+def _dataset_uri_path(roots: StorageRoots, value: object) -> Path:
+    uri = str(value)
+    if not uri.startswith("dataset://"):
+        raise PermissionError("Expected a dataset:// storage URI")
+    return roots.resolve_uri(uri)
+
+
+def _safe_generated_id(value: object) -> str:
+    identifier = str(value)
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", identifier):
+        raise ValueError("Unsafe generated page identifier")
+    return identifier
 
 
 def classify_visual_difficulty(image: Image.Image, severity: str) -> dict[str, Any]:
@@ -272,14 +306,10 @@ def run_distortion_batch(
         encoding="utf-8",
     )
     output_bytes = sum(
-        (roots.dataset_root / str(item["output_uri"]).removeprefix("dataset://"))
-        .stat()
-        .st_size
+        _dataset_uri_path(roots, item["output_uri"]).stat().st_size
         for item in existing
         if item.get("output_uri")
-        and (
-            roots.dataset_root / str(item["output_uri"]).removeprefix("dataset://")
-        ).is_file()
+        and _dataset_uri_path(roots, item["output_uri"]).is_file()
     )
     for source in input_records:
         source_uri = str(source.get("output_uri") or source.get("image_uri") or "")
@@ -287,7 +317,7 @@ def run_distortion_batch(
             if fail_fast:
                 raise ValueError("unsafe source URI")
             continue
-        source_path = roots.dataset_root / source_uri.removeprefix("dataset://")
+        source_path = _dataset_uri_path(roots, source_uri)
         if not _inside(source_path, roots.dataset_root) or not source_path.is_file():
             if fail_fast:
                 raise FileNotFoundError(source_path)
@@ -463,15 +493,13 @@ def validate_distortion_manifest(
 ) -> dict[str, Any]:
     roots = StorageRoots.from_env()
     path = Path(manifest).expanduser().resolve()
+    if not _inside(path, roots.dataset_root):
+        raise PermissionError("Distortion manifest must stay inside dataset root")
     records = read_jsonl(path)
     failures: list[dict[str, Any]] = []
     for record in records:
-        source = roots.dataset_root / str(record["source_uri"]).removeprefix(
-            "dataset://"
-        )
-        output = roots.dataset_root / str(record["output_uri"]).removeprefix(
-            "dataset://"
-        )
+        source = _dataset_uri_path(roots, record["source_uri"])
+        output = _dataset_uri_path(roots, record["output_uri"])
         try:
             with Image.open(output) as image:
                 image.load()
@@ -513,7 +541,12 @@ def validate_distortion_manifest(
         writer = csv.writer(handle)
         writer.writerow(["generated_page_id", "errors"])
         for item in failures:
-            writer.writerow([item["generated_page_id"], ";".join(item["errors"])])
+            writer.writerow(
+                [
+                    sanitize_spreadsheet_cell(item["generated_page_id"]),
+                    sanitize_spreadsheet_cell(";".join(item["errors"])),
+                ]
+            )
     (report_root / f"{stem}.md").write_text(
         f"# Validation\n\n- Records: {len(records)}\n- Failures: {len(failures)}\n- Passed: {not failures}\n",
         encoding="utf-8",
@@ -525,17 +558,17 @@ def generate_preview(
     manifest: str | Path, *, limit: int = 10, difference: bool = True
 ) -> Path:
     roots = StorageRoots.from_env()
-    records = read_jsonl(manifest)[: max(1, min(limit, 100))]
-    preview_root = roots.artifact_root / "previews" / Path(manifest).parent.name
+    manifest_path = Path(manifest).expanduser().resolve()
+    if not _inside(manifest_path, roots.dataset_root):
+        raise PermissionError("Preview manifest must stay inside dataset root")
+    records = read_jsonl(manifest_path)[: max(1, min(limit, 100))]
+    preview_root = roots.artifact_root / "previews" / manifest_path.parent.name
     preview_root.mkdir(parents=True, exist_ok=True)
     rows: list[str] = []
     for record in records:
-        source = roots.dataset_root / str(record["source_uri"]).removeprefix(
-            "dataset://"
-        )
-        output = roots.dataset_root / str(record["output_uri"]).removeprefix(
-            "dataset://"
-        )
+        source = _dataset_uri_path(roots, record["source_uri"])
+        output = _dataset_uri_path(roots, record["output_uri"])
+        generated_id = _safe_generated_id(record["generated_page_id"])
         with Image.open(source) as src_file, Image.open(output) as dst_file:
             src = src_file.convert("RGB")
             dst = dst_file.convert("RGB")
@@ -549,8 +582,8 @@ def generate_preview(
             canvas.paste(dst, (src.width, 0))
             if difference and src.size == dst.size:
                 diff = ImageChops.difference(src, dst)
-                diff.save(preview_root / f"{record['generated_page_id']}-diff.png")
-            preview = preview_root / f"{record['generated_page_id']}.jpg"
+                diff.save(preview_root / f"{generated_id}-diff.png")
+            preview = preview_root / f"{generated_id}.jpg"
             canvas.save(preview, "JPEG", quality=85)
         rows.append(
             f"<tr><td>{html.escape(str(record['source_page_id']))}</td>"

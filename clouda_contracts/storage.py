@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import re
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
@@ -9,6 +11,37 @@ from urllib.parse import unquote, urlparse
 
 class StorageSecurityError(ValueError):
     """Raised when a configured or resolved path crosses a storage boundary."""
+
+
+_WINDOWS_RESERVED_NAMES = {
+    "CON",
+    "PRN",
+    "AUX",
+    "NUL",
+    *(f"COM{index}" for index in range(1, 10)),
+    *(f"LPT{index}" for index in range(1, 10)),
+}
+_CONTROL_CHARACTERS = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def validate_relative_components(path: Path) -> None:
+    """Reject names with ambiguous or dangerous cross-platform semantics."""
+    for component in path.parts:
+        normalized = unicodedata.normalize("NFC", component)
+        if normalized != component:
+            raise StorageSecurityError("Storage URI path must use NFC normalization.")
+        if (
+            not component
+            or component in {".", ".."}
+            or _CONTROL_CHARACTERS.search(component)
+            or ":" in component
+            or component.endswith((" ", "."))
+            or len(component) > 255
+        ):
+            raise StorageSecurityError("Storage URI contains an unsafe path component.")
+        stem = component.split(".", 1)[0].upper()
+        if stem in _WINDOWS_RESERVED_NAMES:
+            raise StorageSecurityError("Storage URI uses a reserved device name.")
 
 
 def _resolved(path: Path) -> Path:
@@ -164,5 +197,6 @@ class StorageRoots:
         relative = Path(unquote(relative_text.replace("\\", "/")))
         if relative.is_absolute() or ".." in relative.parts:
             raise StorageSecurityError("Storage URI contains an unsafe path.")
+        validate_relative_components(relative)
         root = self.root_for_scheme(parsed.scheme)
         return _inside(root, root / relative)

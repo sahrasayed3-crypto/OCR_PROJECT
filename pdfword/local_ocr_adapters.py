@@ -18,6 +18,8 @@ from typing import Any
 
 from PIL import Image
 
+from clouda_contracts.storage import StorageRoots
+
 from .engines import OCRResult, OCR_STATUS_FAILED, OCR_STATUS_SUCCEEDED
 
 TASK_PROMPTS = {
@@ -229,6 +231,22 @@ class CommandLineOCRProvider:
             )
         if self.command and not Path(self.command[0]).expanduser().is_absolute():
             raise ValueError("OCR executable path must be absolute")
+        if self.command:
+            executable = Path(self.command[0]).expanduser().resolve()
+            allowed = {
+                str(Path(item).expanduser().resolve()).casefold()
+                for item in os.getenv("CLOUDA_LOCAL_OCR_ALLOWED_EXECUTABLES", "").split(
+                    os.pathsep
+                )
+                if item.strip()
+            }
+            if not allowed or str(executable).casefold() not in allowed:
+                raise PermissionError(
+                    "OCR executable is not in CLOUDA_LOCAL_OCR_ALLOWED_EXECUTABLES"
+                )
+            if executable.is_symlink() or not executable.is_file():
+                raise PermissionError("OCR executable must be a regular local file")
+            self.command[0] = str(executable)
 
     def available(self) -> bool:
         return (
@@ -249,17 +267,44 @@ class CommandLineOCRProvider:
         with tempfile.TemporaryDirectory(prefix="clouda-ocr-") as directory:
             image = Path(directory) / f"page-{page_no}.png"
             image.write_bytes(image_bytes)
-            completed = subprocess.run(
-                [*self.command, str(image)],
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=self.config.timeout_seconds,
-                shell=False,
-                check=False,
-            )
-        text = completed.stdout.strip()
+            safe_environment = {
+                key: value
+                for key, value in os.environ.items()
+                if key.upper()
+                in {
+                    "PATH",
+                    "PATHEXT",
+                    "SYSTEMDRIVE",
+                    "SYSTEMROOT",
+                    "TEMP",
+                    "TMP",
+                    "WINDIR",
+                }
+            }
+            safe_environment["PYTHONIOENCODING"] = "utf-8"
+            stdout_path = Path(directory) / "stdout.txt"
+            stderr_path = Path(directory) / "stderr.txt"
+            with stdout_path.open("w+b") as stdout, stderr_path.open("w+b") as stderr:
+                completed = subprocess.run(
+                    [*self.command, str(image)],
+                    stdout=stdout,
+                    stderr=stderr,
+                    timeout=self.config.timeout_seconds,
+                    shell=False,
+                    check=False,
+                    cwd=directory,
+                    env=safe_environment,
+                    close_fds=True,
+                )
+            max_output = 4 * 1024 * 1024
+            if stdout_path.stat().st_size > max_output:
+                return OCRResult(
+                    engine_name="command_line_ocr",
+                    status=OCR_STATUS_FAILED,
+                    processing_time=time.perf_counter() - started,
+                    error_message="OCR process output exceeded the byte limit",
+                )
+            text = stdout_path.read_text(encoding="utf-8", errors="replace").strip()
         if completed.returncode != 0 or not text:
             return OCRResult(
                 engine_name="command_line_ocr",
@@ -291,6 +336,18 @@ class TransformersVisionLanguageProvider:
             if config.processor_path
             else self.model_path
         )
+        roots = StorageRoots.from_env()
+        for path in (self.model_path, self.processor_path):
+            if path is None:
+                continue
+            try:
+                path.relative_to(roots.model_root.resolve())
+            except ValueError as exc:
+                raise PermissionError(
+                    "Local OCR model paths must stay inside model://"
+                ) from exc
+            if path.is_symlink():
+                raise PermissionError("Symbolic-link model paths are not accepted")
         self._model: Any = None
         self._processor: Any = None
 
@@ -313,6 +370,8 @@ class TransformersVisionLanguageProvider:
             str(self.model_path),
             local_files_only=True,
             trust_remote_code=False,
+            use_safetensors=True,
+            weights_only=True,
             device_map=None if self.config.device == "cpu" else self.config.device,
         )
 

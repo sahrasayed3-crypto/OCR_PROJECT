@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from clouda_contracts.storage import StorageRoots
+from clouda_data.datasets.license_gate import decide_dataset_use
 from clouda_training.sampling.deduplication import deduplicate_records
 from clouda_training.sampling.splits import deterministic_document_split
 
@@ -66,22 +67,58 @@ def export_training_data(
             continue
         if not record.get("ground_truth_text"):
             continue
+        dataset_id = str(record.get("dataset_id", ""))
         status = str(record.get("license_status", "pending"))
         if purpose == "commercial_training":
-            if status not in {"approved", "approved_with_conditions"} or not record.get(
-                "commercial_training_allowed", False
-            ):
+            if dataset_id == "synthetic_evaluation":
                 raise PermissionError(
-                    f"Dataset {record.get('dataset_id')} is not approved for commercial training"
+                    "Synthetic evaluation data cannot enter commercial training"
                 )
+            decision = decide_dataset_use(dataset_id, purpose=purpose)
+            if not decision.allowed:
+                raise PermissionError(
+                    f"Dataset {dataset_id} is not approved for commercial training"
+                )
+            status = decision.status
+            commercial_allowed = True
         elif purpose == "evaluation":
+            if dataset_id == "synthetic_evaluation":
+                if status != "evaluation_only" or record.get(
+                    "commercial_training_allowed", False
+                ):
+                    raise PermissionError("Invalid synthetic evaluation provenance")
+            else:
+                decision = decide_dataset_use(dataset_id, purpose=purpose)
+                status = decision.status
+                if not decision.allowed:
+                    raise PermissionError(
+                        f"Dataset {dataset_id} is blocked for evaluation"
+                    )
             if status in {"blocked", "pending", "expired"}:
-                raise PermissionError(
-                    f"Dataset {record.get('dataset_id')} is blocked for evaluation"
-                )
+                raise PermissionError(f"Dataset {dataset_id} is blocked for evaluation")
+            commercial_allowed = (
+                False
+                if dataset_id == "synthetic_evaluation"
+                else decide_dataset_use(
+                    dataset_id, purpose="commercial_training"
+                ).allowed
+            )
         else:
             raise ValueError("purpose must be commercial_training or evaluation")
-        eligible.append(record)
+        image_path = roots.resolve_uri(str(record.get("output_uri", "")))
+        if not image_path.is_file():
+            raise FileNotFoundError("Training image is missing")
+        expected_checksum = str(record.get("output_checksum", ""))
+        actual_checksum = hashlib.sha256(image_path.read_bytes()).hexdigest()
+        if expected_checksum != actual_checksum:
+            raise ValueError("Training image checksum does not match manifest")
+        eligible.append(
+            {
+                **record,
+                "license_status": status,
+                "commercial_training_allowed": commercial_allowed,
+            }
+        )
     deduped, duplicates = deduplicate_records(eligible, checksum_key="output_checksum")
     assignments = deterministic_document_split(
         [str(item["source_document_id"]) for item in deduped], seed=seed
@@ -171,12 +208,7 @@ def training_statistics(manifest: str | Path) -> dict[str, Any]:
             Counter(str(item.get("estimated_visual_difficulty")) for item in records)
         ),
         "bytes": sum(
-            (
-                StorageRoots.from_env().dataset_root
-                / str(item["output_uri"]).removeprefix("dataset://")
-            )
-            .stat()
-            .st_size
+            StorageRoots.from_env().resolve_uri(str(item["output_uri"])).stat().st_size
             for item in records
         ),
     }

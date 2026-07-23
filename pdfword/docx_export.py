@@ -7,6 +7,8 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
+from clouda_contracts.security import sanitize_document_text
+
 from .models import PageResult
 
 ARABIC_RE = re.compile(r"[\u0600-\u06FF]")
@@ -89,7 +91,7 @@ def markdown_to_docx(markdown_pages: list[PageResult]) -> bytes:
         if idx > 0:
             doc.add_page_break()
 
-        source_markdown = page.markdown or ""
+        source_markdown = sanitize_document_text(page.markdown or "")
         if page.requires_manual_review and not source_markdown.lstrip().startswith(
             "[PAGE "
         ):

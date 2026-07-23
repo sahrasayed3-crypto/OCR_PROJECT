@@ -4,6 +4,7 @@ import hmac
 import json
 import logging
 import os
+import re
 import threading
 import time
 from collections import Counter, deque
@@ -11,22 +12,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-SENSITIVE_FIELDS = {
-    "authorization",
-    "cookie",
-    "password",
-    "secret",
-    "token",
-    "api_key",
-    "worker_api_key",
-    "openrouter_api_key",
-}
+SENSITIVE_FIELD_PATTERN = re.compile(
+    r"(?:authorization|cookie|password|secret|token|api[_-]?key)",
+    re.IGNORECASE,
+)
 
 
 def redact(value):
     if isinstance(value, dict):
         return {
-            key: "[REDACTED]" if key.casefold() in SENSITIVE_FIELDS else redact(item)
+            key: "[REDACTED]" if SENSITIVE_FIELD_PATTERN.search(key) else redact(item)
             for key, item in value.items()
         }
     if isinstance(value, list):

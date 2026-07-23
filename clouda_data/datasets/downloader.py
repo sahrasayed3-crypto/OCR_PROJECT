@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
+import os
+import socket
 import ssl
 import shutil
 import tempfile
@@ -15,12 +18,14 @@ from functools import lru_cache
 from pathlib import Path
 from tarfile import is_tarfile
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 from .registry import assert_source_download_allowed, get_source
 
 TWO_GB = 2 * 1024 * 1024 * 1024
 DEFAULT_SAMPLE_LIMIT = 100 * 1024 * 1024
+PRIVATE_DOWNLOAD_ENV = "CLOUDA_ALLOW_PRIVATE_DOWNLOADS"
+INSECURE_DOWNLOAD_ENV = "CLOUDA_ALLOW_INSECURE_DOWNLOADS"
 
 
 @dataclass(frozen=True)
@@ -72,11 +77,65 @@ def trusted_ssl_context() -> ssl.SSLContext | None:
     return ssl.create_default_context(cafile=str(cafile))
 
 
+def _enabled(name: str) -> bool:
+    return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def validate_download_url(url: str) -> str:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        raise PermissionError("Dataset downloads require an HTTP(S) URL")
+    if parsed.username or parsed.password or parsed.fragment:
+        raise PermissionError("Dataset download URL contains forbidden components")
+    if parsed.scheme != "https" and not _enabled(INSECURE_DOWNLOAD_ENV):
+        raise PermissionError("Plain HTTP dataset downloads require explicit opt-in")
+    allow_private = _enabled(PRIVATE_DOWNLOAD_ENV)
+    try:
+        addresses = {
+            item[4][0]
+            for item in socket.getaddrinfo(
+                parsed.hostname,
+                parsed.port or (443 if parsed.scheme == "https" else 80),
+            )
+        }
+    except socket.gaierror as exc:
+        raise PermissionError(
+            "Dataset download host cannot be resolved safely"
+        ) from exc
+    if not addresses:
+        raise PermissionError("Dataset download host has no resolved addresses")
+    for address in addresses:
+        value = ipaddress.ip_address(str(address).split("%", 1)[0])
+        if (
+            value.is_private
+            or value.is_loopback
+            or value.is_link_local
+            or value.is_multicast
+            or value.is_reserved
+            or value.is_unspecified
+        ) and not allow_private:
+            raise PermissionError("Private or local dataset destinations are blocked")
+    return url
+
+
+class _SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        target = urljoin(req.full_url, newurl)
+        validate_download_url(target)
+        return super().redirect_request(req, fp, code, msg, headers, target)
+
+
 def _urlopen(request: urllib.request.Request, *, timeout: int):
+    validate_download_url(request.full_url)
     context = trusted_ssl_context()
-    if context is None:
-        return urllib.request.urlopen(request, timeout=timeout)
-    return urllib.request.urlopen(request, timeout=timeout, context=context)
+    handlers: list[urllib.request.BaseHandler] = [
+        urllib.request.ProxyHandler({}),
+        _SafeRedirectHandler(),
+    ]
+    if context is not None:
+        handlers.append(urllib.request.HTTPSHandler(context=context))
+    opener = urllib.request.build_opener(*handlers)
+    return opener.open(request, timeout=timeout)
 
 
 def sha256_file(path: Path) -> str:
@@ -88,6 +147,7 @@ def sha256_file(path: Path) -> str:
 
 
 def content_length(url: str, timeout: int = 20) -> int | None:
+    validate_download_url(url)
     request = urllib.request.Request(
         url, method="HEAD", headers={"User-Agent": "arabic-ocr-dataset-prep/0.1"}
     )
@@ -138,6 +198,7 @@ def download_http(
     backoff_seconds: float = 0.25,
     expected_sha256: str | None = None,
 ) -> DownloadedFile:
+    validate_download_url(url)
     destination.parent.mkdir(parents=True, exist_ok=True)
     partial = destination.with_suffix(destination.suffix + ".part")
     remote_size = content_length(url)

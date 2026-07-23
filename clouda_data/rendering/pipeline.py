@@ -43,6 +43,7 @@ class RenderConfig:
     max_pixels: int = 40_000_000
     start_page: int = 1
     end_page: int | None = None
+    max_pages: int = 1000
     dry_run: bool = False
     resume: bool = False
 
@@ -59,6 +60,10 @@ class RenderConfig:
             raise ValueError("max_pixels is outside safe limits")
         if self.start_page < 1 or (self.end_page and self.end_page < self.start_page):
             raise ValueError("invalid page range")
+        if not 1 <= self.max_pages <= 10_000:
+            raise ValueError("max_pages is outside safe limits")
+        if self.end_page and self.end_page - self.start_page + 1 > self.max_pages:
+            raise ValueError("requested page range exceeds max_pages")
 
 
 def _normalized(image: Image.Image, config: RenderConfig) -> Image.Image:
@@ -93,10 +98,17 @@ def _iter_pages(
         document = pdfium.PdfDocument(str(path))
         try:
             end = min(len(document), config.end_page or len(document))
+            end = min(end, config.start_page + config.max_pages - 1)
             for index in range(config.start_page - 1, end):
                 page = document[index]
                 bitmap = None
                 try:
+                    width, height = page.get_size()
+                    scale = config.dpi / 72
+                    if width * scale * height * scale > config.max_pixels:
+                        raise ValueError(
+                            f"PDF page {index + 1} exceeds the configured pixel limit"
+                        )
                     bitmap = page.render(scale=config.dpi / 72)
                     yield index + 1, bitmap.to_pil().copy(), "pypdfium2", str(
                         getattr(pdfium, "__version__", "unknown")
@@ -114,6 +126,7 @@ def _iter_pages(
         with Image.open(path) as source:
             frame_count = getattr(source, "n_frames", 1)
             end = min(frame_count, config.end_page or frame_count)
+            end = min(end, config.start_page + config.max_pages - 1)
             for index, frame in enumerate(ImageSequence.Iterator(source), start=1):
                 if index < config.start_page:
                     continue

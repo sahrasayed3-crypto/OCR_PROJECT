@@ -9,7 +9,9 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from xml.etree import ElementTree
+from defusedxml import ElementTree
+
+from .downloader import validate_download_url
 
 from PIL import Image
 
@@ -88,6 +90,7 @@ class RasamBatchResult:
 
 
 def _fetch_bytes(url: str) -> bytes:
+    validate_download_url(url)
     from clouda_data.datasets.downloader import _urlopen
 
     request = urllib.request.Request(

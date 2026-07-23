@@ -331,6 +331,9 @@ def test_command_line_adapter(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
         "CLOUDA_LOCAL_OCR_COMMAND",
         json.dumps([str(Path(sys.executable).resolve()), str(script)]),
     )
+    monkeypatch.setenv(
+        "CLOUDA_LOCAL_OCR_ALLOWED_EXECUTABLES", str(Path(sys.executable).resolve())
+    )
     provider = CommandLineOCRProvider(
         LocalOCRConfig(enabled=True, engine="command_line")
     )

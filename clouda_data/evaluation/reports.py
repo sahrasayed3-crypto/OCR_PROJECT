@@ -4,6 +4,8 @@ import csv
 import json
 from pathlib import Path
 
+from clouda_contracts.security import sanitize_spreadsheet_cell
+
 from .aggregations import (
     PageMetric,
     aggregate_metrics,
@@ -45,7 +47,12 @@ def write_csv_report(metrics: list[PageMetric], path: str | Path) -> None:
         )
         writer.writeheader()
         for metric in metrics:
-            writer.writerow(metric.__dict__)
+            writer.writerow(
+                {
+                    key: sanitize_spreadsheet_cell(value)
+                    for key, value in metric.__dict__.items()
+                }
+            )
 
 
 def markdown_summary(metrics: list[PageMetric]) -> str:

@@ -3,7 +3,9 @@ from __future__ import annotations
 import stat
 import zipfile
 from dataclasses import dataclass
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
+
+from .storage import StorageSecurityError, validate_relative_components
 
 
 @dataclass(frozen=True)
@@ -23,14 +25,26 @@ def validate_zip_archive(
     if len(members) > limits.max_members:
         raise ValueError("Archive contains too many members.")
     total = 0
+    normalized_names: set[str] = set()
     for member in members:
         normalized = member.filename.replace("\\", "/")
         path = PurePosixPath(normalized)
         if path.is_absolute() or ".." in path.parts or "\x00" in normalized:
             raise ValueError("Archive contains an unsafe member path.")
+        try:
+            validate_relative_components(Path(*path.parts))
+        except StorageSecurityError as exc:
+            raise ValueError("Archive contains an unsafe member name.") from exc
+        collision_key = "/".join(path.parts).casefold()
+        if collision_key in normalized_names:
+            raise ValueError("Archive contains duplicate or case-colliding members.")
+        normalized_names.add(collision_key)
         mode = (member.external_attr >> 16) & 0xFFFF
         if mode and stat.S_ISLNK(mode):
             raise ValueError("Archive symbolic links are not accepted.")
+        file_type = stat.S_IFMT(mode)
+        if file_type and not (stat.S_ISREG(mode) or stat.S_ISDIR(mode)):
+            raise ValueError("Archive special-file members are not accepted.")
         if member.flag_bits & 0x1:
             raise ValueError("Encrypted archive members are not accepted.")
         if member.file_size > limits.max_member_uncompressed_bytes:

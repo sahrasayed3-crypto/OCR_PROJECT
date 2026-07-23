@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import functools
 import json
+import os
 import tempfile
 import threading
 import unittest
+from unittest import mock
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -87,9 +89,16 @@ class DatasetDownloaderTests(unittest.TestCase):
             with LocalServer(server_root) as server:
                 registry = root / "data/manifests/dataset_registry.json"
                 create_registry(registry, f"{server.url}/sample.txt")
-                result = download_dataset_sample(
-                    "tiny_source", project_root=root, max_bytes=1024 * 1024
-                )
+                with mock.patch.dict(
+                    os.environ,
+                    {
+                        "CLOUDA_ALLOW_PRIVATE_DOWNLOADS": "true",
+                        "CLOUDA_ALLOW_INSECURE_DOWNLOADS": "true",
+                    },
+                ):
+                    result = download_dataset_sample(
+                        "tiny_source", project_root=root, max_bytes=1024 * 1024
+                    )
             self.assertTrue(result.ok, result.issues)
             self.assertTrue((root / "data/downloads/tiny_source/sample.txt").exists())
             verified = verify_download("tiny_source", project_root=root)
