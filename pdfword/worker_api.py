@@ -353,15 +353,20 @@ def upload_result(
     ) as temporary:
         temporary_path = Path(temporary.name)
         total = 0
+        too_large = False
         limits = limits_from_env()
         while chunk := result.file.read(1024 * 1024):
             total += len(chunk)
             if total > limits.max_result_bytes:
-                temporary_path.unlink(missing_ok=True)
-                raise HTTPException(status_code=413, detail="Result is too large")
+                too_large = True
+                break
             temporary.write(chunk)
-        temporary.flush()
-        os.fsync(temporary.fileno())
+        if not too_large:
+            temporary.flush()
+            os.fsync(temporary.fileno())
+    if too_large:
+        temporary_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=413, detail="Result is too large")
     if total < 4 or temporary_path.read_bytes()[:2] != b"PK":
         temporary_path.unlink(missing_ok=True)
         raise HTTPException(status_code=400, detail="Invalid DOCX content")

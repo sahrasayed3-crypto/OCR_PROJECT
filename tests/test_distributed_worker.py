@@ -289,6 +289,131 @@ def test_worker_api_full_status_flow(api_environment):
     assert Path(row["stored_docx_path"]).read_bytes().startswith(b"PK")
 
 
+def test_worker_api_rejects_invalid_job_and_result_inputs(
+    api_environment,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    client, database, storage = api_environment
+    create_job(database, storage)
+    headers = {"X-Worker-API-Key": API_KEY}
+
+    assert client.get("/internal/jobs/bad$id", headers=headers).status_code == 400
+    assert client.get("/internal/jobs/missing", headers=headers).status_code == 404
+    assert client.get("/internal/jobs/job-a/input", headers=headers).status_code == 200
+
+    assert (
+        client.post(
+            "/internal/jobs/job-a/start",
+            headers=headers,
+            json={"worker_name": "worker-1"},
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/start",
+            headers=headers,
+            json={"worker_name": "worker-1"},
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/start",
+            headers=headers,
+            json={"worker_name": "worker-2"},
+        ).status_code
+        == 409
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/heartbeat",
+            headers=headers,
+            json={"worker_name": "worker-2"},
+        ).status_code
+        == 409
+    )
+
+    common = {"worker_name": "worker-1", "metadata": '{"status":"completed"}'}
+    assert (
+        client.post(
+            "/internal/jobs/job-a/result",
+            headers=headers,
+            data=common,
+            files={"result": ("bad.txt", b"text", "text/plain")},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/result",
+            headers=headers,
+            data={"worker_name": "worker-1", "metadata": "{"},
+            files={"result": ("result.docx", valid_docx_bytes())},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/result",
+            headers=headers,
+            data={"worker_name": "worker-1", "metadata": '{"status":"wrong"}'},
+            files={"result": ("result.docx", valid_docx_bytes())},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.post(
+            "/internal/jobs/job-a/result",
+            headers=headers,
+            data=common,
+            files={"result": ("result.docx", b"PK\x03\x04not-a-zip")},
+        ).status_code
+        == 400
+    )
+    monkeypatch.setenv("CLOUDA_MAX_RESULT_BYTES", "1024")
+    assert (
+        client.post(
+            "/internal/jobs/job-a/result",
+            headers=headers,
+            data=common,
+            files={"result": ("result.docx", b"PK" + b"x" * 2048)},
+        ).status_code
+        == 413
+    )
+
+
+def test_worker_failure_endpoint_enforces_ownership(api_environment):
+    client, database, storage = api_environment
+    create_job(database, storage)
+    headers = {"X-Worker-API-Key": API_KEY}
+    payload = {"worker_name": "worker-1", "error": "test failure"}
+    assert (
+        client.post(
+            "/internal/jobs/job-a/failure", headers=headers, json=payload
+        ).status_code
+        == 409
+    )
+    client.post(
+        "/internal/jobs/job-a/start",
+        headers=headers,
+        json={"worker_name": "worker-1"},
+    )
+    response = client.post(
+        "/internal/jobs/job-a/failure",
+        headers=headers,
+        json=payload,
+    )
+    assert response.status_code == 200
+    assert response.json()["status"] == "failed"
+    assert (
+        client.post(
+            "/internal/jobs/job-a/failure", headers=headers, json=payload
+        ).json()["status"]
+        == "failed"
+    )
+
+
 def test_api_rejects_path_outside_storage(api_environment, tmp_path: Path):
     client, database, storage = api_environment
     outside = tmp_path / "outside.pdf"
@@ -443,3 +568,55 @@ def test_worker_status_404_is_treated_as_legacy_server(
     result = WorkerApiClient().report_status("windows-worker-1", True, "openrouter")
 
     assert result == {"status": "unsupported", "legacy_server": True}
+
+
+def test_worker_client_covers_json_stream_and_command_methods(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    calls = []
+
+    class Response:
+        headers = {"content-type": "application/json"}
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"status": "ok"}
+
+        def iter_content(self, _size):
+            return [b"part-a", b"", b"part-b"]
+
+    def fake_request(method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        response = Response()
+        if url.endswith("/input"):
+            response.headers = {"content-type": "application/pdf"}
+        return response
+
+    monkeypatch.setenv("SERVER_BASE_URL", "http://server")
+    monkeypatch.setenv("WORKER_API_KEY", API_KEY)
+    monkeypatch.setattr(requests, "request", fake_request)
+    client = WorkerApiClient()
+
+    assert client.health()["status"] == "ok"
+    assert client.correction_snapshot()["status"] == "ok"
+    assert client.report_status("worker", False)["status"] == "ok"
+    assert client.get_job("job-a")["status"] == "ok"
+    target = tmp_path / "input.pdf"
+    client.download_input("job-a", target)
+    assert target.read_bytes() == b"part-apart-b"
+    assert client.start("job-a", "worker")["status"] == "ok"
+    assert client.heartbeat("job-a", "worker") is None
+    assert (
+        client.upload_result(
+            "job-a",
+            "worker",
+            io.BytesIO(valid_docx_bytes()),
+            {"status": "completed"},
+        )["status"]
+        == "ok"
+    )
+    assert client.fail("job-a", "worker", "error" * 1000)["status"] == "ok"
+    assert all(call[2]["headers"]["X-Worker-API-Key"] == API_KEY for call in calls)

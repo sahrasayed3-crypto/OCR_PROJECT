@@ -1,7 +1,9 @@
+import os
 import tempfile
 import time
 import tomllib
 import unittest
+import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -121,6 +123,41 @@ class TestRuntimeFeatures(unittest.TestCase):
             self.assertTrue(validate_backup(archive)["valid"])
             restored = restore_backup(archive, root / "restored")
             self.assertTrue((restored / "data" / "clouda.sqlite3").is_file())
+
+    def test_backup_includes_external_storage_and_rejects_invalid_restore(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            database = Database(root / "source.sqlite3")
+            storage = root / "external-storage"
+            storage.mkdir()
+            (storage / "result.txt").write_text("result", encoding="utf-8")
+            backups = root / "backups"
+            backups.mkdir()
+            old = backups / "clouda_backup_20000101_000000.zip"
+            old.write_bytes(b"old")
+            os.utime(old, (0, 0))
+
+            archive = create_backup(
+                database,
+                storage_root=storage,
+                backup_root=backups,
+                retention_days=1,
+            )
+            assert not old.exists()
+            with zipfile.ZipFile(archive) as bundle:
+                assert any(name.endswith("result.txt") for name in bundle.namelist())
+
+            invalid = root / "invalid.zip"
+            with zipfile.ZipFile(invalid, "w") as bundle:
+                bundle.writestr("note.txt", "missing database")
+            with self.assertRaises(ValueError):
+                restore_backup(invalid, root / "invalid-restore")
+
+            nonempty = root / "nonempty"
+            nonempty.mkdir()
+            (nonempty / "keep.txt").write_text("keep", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                restore_backup(archive, nonempty)
 
     def test_registry_excludes_safety_and_ranks_free_vision(self) -> None:
         models = [
