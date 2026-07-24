@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "region": "us-east-2",
+  "bucket": "REPLACE_WITH_BUCKET",
+  "prefix": "arabic-ocr-distortion/",
+  "upload_project": false,
+  "upload_checkpoints": false,
+  "download_results": false,
+  "credentials": "not_stored_here"
+}

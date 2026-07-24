@@ -3,9 +3,13 @@ import sqlite3
 from contextlib import closing, contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+
+from clouda_contracts.security import sanitize_spreadsheet_cell
 from typing import Any, Iterator
 
-DEFAULT_DB_PATH = Path("data") / "clouda.sqlite3"
+from clouda_contracts.storage import StorageRoots
+
+DEFAULT_DB_PATH = StorageRoots.from_env().database_path
 SCHEMA_VERSION = 3
 FINAL_STATUSES = {"completed", "failed", "manual_review", "cancelled"}
 ALLOWED_STATUS_TRANSITIONS = {
@@ -16,6 +20,55 @@ ALLOWED_STATUS_TRANSITIONS = {
     "manual_review": set(),
     "completed": set(),
 }
+CONVERSION_INSERT_FIELDS = {
+    "job_id",
+    "username",
+    "original_pdf_name",
+    "stored_pdf_path",
+    "output_docx_name",
+    "stored_docx_path",
+    "page_from",
+    "page_to",
+    "page_numbers",
+    "file_type",
+    "text_quality_score",
+    "layout_quality_score",
+    "final_quality_score",
+    "winning_engine",
+    "winning_model",
+    "total_cost",
+    "processing_time",
+    "status",
+    "hidden",
+    "created_at",
+    "updated_at",
+    "error_message",
+    "corrected_docx_path",
+    "actual_char_accuracy",
+    "actual_word_accuracy",
+    "attempt_count",
+    "started_at",
+    "completed_at",
+    "worker_name",
+    "last_heartbeat",
+    "rq_job_id",
+}
+ATTEMPT_INSERT_FIELDS = {
+    "conversion_id",
+    "engine_name",
+    "model_name",
+    "engine_type",
+    "attempt_number",
+    "quality_score",
+    "cost",
+    "cost_is_estimated",
+    "prompt_tokens",
+    "completion_tokens",
+    "processing_time",
+    "success",
+    "failure_reason",
+    "created_at",
+}
 
 
 def utc_now() -> str:
@@ -24,7 +77,11 @@ def utc_now() -> str:
 
 class Database:
     def __init__(self, path: str | Path | None = None) -> None:
-        configured_path = path if path is not None else os.getenv("DATABASE_PATH")
+        configured_path = (
+            path
+            if path is not None
+            else os.getenv("CLOUDA_DATABASE_PATH") or os.getenv("DATABASE_PATH")
+        )
         self.path = Path(configured_path or DEFAULT_DB_PATH)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.initialize()
@@ -291,6 +348,9 @@ class Database:
             return cursor.rowcount
 
     def create_conversion(self, values: dict) -> int:
+        invalid = set(values) - CONVERSION_INSERT_FIELDS
+        if invalid:
+            raise ValueError(f"Unsupported conversion fields: {sorted(invalid)}")
         fields = ", ".join(values)
         placeholders = ", ".join("?" for _ in values)
         with self.transaction() as connection:
@@ -448,6 +508,9 @@ class Database:
                 raise ValueError("Job is not processing")
 
     def record_attempt(self, values: dict) -> int:
+        invalid = set(values) - ATTEMPT_INSERT_FIELDS
+        if invalid:
+            raise ValueError(f"Unsupported attempt fields: {sorted(invalid)}")
         fields = ", ".join(values)
         placeholders = ", ".join("?" for _ in values)
         with self.transaction() as connection:
@@ -602,7 +665,10 @@ class Database:
         output = io.StringIO()
         writer = csv.DictWriter(output, fieldnames=list(rows[0]))
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(
+            {key: sanitize_spreadsheet_cell(value) for key, value in row.items()}
+            for row in rows
+        )
         return output.getvalue()
 
     def add_correction_rule(

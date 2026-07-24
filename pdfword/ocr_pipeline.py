@@ -288,6 +288,14 @@ def process_pdf(
             if engine.engine_type == DIRECT_TEXT_ENGINE.engine_type
         ]
         direct_engine = direct_engines[0] if direct_engines else DIRECT_TEXT_ENGINE
+        local_model_engine = next(
+            (
+                engine
+                for engine in active_engines
+                if engine.engine_type == "local_model" and engine.available()
+            ),
+            None,
+        )
         extraction = direct_engine.extract_page(pdf_bytes=pdf_bytes, page_no=page_no)
         text = _clean_markdown_output(extraction.text)
         if extraction.status == OCR_STATUS_FAILED:
@@ -317,13 +325,76 @@ def process_pdf(
             route, metadata = _classify_page_without_digital_text(
                 reader.pages[page_no - 1], extraction.text or ""
             )
-            results_by_page[page_no] = _classified_non_text_page(
-                page_no,
-                route,
-                metadata,
-                extraction.failure_reason,
-                attempted,
+            model_extraction = None
+            if route == OCR_STATUS_PENDING_MODEL and local_model_engine is not None:
+                try:
+                    image_bytes = render_pdf_page_to_png_bytes(pdf_bytes, page_no)
+                    model_extraction = local_model_engine.extract_page(
+                        image_bytes=image_bytes,
+                        page_no=page_no,
+                    )
+                except Exception as exc:
+                    metadata["local_model_error"] = f"{type(exc).__name__}: {exc}"
+            model_text = _clean_markdown_output(
+                model_extraction.text if model_extraction is not None else ""
             )
+            valid_model_result = bool(
+                model_extraction is not None
+                and model_extraction.success
+                and model_text
+                and model_extraction.confidence is not None
+            )
+            if valid_model_result and model_extraction is not None:
+                assert model_extraction.confidence is not None
+                quality_parts = estimate_quality_components(
+                    model_text,
+                    base_text_score=float(model_extraction.confidence) * 100,
+                )
+                decision = final_acceptance_decision(
+                    model_text,
+                    estimated_text_quality=quality_parts["text_quality"],
+                    threshold=acceptance_threshold,
+                    expected_non_empty=True,
+                )
+                results_by_page[page_no] = PageResult(
+                    page_no=page_no,
+                    model_used=model_extraction.model_name
+                    or f"local:{model_extraction.engine_name}",
+                    markdown=model_text,
+                    quality_score=quality_parts["final_quality"],
+                    text_quality_score=decision["estimated_text_quality"],
+                    layout_quality_score=quality_parts["layout_quality"],
+                    direction_quality_score=quality_parts["direction_quality"],
+                    completeness_score=quality_parts["completeness"],
+                    requires_manual_review=bool(decision["requires_manual_review"]),
+                    review_reason=decision["review_reason"],
+                    engines_attempted=attempted,
+                    route_used=model_extraction.engine_name,
+                    accepted=bool(decision["accepted"]),
+                    attempts_count=1,
+                    elapsed_time=model_extraction.processing_time,
+                    corruption_diagnostics=decision["diagnostics"],
+                    selection_reason="feature_flagged_local_model",
+                    metadata={
+                        **metadata,
+                        **model_extraction.metadata,
+                        "engine_status": model_extraction.status,
+                        "page_state": "local_model_ocr",
+                    },
+                )
+            else:
+                reason = (
+                    model_extraction.failure_reason
+                    if model_extraction is not None
+                    else extraction.failure_reason
+                )
+                results_by_page[page_no] = _classified_non_text_page(
+                    page_no,
+                    route,
+                    metadata,
+                    reason,
+                    attempted,
+                )
         elif direct_engine.name == DIRECT_TEXT_ENGINE.name:
             route, metadata = _classify_page_without_digital_text(
                 reader.pages[page_no - 1], extraction.text or ""

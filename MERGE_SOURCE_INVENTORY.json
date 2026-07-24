@@ -1,0 +1,84 @@
+{
+  "created_at_utc": "2026-07-23T13:37:01.377938+00:00",
+  "audit_report": "E:\\merge_analysis\\MERGE_AUDIT.md",
+  "environment": {
+    "os": "Windows-10-10.0.19045-SP0",
+    "python_used_for_backup": "3.11.9",
+    "secret_values_read": false
+  },
+  "sources": [
+    {
+      "id": "A",
+      "path": "E:\\project_collected",
+      "commit": "b6e548a853991b872d804f5e71238d17fa7103a7",
+      "expected_commit_prefix": "b6e548a",
+      "expected_commit_matches": true,
+      "branch": "main",
+      "tracked_file_count": 217,
+      "untracked_file_count": 18,
+      "untracked_paths": [
+        "CODEX_FINAL_HANDOFF.md",
+        "CODEX_FINAL_REPORT.md",
+        "GITHUB_AMD_READINESS_REPORT.md",
+        "GITHUB_UPLOAD_REPORT.md",
+        "MODEL_AGNOSTIC_READINESS_REPORT.md",
+        "PULL_REQUEST_BODY.md",
+        "audit_reports/BASELINE_TEST_RESULTS.md",
+        "audit_reports/BLOCKED_NOT_AUTHORIZED.md",
+        "audit_reports/DEPENDENCY_AUDIT.md",
+        "audit_reports/FILES_CREATED.md",
+        "audit_reports/FINAL_READINESS_REPORT.md",
+        "audit_reports/FINAL_STOP_REPORT.md",
+        "audit_reports/FIXES_APPLIED.md",
+        "audit_reports/PROJECT_AUDIT.md",
+        "audit_reports/PROJECT_INVENTORY.md",
+        "audit_reports/SECURITY_AUDIT.md",
+        "audit_reports/TEST_RESULTS.md",
+        "audit_reports/UNRESOLVED_ISSUES.md"
+      ],
+      "status": [
+        "## main...origin/main",
+        "?? CODEX_FINAL_HANDOFF.md",
+        "?? CODEX_FINAL_REPORT.md",
+        "?? GITHUB_AMD_READINESS_REPORT.md",
+        "?? GITHUB_UPLOAD_REPORT.md",
+        "?? MODEL_AGNOSTIC_READINESS_REPORT.md",
+        "?? PULL_REQUEST_BODY.md",
+        "?? audit_reports/"
+      ],
+      "remote_names": [
+        "origin"
+      ],
+      "repository_file_count": 56343,
+      "repository_size_bytes": 2029380313,
+      "python_expectation": "3.11"
+    },
+    {
+      "id": "B",
+      "path": "E:\\new ocr project",
+      "commit": "e9a2112df5aa245ddefe2271a62d9c325c184c48",
+      "expected_commit_prefix": "e9a2112",
+      "expected_commit_matches": true,
+      "branch": "master",
+      "tracked_file_count": 390,
+      "untracked_file_count": 0,
+      "untracked_paths": [],
+      "status": [
+        "## master"
+      ],
+      "remote_names": [],
+      "repository_file_count": 2862,
+      "repository_size_bytes": 200705040,
+      "python_expectation": ">=3.10 (merge target 3.11)"
+    }
+  ],
+  "exclusions": [
+    ".venv*",
+    "__pycache__",
+    "caches",
+    "bundled Python/Poppler",
+    "real .env and secrets",
+    "model weights/checkpoints from destination export"
+  ],
+  "expected_destination": "E:\\clouda_merged_work"
+}

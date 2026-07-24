@@ -1,0 +1,1453 @@
+{
+    "schema_version":  1,
+    "source_commit":  "e9a2112df5aa245ddefe2271a62d9c325c184c48",
+    "copied_count":  157,
+    "files":  [
+                  {
+                      "source_project":  "B",
+                      "source_path":  "ARCHITECTURE.md",
+                      "destination_path":  "docs/data_foundation/ARCHITECTURE.md",
+                      "category":  "documentation",
+                      "source_sha256":  "F60894E8F970A60830BED11FD61CDABAE694CB72D0B2F6C257F67EE03CE71439",
+                      "destination_sha256":  "F60894E8F970A60830BED11FD61CDABAE694CB72D0B2F6C257F67EE03CE71439",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "AWS_DEPLOYMENT_PLAN.md",
+                      "destination_path":  "docs/data_foundation/AWS_DEPLOYMENT_PLAN.md",
+                      "category":  "documentation",
+                      "source_sha256":  "39A1AB13C6A11970FB3524B79F661F48375E3429DDABFB4D48E0A4B7D1840EC4",
+                      "destination_sha256":  "39A1AB13C6A11970FB3524B79F661F48375E3429DDABFB4D48E0A4B7D1840EC4",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "CHANGELOG.md",
+                      "destination_path":  "docs/data_foundation/CHANGELOG_HISTORY.md",
+                      "category":  "documentation",
+                      "source_sha256":  "7B39C772D62D242F7E14B23BBA02DC62D1FA39C4A227D9347F71EC43D86E3895",
+                      "destination_sha256":  "7B39C772D62D242F7E14B23BBA02DC62D1FA39C4A227D9347F71EC43D86E3895",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "DATA_FORMAT.md",
+                      "destination_path":  "docs/data_foundation/DATA_FORMAT.md",
+                      "category":  "documentation",
+                      "source_sha256":  "9D70504C4441BE38DE210A95E884E90A1E96D88D77CAA2CA0BECD6BBA60720D9",
+                      "destination_sha256":  "9D70504C4441BE38DE210A95E884E90A1E96D88D77CAA2CA0BECD6BBA60720D9",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "DISTORTION_DESIGN.md",
+                      "destination_path":  "docs/data_foundation/DISTORTION_DESIGN.md",
+                      "category":  "documentation",
+                      "source_sha256":  "AAD19F753C7AA3B61BA3D790F3DD4ACB7FFADBB4550632B5ACF3B8EB4EF90070",
+                      "destination_sha256":  "AAD19F753C7AA3B61BA3D790F3DD4ACB7FFADBB4550632B5ACF3B8EB4EF90070",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "EVALUATION_PLAN.md",
+                      "destination_path":  "docs/data_foundation/EVALUATION_PLAN.md",
+                      "category":  "documentation",
+                      "source_sha256":  "D81992FB21FEC0C05A2F72F2FF84367D73D74D97EE428E36D7B05D94DB2AB414",
+                      "destination_sha256":  "D81992FB21FEC0C05A2F72F2FF84367D73D74D97EE428E36D7B05D94DB2AB414",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "GROUND_TRUTH_POLICY.md",
+                      "destination_path":  "docs/data_foundation/GROUND_TRUTH_POLICY.md",
+                      "category":  "documentation",
+                      "source_sha256":  "D0A55CB9176BA9D7A898581DC44AE295B8CFABD3DF9C4F59D06BFD8906834A6D",
+                      "destination_sha256":  "D0A55CB9176BA9D7A898581DC44AE295B8CFABD3DF9C4F59D06BFD8906834A6D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "LICENSE_REVIEW.md",
+                      "destination_path":  "docs/data_foundation/LICENSE_REVIEW.md",
+                      "category":  "documentation",
+                      "source_sha256":  "2924504DBC907C91A2818322FB3C555BBDEB290AD7C8CE991AD7F6EEEB02254A",
+                      "destination_sha256":  "2924504DBC907C91A2818322FB3C555BBDEB290AD7C8CE991AD7F6EEEB02254A",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "LOCAL_SETUP.md",
+                      "destination_path":  "docs/data_foundation/LOCAL_SETUP.md",
+                      "category":  "documentation",
+                      "source_sha256":  "DFBB1D3759797D8B3753BC24EF328CC4FEA9FE5617E82828FB051A91943085AB",
+                      "destination_sha256":  "DFBB1D3759797D8B3753BC24EF328CC4FEA9FE5617E82828FB051A91943085AB",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "PROJECT_STATUS.md",
+                      "destination_path":  "docs/data_foundation/PROJECT_STATUS.md",
+                      "category":  "documentation",
+                      "source_sha256":  "EECD80E3879C47A6D5B84617A1E9FC30DD7C4791DAD9DDAF47CF11A7CB4C1487",
+                      "destination_sha256":  "B64E7DA3BC20A587769D25967D0A6E8FAD19FDBD235582A0D9D969A21C242A23",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "README.md",
+                      "destination_path":  "docs/data_foundation/README.md",
+                      "category":  "documentation",
+                      "source_sha256":  "2314D1DD2E2A4959046C14E34B956C5C202805F94898D62FE4DA4A7460F1CDF7",
+                      "destination_sha256":  "8C71C07FE1FA2B6274D5FEF9F85976F0C3190C196CCB4E3849638DD6D1D699E8",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "ROADMAP.md",
+                      "destination_path":  "docs/data_foundation/ROADMAP.md",
+                      "category":  "documentation",
+                      "source_sha256":  "B86E0979D881B5E99A69DD9C60CBA644F064E19CE659FA97F22D7756F1FFEF29",
+                      "destination_sha256":  "B86E0979D881B5E99A69DD9C60CBA644F064E19CE659FA97F22D7756F1FFEF29",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "SECURITY.md",
+                      "destination_path":  "docs/data_foundation/SECURITY_HISTORY.md",
+                      "category":  "documentation",
+                      "source_sha256":  "538D407FB857E8FB6AA2C7D79B05E7113A7EC984BD1EAEDECFF11A89C3D118D8",
+                      "destination_sha256":  "538D407FB857E8FB6AA2C7D79B05E7113A7EC984BD1EAEDECFF11A89C3D118D8",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "TROUBLESHOOTING.md",
+                      "destination_path":  "docs/data_foundation/TROUBLESHOOTING.md",
+                      "category":  "documentation",
+                      "source_sha256":  "F712331746DC9D2DBE3C4535493CF599EED8BC98BB11C65E7E3DE5C987146054",
+                      "destination_sha256":  "F712331746DC9D2DBE3C4535493CF599EED8BC98BB11C65E7E3DE5C987146054",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/aws/least_privilege_policy.template.json",
+                      "destination_path":  "configs/data_foundation/aws/least_privilege_policy.template.json",
+                      "category":  "config",
+                      "source_sha256":  "9AF370DEA0432958DEE4A128F76AEA5BDBAE955F764F4A1BF728FB12D75C202E",
+                      "destination_sha256":  "9AF370DEA0432958DEE4A128F76AEA5BDBAE955F764F4A1BF728FB12D75C202E",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/aws/template.yaml",
+                      "destination_path":  "configs/data_foundation/aws/template.yaml",
+                      "category":  "config",
+                      "source_sha256":  "16488C5756CA04C4F58C186AB927DEEC23DCEA3412A6A0207C3C5A272D3347CA",
+                      "destination_sha256":  "16488C5756CA04C4F58C186AB927DEEC23DCEA3412A6A0207C3C5A272D3347CA",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/binding_shadow.json",
+                      "destination_path":  "configs/data_foundation/distortions/binding_shadow.json",
+                      "category":  "config",
+                      "source_sha256":  "92715EFB66A9F6A26CFC94F39AD2AAC480A25F4EF3272AF246D38BC7CB707E95",
+                      "destination_sha256":  "92715EFB66A9F6A26CFC94F39AD2AAC480A25F4EF3272AF246D38BC7CB707E95",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/clean_control.json",
+                      "destination_path":  "configs/data_foundation/distortions/clean_control.json",
+                      "category":  "config",
+                      "source_sha256":  "BBC84DE4BC6189782ECD2A60F5704E05DB325BC83FF84D6972B26CE96053FCE1",
+                      "destination_sha256":  "BBC84DE4BC6189782ECD2A60F5704E05DB325BC83FF84D6972B26CE96053FCE1",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/faded_text.json",
+                      "destination_path":  "configs/data_foundation/distortions/faded_text.json",
+                      "category":  "config",
+                      "source_sha256":  "6ED5B1F34220B31ED132A6E90D07047650E87AC3FFB4E7F5A367871A613E4ECB",
+                      "destination_sha256":  "6ED5B1F34220B31ED132A6E90D07047650E87AC3FFB4E7F5A367871A613E4ECB",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/footnote_heavy.json",
+                      "destination_path":  "configs/data_foundation/distortions/footnote_heavy.json",
+                      "category":  "config",
+                      "source_sha256":  "2FAF5029FAE210AECC1C1977AC9CF76169C8963D40AD7BCE8BBA97BF31F8F362",
+                      "destination_sha256":  "2FAF5029FAE210AECC1C1977AC9CF76169C8963D40AD7BCE8BBA97BF31F8F362",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/historical_heavy.json",
+                      "destination_path":  "configs/data_foundation/distortions/historical_heavy.json",
+                      "category":  "config",
+                      "source_sha256":  "A5866A64EE010FD6E3B29803274529C06B0A7F4A511A60037BAA4C329B33E3A8",
+                      "destination_sha256":  "A5866A64EE010FD6E3B29803274529C06B0A7F4A511A60037BAA4C329B33E3A8",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/historical_light.json",
+                      "destination_path":  "configs/data_foundation/distortions/historical_light.json",
+                      "category":  "config",
+                      "source_sha256":  "2B11F1730938134921703152D9331712315FBB9E08CA0C11D76A8164EAA5F480",
+                      "destination_sha256":  "2B11F1730938134921703152D9331712315FBB9E08CA0C11D76A8164EAA5F480",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/historical_medium.json",
+                      "destination_path":  "configs/data_foundation/distortions/historical_medium.json",
+                      "category":  "config",
+                      "source_sha256":  "82FE63430EA2591F13E70C921C0F0BA69FF63BC50275D06073CD27DAE1C2FFD3",
+                      "destination_sha256":  "82FE63430EA2591F13E70C921C0F0BA69FF63BC50275D06073CD27DAE1C2FFD3",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/mixed_layout.json",
+                      "destination_path":  "configs/data_foundation/distortions/mixed_layout.json",
+                      "category":  "config",
+                      "source_sha256":  "9A3257B2EFE2C7438337D821D543156EEF0F31A6DCE2F504F67721A6CA3E9B08",
+                      "destination_sha256":  "9A3257B2EFE2C7438337D821D543156EEF0F31A6DCE2F504F67721A6CA3E9B08",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/modern_heavy.json",
+                      "destination_path":  "configs/data_foundation/distortions/modern_heavy.json",
+                      "category":  "config",
+                      "source_sha256":  "913A086D0E2EBB6A63FD18BE67549EBBA06860CD590807A80F0A56CB6DE93510",
+                      "destination_sha256":  "913A086D0E2EBB6A63FD18BE67549EBBA06860CD590807A80F0A56CB6DE93510",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/modern_light.json",
+                      "destination_path":  "configs/data_foundation/distortions/modern_light.json",
+                      "category":  "config",
+                      "source_sha256":  "1EF797182A9F7A42A5783FB52595144F30F3672392BBE19555D3540615DF3CB9",
+                      "destination_sha256":  "1EF797182A9F7A42A5783FB52595144F30F3672392BBE19555D3540615DF3CB9",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/modern_medium.json",
+                      "destination_path":  "configs/data_foundation/distortions/modern_medium.json",
+                      "category":  "config",
+                      "source_sha256":  "5072BF250F4C2E28883F89DCA9C688F64FF1F2ABAEAF3E1AFCB2B4ABF179F89B",
+                      "destination_sha256":  "5072BF250F4C2E28883F89DCA9C688F64FF1F2ABAEAF3E1AFCB2B4ABF179F89B",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/noisy_compressed.json",
+                      "destination_path":  "configs/data_foundation/distortions/noisy_compressed.json",
+                      "category":  "config",
+                      "source_sha256":  "A487EC084FC39DFFFFCCAF8573D37410ADC514F9E762FD8CCA67E8F802E0F864",
+                      "destination_sha256":  "A487EC084FC39DFFFFCCAF8573D37410ADC514F9E762FD8CCA67E8F802E0F864",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/phone_camera.json",
+                      "destination_path":  "configs/data_foundation/distortions/phone_camera.json",
+                      "category":  "config",
+                      "source_sha256":  "9F34284DEFE4BEA268386A3305A34625326A4DCCD7EF33CDED7A0FF6A6C8BC0D",
+                      "destination_sha256":  "9F34284DEFE4BEA268386A3305A34625326A4DCCD7EF33CDED7A0FF6A6C8BC0D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/scanner_office.json",
+                      "destination_path":  "configs/data_foundation/distortions/scanner_office.json",
+                      "category":  "config",
+                      "source_sha256":  "9A9278A63E3748198ACB030517444903BC4783A114E4B89B5BB6FE49787598B3",
+                      "destination_sha256":  "9A9278A63E3748198ACB030517444903BC4783A114E4B89B5BB6FE49787598B3",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/small_text.json",
+                      "destination_path":  "configs/data_foundation/distortions/small_text.json",
+                      "category":  "config",
+                      "source_sha256":  "BDA3C0631C6531C1B979AA5C6AD0974ABE63BBA32C0BAF115F135DABD5754135",
+                      "destination_sha256":  "BDA3C0631C6531C1B979AA5C6AD0974ABE63BBA32C0BAF115F135DABD5754135",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/distortions/weak_scan.json",
+                      "destination_path":  "configs/data_foundation/distortions/weak_scan.json",
+                      "category":  "config",
+                      "source_sha256":  "639527F0E61D0CBC424B6582DA4AE5C210D11C9D0CA239D2E016DBEF5839DA46",
+                      "destination_sha256":  "639527F0E61D0CBC424B6582DA4AE5C210D11C9D0CA239D2E016DBEF5839DA46",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/evaluation/default.json",
+                      "destination_path":  "configs/data_foundation/evaluation/default.json",
+                      "category":  "config",
+                      "source_sha256":  "EF799F11F54DA4E4A1AAE84890AB4B90DA9CDE018DD825FE583246E3B9E51CCA",
+                      "destination_sha256":  "EF799F11F54DA4E4A1AAE84890AB4B90DA9CDE018DD825FE583246E3B9E51CCA",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/local/default.yaml",
+                      "destination_path":  "configs/data_foundation/local/default.yaml",
+                      "category":  "config",
+                      "source_sha256":  "BB0642CFEED783F971A25F0D29FBAA583A8AD5BC3F9357A8430B0460E39ABB50",
+                      "destination_sha256":  "BB0642CFEED783F971A25F0D29FBAA583A8AD5BC3F9357A8430B0460E39ABB50",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "configs/pipelines/foundation_dry_run.json",
+                      "destination_path":  "configs/data_foundation/pipelines/foundation_dry_run.json",
+                      "category":  "config",
+                      "source_sha256":  "F5815F0A755ABEB997BA46F1616E331AB93B4D799CBC2E2AEC7E808D8796B0DA",
+                      "destination_sha256":  "F5815F0A755ABEB997BA46F1616E331AB93B4D799CBC2E2AEC7E808D8796B0DA",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/DATASET_DOWNLOAD_PLAN.md",
+                      "destination_path":  "docs/data_foundation/reports/DATASET_DOWNLOAD_PLAN.md",
+                      "category":  "documentation",
+                      "source_sha256":  "9C76D9A66FF8F4D7077030F71648811FB71C55D4235934A7A9F9C7B80EFD3B4B",
+                      "destination_sha256":  "4C57A1DBA252EC885547CC45FF2C2F0128DC96AEB5B7FD32B64FBF8B3920A240",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/DATASET_LICENSE_MATRIX.md",
+                      "destination_path":  "docs/data_foundation/reports/DATASET_LICENSE_MATRIX.md",
+                      "category":  "documentation",
+                      "source_sha256":  "FF89B950E47E01F8FB955C4646AB997682C9EB61F00E5C0685399E8026620E26",
+                      "destination_sha256":  "FF89B950E47E01F8FB955C4646AB997682C9EB61F00E5C0685399E8026620E26",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/DATASET_SOURCE_REPORT.md",
+                      "destination_path":  "docs/data_foundation/reports/DATASET_SOURCE_REPORT.md",
+                      "category":  "documentation",
+                      "source_sha256":  "CA1476CC52978F6CBC3DF31EBFAE4CDFECEA55DDDA25600A6521233776F71EAF",
+                      "destination_sha256":  "CA1476CC52978F6CBC3DF31EBFAE4CDFECEA55DDDA25600A6521233776F71EAF",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/DATA_FORMAT.md",
+                      "destination_path":  "docs/data_foundation/reports/DATA_FORMAT.md",
+                      "category":  "documentation",
+                      "source_sha256":  "1F2CDA20B3F30DC1C286997AE83CC7AEBA6261E44B1BBC074EF77DD0665F5B57",
+                      "destination_sha256":  "1F2CDA20B3F30DC1C286997AE83CC7AEBA6261E44B1BBC074EF77DD0665F5B57",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/ENVIRONMENT_REPORT.json",
+                      "destination_path":  "docs/data_foundation/reports/ENVIRONMENT_REPORT.json",
+                      "category":  "documentation",
+                      "source_sha256":  "A83116CF78835D220E62CE9A3CE304F1ABED5E142EFD169E051BEE35609DEC6B",
+                      "destination_sha256":  "A83116CF78835D220E62CE9A3CE304F1ABED5E142EFD169E051BEE35609DEC6B",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/GROUND_TRUTH_POLICY.md",
+                      "destination_path":  "docs/data_foundation/reports/GROUND_TRUTH_POLICY.md",
+                      "category":  "documentation",
+                      "source_sha256":  "5429D31BF621B4C5FC7B56774EC775967250A05040C45C437E18616D49E0F843",
+                      "destination_sha256":  "5429D31BF621B4C5FC7B56774EC775967250A05040C45C437E18616D49E0F843",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/INGESTION_WORKFLOW.md",
+                      "destination_path":  "docs/data_foundation/reports/INGESTION_WORKFLOW.md",
+                      "category":  "documentation",
+                      "source_sha256":  "7AF8513143D5B0D4D00D28F23185D83EB5082BC74D56470D7075C15FB76E9CDA",
+                      "destination_sha256":  "A960E8CF9C0239BF8F26DEA520C8EEF7BAAF8313D5CE02499D9F863857BCF340",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/LOCAL_SYSTEM_REPORT.md",
+                      "destination_path":  "docs/data_foundation/reports/LOCAL_SYSTEM_REPORT.md",
+                      "category":  "documentation",
+                      "source_sha256":  "6D25A7A76637FF910E8ED66F3636B95DB908AF6B1A048E447AC34B95AE4D2C8D",
+                      "destination_sha256":  "28BCE23C1AAE8260011A01C26EB694A159442473F212A146D3F75DCBC80EAADD",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "docs/RASAM_FIRST_BATCH_REPORT.md",
+                      "destination_path":  "docs/data_foundation/reports/RASAM_FIRST_BATCH_REPORT.md",
+                      "category":  "documentation",
+                      "source_sha256":  "EEBED73F4514FB5F7CA44804A58ACCC3FAB39FA33C19CCDFE093C5FBFC7D46F7",
+                      "destination_sha256":  "EEBED73F4514FB5F7CA44804A58ACCC3FAB39FA33C19CCDFE093C5FBFC7D46F7",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "requirements-base.txt",
+                      "destination_path":  "docs/data_foundation/source_requirements/requirements-base.txt",
+                      "category":  "documentation",
+                      "source_sha256":  "89F1C4B0A7F745D40DB305A1373824312BB99FB11FD187B8A15DCB9CD28A2F40",
+                      "destination_sha256":  "89F1C4B0A7F745D40DB305A1373824312BB99FB11FD187B8A15DCB9CD28A2F40",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "requirements-cpu.txt",
+                      "destination_path":  "docs/data_foundation/source_requirements/requirements-cpu.txt",
+                      "category":  "documentation",
+                      "source_sha256":  "081BAC7E1698D117012AD605AF66536148B02B3327B3EB0218A626FF1F1533F1",
+                      "destination_sha256":  "081BAC7E1698D117012AD605AF66536148B02B3327B3EB0218A626FF1F1533F1",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "requirements-dev.txt",
+                      "destination_path":  "docs/data_foundation/source_requirements/requirements-dev.txt",
+                      "category":  "documentation",
+                      "source_sha256":  "674C59E5651C0BA627C1F2846B1003A1A7AC7EAA2610706019B2F80CB3CFBF0D",
+                      "destination_sha256":  "674C59E5651C0BA627C1F2846B1003A1A7AC7EAA2610706019B2F80CB3CFBF0D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "requirements-gpu.txt",
+                      "destination_path":  "docs/data_foundation/source_requirements/requirements-gpu.txt",
+                      "category":  "documentation",
+                      "source_sha256":  "0CA40E521133AA382DB752B4A5252B48C823898D4D343659F424AF12A0FEB343",
+                      "destination_sha256":  "0CA40E521133AA382DB752B4A5252B48C823898D4D343659F424AF12A0FEB343",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/automatic_shutdown_plan.md",
+                      "destination_path":  "tools/data_foundation/aws/automatic_shutdown_plan.md",
+                      "category":  "tool",
+                      "source_sha256":  "126337BD0A1D88FE03788649FF04B51EDE7ADBA72AD36699270A3E0CCFA601E6",
+                      "destination_sha256":  "126337BD0A1D88FE03788649FF04B51EDE7ADBA72AD36699270A3E0CCFA601E6",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/checkpoint_upload_plan.md",
+                      "destination_path":  "tools/data_foundation/aws/checkpoint_upload_plan.md",
+                      "category":  "tool",
+                      "source_sha256":  "1258E8577DDF48E2184580068A832ACCA197A3698A61E9BF99177108B9D17BBA",
+                      "destination_sha256":  "1258E8577DDF48E2184580068A832ACCA197A3698A61E9BF99177108B9D17BBA",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/cost_estimation_placeholder.py",
+                      "destination_path":  "tools/data_foundation/aws/cost_estimation_placeholder.py",
+                      "category":  "tool",
+                      "source_sha256":  "4D53DE7336D548FCEACA2FDE340434B8AE437E010B064C9EDB5EEAD02A664726",
+                      "destination_sha256":  "4D53DE7336D548FCEACA2FDE340434B8AE437E010B064C9EDB5EEAD02A664726",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/environment_setup_template.sh",
+                      "destination_path":  "tools/data_foundation/aws/environment_setup_template.sh",
+                      "category":  "tool",
+                      "source_sha256":  "6627571DB2577948F103FA18EF35891D06195F4C80369655D618BB1FA8BF9689",
+                      "destination_sha256":  "6627571DB2577948F103FA18EF35891D06195F4C80369655D618BB1FA8BF9689",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/gpu_verification.py",
+                      "destination_path":  "tools/data_foundation/aws/gpu_verification.py",
+                      "category":  "tool",
+                      "source_sha256":  "0648E34A4C6115AB4C96E1DAB74AFFECA40B49D6B637980A88DC729043758796",
+                      "destination_sha256":  "0648E34A4C6115AB4C96E1DAB74AFFECA40B49D6B637980A88DC729043758796",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/job_runner_template.py",
+                      "destination_path":  "tools/data_foundation/aws/job_runner_template.py",
+                      "category":  "tool",
+                      "source_sha256":  "684118FC423D4281BB3BB8F3B7368A7A789D44CDFA277864EFF0F687433E9793",
+                      "destination_sha256":  "684118FC423D4281BB3BB8F3B7368A7A789D44CDFA277864EFF0F687433E9793",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/project_upload_plan.md",
+                      "destination_path":  "tools/data_foundation/aws/project_upload_plan.md",
+                      "category":  "tool",
+                      "source_sha256":  "13AD9CCAAD9DC36DA50A2E97E008E3AE21396C3CFEC7FEFF8F2B80BFEB84746F",
+                      "destination_sha256":  "13AD9CCAAD9DC36DA50A2E97E008E3AE21396C3CFEC7FEFF8F2B80BFEB84746F",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/result_download_plan.md",
+                      "destination_path":  "tools/data_foundation/aws/result_download_plan.md",
+                      "category":  "tool",
+                      "source_sha256":  "75E0D1DFA7AB45549A2E89493731CD7154538990CCDED47B659A31DEB4586704",
+                      "destination_sha256":  "75E0D1DFA7AB45549A2E89493731CD7154538990CCDED47B659A31DEB4586704",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/s3_configuration_template.json",
+                      "destination_path":  "tools/data_foundation/aws/s3_configuration_template.json",
+                      "category":  "tool",
+                      "source_sha256":  "4301E6B4F515813E2FAC43ACFA0F1333CD7D3077E02FF6CDDFFA40283CCAC416",
+                      "destination_sha256":  "4301E6B4F515813E2FAC43ACFA0F1333CD7D3077E02FF6CDDFFA40283CCAC416",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/aws/spot_interruption_plan.md",
+                      "destination_path":  "tools/data_foundation/aws/spot_interruption_plan.md",
+                      "category":  "tool",
+                      "source_sha256":  "8724B3D8E03076B17A8E6E80FF69F6BD3CB11B0C6307C4DA371DE598FB39D91A",
+                      "destination_sha256":  "8724B3D8E03076B17A8E6E80FF69F6BD3CB11B0C6307C4DA371DE598FB39D91A",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/maintenance/cleanup_temp.py",
+                      "destination_path":  "tools/data_foundation/maintenance/cleanup_temp.py",
+                      "category":  "tool",
+                      "source_sha256":  "6B5FEACEC25642D2D7A0EEDE3621B5A292DD98328A52DA82443C11E36026C301",
+                      "destination_sha256":  "6B5FEACEC25642D2D7A0EEDE3621B5A292DD98328A52DA82443C11E36026C301",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/check_system.py",
+                      "destination_path":  "tools/data_foundation/setup/check_system.py",
+                      "category":  "tool",
+                      "source_sha256":  "30315D2B01E6147430F3EC3373A5203312EB39B4E5F7D6F981B69BD89CCFF38D",
+                      "destination_sha256":  "30315D2B01E6147430F3EC3373A5203312EB39B4E5F7D6F981B69BD89CCFF38D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/create_environment.py",
+                      "destination_path":  "tools/data_foundation/setup/create_environment.py",
+                      "category":  "tool",
+                      "source_sha256":  "8618B5733495132D020260B7B8A47DD68022207326D23995977FE74117426C9F",
+                      "destination_sha256":  "8618B5733495132D020260B7B8A47DD68022207326D23995977FE74117426C9F",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/create_synthetic_fixtures.py",
+                      "destination_path":  "tools/data_foundation/setup/create_synthetic_fixtures.py",
+                      "category":  "tool",
+                      "source_sha256":  "D8A291BF3E30EBA9CD93EA4F85ACA9E48D3BE8004DF5D82470CE8FA81F7FA489",
+                      "destination_sha256":  "D8A291BF3E30EBA9CD93EA4F85ACA9E48D3BE8004DF5D82470CE8FA81F7FA489",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/export_environment_report.py",
+                      "destination_path":  "tools/data_foundation/setup/export_environment_report.py",
+                      "category":  "tool",
+                      "source_sha256":  "0A41FE748E5EEA335E2B4CAA24FB81C020CF2B9B820A3F65BD626CF89E48DF00",
+                      "destination_sha256":  "0A41FE748E5EEA335E2B4CAA24FB81C020CF2B9B820A3F65BD626CF89E48DF00",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/install_base_dependencies.py",
+                      "destination_path":  "tools/data_foundation/setup/install_base_dependencies.py",
+                      "category":  "tool",
+                      "source_sha256":  "0231BA2F066B06637FCEA706C9CE5DC0E20201AF05A44A9D9E4E14D03393133B",
+                      "destination_sha256":  "0231BA2F066B06637FCEA706C9CE5DC0E20201AF05A44A9D9E4E14D03393133B",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "scripts/setup/validate_environment.py",
+                      "destination_path":  "tools/data_foundation/setup/validate_environment.py",
+                      "category":  "tool",
+                      "source_sha256":  "27C9E4E74248A3A455AD886F2BCEFC6D9A5839405F74F79D12650207B27A7FB6",
+                      "destination_sha256":  "27C9E4E74248A3A455AD886F2BCEFC6D9A5839405F74F79D12650207B27A7FB6",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/__init__.py",
+                      "destination_path":  "clouda_data/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "5918BBFE7184484B851081FF9ACB3A5FBF0024BCE69B8247FF32A56C9CBBD051",
+                      "destination_sha256":  "5918BBFE7184484B851081FF9ACB3A5FBF0024BCE69B8247FF32A56C9CBBD051",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/aws/__init__.py",
+                      "destination_path":  "clouda_data/aws/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "6D064C5D3F846DABBD0781B240E3D7A8A17BEF8C0A483294990CE8CACD7A7483",
+                      "destination_sha256":  "6D064C5D3F846DABBD0781B240E3D7A8A17BEF8C0A483294990CE8CACD7A7483",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/aws/templates.py",
+                      "destination_path":  "clouda_data/aws/templates.py",
+                      "category":  "code",
+                      "source_sha256":  "08CBDE56C154ED45C7174DD73C07A94A8654B6E0AAA8784D5DEE1F5AA5E5A62E",
+                      "destination_sha256":  "08CBDE56C154ED45C7174DD73C07A94A8654B6E0AAA8784D5DEE1F5AA5E5A62E",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/config/__init__.py",
+                      "destination_path":  "clouda_data/config/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "E59C00FD041D21E6426B6D9775AB9319BB8BDF1184EC735058CAB74F4C4BD81A",
+                      "destination_sha256":  "E59C00FD041D21E6426B6D9775AB9319BB8BDF1184EC735058CAB74F4C4BD81A",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/config/loader.py",
+                      "destination_path":  "clouda_data/config/loader.py",
+                      "category":  "code",
+                      "source_sha256":  "109EA4D23901136AF6A92C37D8907EC052352A4C808F08B03DD97FD12F0531EC",
+                      "destination_sha256":  "109EA4D23901136AF6A92C37D8907EC052352A4C808F08B03DD97FD12F0531EC",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/config/models.py",
+                      "destination_path":  "clouda_data/config/models.py",
+                      "category":  "code",
+                      "source_sha256":  "D81F57B51F3A3C5BD618D0C86DC556FC5F536C092656F49D7AEFD11D94F5EA6C",
+                      "destination_sha256":  "D81F57B51F3A3C5BD618D0C86DC556FC5F536C092656F49D7AEFD11D94F5EA6C",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/core/__init__.py",
+                      "destination_path":  "clouda_data/core/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "90855EF60AE7CA3A729225678C403825347FE585A2EAFEF588B9105E8B7DF174",
+                      "destination_sha256":  "90855EF60AE7CA3A729225678C403825347FE585A2EAFEF588B9105E8B7DF174",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/core/checkpoint.py",
+                      "destination_path":  "clouda_data/core/checkpoint.py",
+                      "category":  "code",
+                      "source_sha256":  "BD3E9187AEC41775FF0427852451C5DBD6D0D78A14DD8DFE65B41850A96C5FED",
+                      "destination_sha256":  "BD3E9187AEC41775FF0427852451C5DBD6D0D78A14DD8DFE65B41850A96C5FED",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/core/manifest.py",
+                      "destination_path":  "clouda_data/core/manifest.py",
+                      "category":  "code",
+                      "source_sha256":  "D70B575535814310A7D88EF185CE86A81E918574E4B86C4B2A55C5DDC2CDDAEF",
+                      "destination_sha256":  "D70B575535814310A7D88EF185CE86A81E918574E4B86C4B2A55C5DDC2CDDAEF",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/core/status.py",
+                      "destination_path":  "clouda_data/core/status.py",
+                      "category":  "code",
+                      "source_sha256":  "183A3A61164E3F92E1469EA2BFC541947857A52867ED1614E0B32FD160D07F2F",
+                      "destination_sha256":  "183A3A61164E3F92E1469EA2BFC541947857A52867ED1614E0B32FD160D07F2F",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/datasets/__init__.py",
+                      "destination_path":  "clouda_data/datasets/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "246F7C9A0C63405C1CFE0A9FE41EBFF2A54C0228CC7F3CB68E966FFD73C0996A",
+                      "destination_sha256":  "246F7C9A0C63405C1CFE0A9FE41EBFF2A54C0228CC7F3CB68E966FFD73C0996A",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/datasets/downloader.py",
+                      "destination_path":  "clouda_data/datasets/downloader.py",
+                      "category":  "code",
+                      "source_sha256":  "7ACAC99A0E3D545ED01DADA355ABD1CC9F84DE1A46825E36592B21555C8B46A7",
+                      "destination_sha256":  "FDB5C67737B7D6E75CAADD60F07918C384F62556BDAF66EB8F3D59477B6D41C8",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/datasets/rasam_batch.py",
+                      "destination_path":  "clouda_data/datasets/rasam_batch.py",
+                      "category":  "code",
+                      "source_sha256":  "548A8CA56AB1A588E73813765010B7E91E6C5809A51197044E833BFF92797596",
+                      "destination_sha256":  "8E404D0B79914FBD8FFE29447F25CE26A42E1BC869460CDB1C2F7CA5B0E9FFB6",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/datasets/registry.py",
+                      "destination_path":  "clouda_data/datasets/registry.py",
+                      "category":  "code",
+                      "source_sha256":  "CF3E97BA9A81A0E75F05342D1C1F6F7F2CF4FE127E086A3F71D35BAF40A6A054",
+                      "destination_sha256":  "CF3E97BA9A81A0E75F05342D1C1F6F7F2CF4FE127E086A3F71D35BAF40A6A054",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/datasets/reports.py",
+                      "destination_path":  "clouda_data/datasets/reports.py",
+                      "category":  "code",
+                      "source_sha256":  "A9272F5E4BC4B31B3C90C53334B894C22BE3B7E33920536DB8DF4A7210AF9D15",
+                      "destination_sha256":  "A9272F5E4BC4B31B3C90C53334B894C22BE3B7E33920536DB8DF4A7210AF9D15",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/__init__.py",
+                      "destination_path":  "clouda_data/distortion/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "BBF414D8CA19A8083F553A6D42FD4C36F29102971A405776E74B93B704715818",
+                      "destination_sha256":  "BBF414D8CA19A8083F553A6D42FD4C36F29102971A405776E74B93B704715818",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/base.py",
+                      "destination_path":  "clouda_data/distortion/base.py",
+                      "category":  "code",
+                      "source_sha256":  "348DCBB79040AB5D44E16A0B018CA5483FF702073A2549308D97936336713C14",
+                      "destination_sha256":  "348DCBB79040AB5D44E16A0B018CA5483FF702073A2549308D97936336713C14",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/layout_aware.py",
+                      "destination_path":  "clouda_data/distortion/layout_aware.py",
+                      "category":  "code",
+                      "source_sha256":  "126C96FF5091D5C5700C7DA7326192F5A6E2D568DDA79C9D54237E3DED4387F3",
+                      "destination_sha256":  "805E90BFEDC129627C16DCACCE22C3B42ACCA4F586AF903FD0C0EA7EDA45CC27",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/metadata.py",
+                      "destination_path":  "clouda_data/distortion/metadata.py",
+                      "category":  "code",
+                      "source_sha256":  "444B2679C2D40FDFB72BBB4B7408DFF68A57AAAC6C407EBEBEE5679D50557598",
+                      "destination_sha256":  "444B2679C2D40FDFB72BBB4B7408DFF68A57AAAC6C407EBEBEE5679D50557598",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/pipeline.py",
+                      "destination_path":  "clouda_data/distortion/pipeline.py",
+                      "category":  "code",
+                      "source_sha256":  "9A9015908F9615FE89EFA4DC1B0E43A0B6FFC8017BE8F9B09AD8A98AAF379136",
+                      "destination_sha256":  "9A9015908F9615FE89EFA4DC1B0E43A0B6FFC8017BE8F9B09AD8A98AAF379136",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/randomness.py",
+                      "destination_path":  "clouda_data/distortion/randomness.py",
+                      "category":  "code",
+                      "source_sha256":  "89CBF5FD9B482C5117A9BB953A2462C8CE11322D5E5D4D5593945648D3CFF8B4",
+                      "destination_sha256":  "89CBF5FD9B482C5117A9BB953A2462C8CE11322D5E5D4D5593945648D3CFF8B4",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/distortion/registry.py",
+                      "destination_path":  "clouda_data/distortion/registry.py",
+                      "category":  "code",
+                      "source_sha256":  "FB5FE7805456EF20BD7D311955D522D6D77DDAABA4DB7F41B465FB537A6EEE3F",
+                      "destination_sha256":  "FB5FE7805456EF20BD7D311955D522D6D77DDAABA4DB7F41B465FB537A6EEE3F",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/__init__.py",
+                      "destination_path":  "clouda_data/evaluation/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "76DC978EA0D3541EE5C04C040FB0029C7404FA52CFA9FBF9EF8350CCACC2E652",
+                      "destination_sha256":  "76DC978EA0D3541EE5C04C040FB0029C7404FA52CFA9FBF9EF8350CCACC2E652",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/aggregations.py",
+                      "destination_path":  "clouda_data/evaluation/aggregations.py",
+                      "category":  "code",
+                      "source_sha256":  "252EB3232924638AB5834178149258C08993CF6A8C36C5A6855BC3E1BF72D3A6",
+                      "destination_sha256":  "252EB3232924638AB5834178149258C08993CF6A8C36C5A6855BC3E1BF72D3A6",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/cer.py",
+                      "destination_path":  "clouda_data/evaluation/cer.py",
+                      "category":  "code",
+                      "source_sha256":  "E8D23345B66B77DC77E8E90811914828026EC3DDCB0FBF0B381DC5952CE8BC5C",
+                      "destination_sha256":  "E8D23345B66B77DC77E8E90811914828026EC3DDCB0FBF0B381DC5952CE8BC5C",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/normalization.py",
+                      "destination_path":  "clouda_data/evaluation/normalization.py",
+                      "category":  "code",
+                      "source_sha256":  "130F56D360E30629161DB35F5FF555C4C8417B5BC9027C1712586E592953D100",
+                      "destination_sha256":  "D42949F3F4771F2EBCCE695D1C5377F61101FA7A30AA55781415DD4AA0CFD9F4",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/reports.py",
+                      "destination_path":  "clouda_data/evaluation/reports.py",
+                      "category":  "code",
+                      "source_sha256":  "EFD57CAFD306A9F444C3B9056A5FBEF6987A493343D03FEFC1425CF5576AB501",
+                      "destination_sha256":  "EFD57CAFD306A9F444C3B9056A5FBEF6987A493343D03FEFC1425CF5576AB501",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/evaluation/wer.py",
+                      "destination_path":  "clouda_data/evaluation/wer.py",
+                      "category":  "code",
+                      "source_sha256":  "783176AD863B6316F08F1A5DBFC46035A2958A8D5D9E17446B5495C69B495ADD",
+                      "destination_sha256":  "783176AD863B6316F08F1A5DBFC46035A2958A8D5D9E17446B5495C69B495ADD",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ground_truth/__init__.py",
+                      "destination_path":  "clouda_data/ground_truth/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "082E9240DE0A71CD70915B01A7950E78A394D3DD41906FF5524EBE9D9948D5C5",
+                      "destination_sha256":  "082E9240DE0A71CD70915B01A7950E78A394D3DD41906FF5524EBE9D9948D5C5",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ground_truth/alignment.py",
+                      "destination_path":  "clouda_data/ground_truth/alignment.py",
+                      "category":  "code",
+                      "source_sha256":  "C48175204E2ABC4E0CD3EA67DAA505459150F2C62B6A6A90357751F119C4D0E8",
+                      "destination_sha256":  "C48175204E2ABC4E0CD3EA67DAA505459150F2C62B6A6A90357751F119C4D0E8",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ground_truth/checksums.py",
+                      "destination_path":  "clouda_data/ground_truth/checksums.py",
+                      "category":  "code",
+                      "source_sha256":  "B33B84FFCD89004FC015213943FAD00784D0FFDD271DE8F139159CFAE16574CE",
+                      "destination_sha256":  "B33B84FFCD89004FC015213943FAD00784D0FFDD271DE8F139159CFAE16574CE",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ground_truth/normalization.py",
+                      "destination_path":  "clouda_data/ground_truth/normalization.py",
+                      "category":  "code",
+                      "source_sha256":  "818F0A58B4226D731A08CA2E8E6902FE6D72C63B170770CD49B541D6DFF6CD00",
+                      "destination_sha256":  "818F0A58B4226D731A08CA2E8E6902FE6D72C63B170770CD49B541D6DFF6CD00",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ground_truth/validators.py",
+                      "destination_path":  "clouda_data/ground_truth/validators.py",
+                      "category":  "code",
+                      "source_sha256":  "1AAE19846822A0861AE130BEB15B025413B41A2187A9A87FE2B858DA6DF487F2",
+                      "destination_sha256":  "1AAE19846822A0861AE130BEB15B025413B41A2187A9A87FE2B858DA6DF487F2",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/__init__.py",
+                      "destination_path":  "clouda_data/ingestion/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "3EA5938066F1C022A0A6FC92143A9EE0FCF09606B7B7F4BCEA3DE34B10C055C1",
+                      "destination_sha256":  "3EA5938066F1C022A0A6FC92143A9EE0FCF09606B7B7F4BCEA3DE34B10C055C1",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/file_inspection.py",
+                      "destination_path":  "clouda_data/ingestion/file_inspection.py",
+                      "category":  "code",
+                      "source_sha256":  "154E1175CB00C011F74407FDFA2D231CD637AC54174D8A5F173192CEA25F225C",
+                      "destination_sha256":  "DD332DDFCCC6AA9613D482DD9A0C209848A55496D268631CF1F943BF9E74D8B6",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/manifest.py",
+                      "destination_path":  "clouda_data/ingestion/manifest.py",
+                      "category":  "code",
+                      "source_sha256":  "560E1FE96D3D8FD6C70F78B4065FE8D9D1781308A4B923DF82A672E87DF55FDE",
+                      "destination_sha256":  "560E1FE96D3D8FD6C70F78B4065FE8D9D1781308A4B923DF82A672E87DF55FDE",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/page_record.schema.json",
+                      "destination_path":  "clouda_data/ingestion/page_record.schema.json",
+                      "category":  "code",
+                      "source_sha256":  "521901E6B8BE127AE3E1BE8AA8D27AE241D41537F9C6A0522460610C536682E2",
+                      "destination_sha256":  "521901E6B8BE127AE3E1BE8AA8D27AE241D41537F9C6A0522460610C536682E2",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/registry.py",
+                      "destination_path":  "clouda_data/ingestion/registry.py",
+                      "category":  "code",
+                      "source_sha256":  "71DE49688A8667FE15711525807C63E9F56AE90759D56D497054ED23A54207A5",
+                      "destination_sha256":  "71DE49688A8667FE15711525807C63E9F56AE90759D56D497054ED23A54207A5",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/schema.py",
+                      "destination_path":  "clouda_data/ingestion/schema.py",
+                      "category":  "code",
+                      "source_sha256":  "26946478BB726DB0CA3B72897905CB6CEEF21D4D47203F9C0A0A96C18D030582",
+                      "destination_sha256":  "26946478BB726DB0CA3B72897905CB6CEEF21D4D47203F9C0A0A96C18D030582",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/source_manifest.py",
+                      "destination_path":  "clouda_data/ingestion/source_manifest.py",
+                      "category":  "code",
+                      "source_sha256":  "9342B3453F8C798C343156C80F618C31607885E6ABBD70F31A88FFB18ADEC337",
+                      "destination_sha256":  "9342B3453F8C798C343156C80F618C31607885E6ABBD70F31A88FFB18ADEC337",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/source_manifest.schema.json",
+                      "destination_path":  "clouda_data/ingestion/source_manifest.schema.json",
+                      "category":  "code",
+                      "source_sha256":  "420E88745BE16D51E3B259D568F36B29D090839A6506AD025D5FBC02A091556C",
+                      "destination_sha256":  "420E88745BE16D51E3B259D568F36B29D090839A6506AD025D5FBC02A091556C",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/validators.py",
+                      "destination_path":  "clouda_data/ingestion/validators.py",
+                      "category":  "code",
+                      "source_sha256":  "72310D0BE67005C649680208EAB3E4F787C437775540B297D37848E3C8746F0D",
+                      "destination_sha256":  "3ABB5BCBC30BBE202EDFAC357E2D550ABD0DA11D62DFFFCEBEDC4B5D79517EAC",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/ingestion/workflow.py",
+                      "destination_path":  "clouda_data/ingestion/workflow.py",
+                      "category":  "code",
+                      "source_sha256":  "B707700801E1C99202CAB3B9EA04CE6939AD36B099B9E231971FE36C15F07228",
+                      "destination_sha256":  "F2FED8BC8E1470CF1670A29F025ADF4E2677050BC75A797B4E91DA59812F3689",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/layout/__init__.py",
+                      "destination_path":  "clouda_data/layout/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "3117D1CA1D4A3E84FFA8ECE1A6840BF7B1F24B53717CDD8374443891ECD7571E",
+                      "destination_sha256":  "3117D1CA1D4A3E84FFA8ECE1A6840BF7B1F24B53717CDD8374443891ECD7571E",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/layout/reading_order.py",
+                      "destination_path":  "clouda_data/layout/reading_order.py",
+                      "category":  "code",
+                      "source_sha256":  "DA5477751EC7DAF0C635B6A552728575E463BA5EFFC1600D101AB3EB9C448F9D",
+                      "destination_sha256":  "DA5477751EC7DAF0C635B6A552728575E463BA5EFFC1600D101AB3EB9C448F9D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/layout/region_masks.py",
+                      "destination_path":  "clouda_data/layout/region_masks.py",
+                      "category":  "code",
+                      "source_sha256":  "2E7C424897CDC50B9A446298E5EC55B55E4D9AEAC905D0272E955505279198B5",
+                      "destination_sha256":  "2E7C424897CDC50B9A446298E5EC55B55E4D9AEAC905D0272E955505279198B5",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/layout/regions.py",
+                      "destination_path":  "clouda_data/layout/regions.py",
+                      "category":  "code",
+                      "source_sha256":  "A994E124A771846716F88DAD4BA6D539F58D4416F2B38D1B4709747025407B20",
+                      "destination_sha256":  "A994E124A771846716F88DAD4BA6D539F58D4416F2B38D1B4709747025407B20",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/layout/validators.py",
+                      "destination_path":  "clouda_data/layout/validators.py",
+                      "category":  "code",
+                      "source_sha256":  "E025DF21D840FC82B2C235557765D12C7D0B97A52EEF91BD217805B058D71484",
+                      "destination_sha256":  "E025DF21D840FC82B2C235557765D12C7D0B97A52EEF91BD217805B058D71484",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/pipeline/__init__.py",
+                      "destination_path":  "clouda_data/pipeline/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "87E704565FB9BFF023071C187245D7608535F73D3D84905F0230D5FD1B385DB9",
+                      "destination_sha256":  "87E704565FB9BFF023071C187245D7608535F73D3D84905F0230D5FD1B385DB9",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/pipeline/cli.py",
+                      "destination_path":  "clouda_data/pipeline/cli.py",
+                      "category":  "code",
+                      "source_sha256":  "21B6B9AAA83A8BC07A95FFBF0A08C08C1FAFBBF74CEE9CB7D02D24D552565020",
+                      "destination_sha256":  "987C71A1E8FF296239F0ECEEA582017524D058AAEDFD4799F2A91840A0C1B2D0",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/pipeline/profiles.py",
+                      "destination_path":  "clouda_data/pipeline/profiles.py",
+                      "category":  "code",
+                      "source_sha256":  "E5EB99E24087649D861897359C6AAD16E98BEDA977187E8E54B82A4A61E7616B",
+                      "destination_sha256":  "8EAD14915815938589A4C476E742F5E652853720170AF43CF147167B41FEF59A",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/rendering/__init__.py",
+                      "destination_path":  "clouda_data/rendering/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "02BE310719E3011B637ECD5DF196E32019A7B2DDEC3FA3702D5D75DDC763634C",
+                      "destination_sha256":  "02BE310719E3011B637ECD5DF196E32019A7B2DDEC3FA3702D5D75DDC763634C",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/rendering/interfaces.py",
+                      "destination_path":  "clouda_data/rendering/interfaces.py",
+                      "category":  "code",
+                      "source_sha256":  "993DE2D19CD18928C71BDAD44DD9738383BFC18E1F73B88C4D857E652708956E",
+                      "destination_sha256":  "993DE2D19CD18928C71BDAD44DD9738383BFC18E1F73B88C4D857E652708956E",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/reporting/__init__.py",
+                      "destination_path":  "clouda_data/reporting/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "66EC2F44031581ADA882A62390B725CB3D174AF729CF0FDDA9E27CF77ABF3440",
+                      "destination_sha256":  "66EC2F44031581ADA882A62390B725CB3D174AF729CF0FDDA9E27CF77ABF3440",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/reporting/status_report.py",
+                      "destination_path":  "clouda_data/reporting/status_report.py",
+                      "category":  "code",
+                      "source_sha256":  "7C618DA6E873A5D9CCCAA388DAB60F8510837BAC8909353B06ED34C2A1E32887",
+                      "destination_sha256":  "7C618DA6E873A5D9CCCAA388DAB60F8510837BAC8909353B06ED34C2A1E32887",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/storage/__init__.py",
+                      "destination_path":  "clouda_data/storage/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "03B9E09A1B374BFAEC4D1D7E6F936979CD38D0AAF1128E7D9F5D46F770CDC264",
+                      "destination_sha256":  "03B9E09A1B374BFAEC4D1D7E6F936979CD38D0AAF1128E7D9F5D46F770CDC264",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/storage/manifest_store.py",
+                      "destination_path":  "clouda_data/storage/manifest_store.py",
+                      "category":  "code",
+                      "source_sha256":  "DD7E2232A58D70A491305987CF50D999CFB715C30BED96DB88EB3C67636A0BAA",
+                      "destination_sha256":  "858C6A7C72FFBA54493DC4E246CAADCA5F4282DC2BE849ADA601F7F579D4DED5",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/utils/__init__.py",
+                      "destination_path":  "clouda_data/utils/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "B1889DD76636AC4F0500078D8BFDC713987755E20DC8746E0BE28BAAA5FC59AD",
+                      "destination_sha256":  "B1889DD76636AC4F0500078D8BFDC713987755E20DC8746E0BE28BAAA5FC59AD",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/utils/paths.py",
+                      "destination_path":  "clouda_data/utils/paths.py",
+                      "category":  "code",
+                      "source_sha256":  "D419B66077B678B276ACEA286402D45312793816406E85AD445E5DCF21BE3005",
+                      "destination_sha256":  "D419B66077B678B276ACEA286402D45312793816406E85AD445E5DCF21BE3005",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/__init__.py",
+                      "destination_path":  "clouda_data/validation/__init__.py",
+                      "category":  "code",
+                      "source_sha256":  "F1DC224ECF22ADA9EE23381D860D13F311D1402595B9A8709FDF1EA9EA3F74A7",
+                      "destination_sha256":  "F1DC224ECF22ADA9EE23381D860D13F311D1402595B9A8709FDF1EA9EA3F74A7",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/image_quality.py",
+                      "destination_path":  "clouda_data/validation/image_quality.py",
+                      "category":  "code",
+                      "source_sha256":  "D73815647DF0A908E12B63D2FFA99A323E6A62EAA47A0C70BB4E059C369812D4",
+                      "destination_sha256":  "D73815647DF0A908E12B63D2FFA99A323E6A62EAA47A0C70BB4E059C369812D4",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/layout_preservation.py",
+                      "destination_path":  "clouda_data/validation/layout_preservation.py",
+                      "category":  "code",
+                      "source_sha256":  "C7CB8D4D32D5F3BB15ACC37C2E5CFBE84BC6D68C25549357CEDF3BCEA1A7A8B2",
+                      "destination_sha256":  "C7CB8D4D32D5F3BB15ACC37C2E5CFBE84BC6D68C25549357CEDF3BCEA1A7A8B2",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/manifest_validation.py",
+                      "destination_path":  "clouda_data/validation/manifest_validation.py",
+                      "category":  "code",
+                      "source_sha256":  "032847C16ABACA6E65D454C984F097D15E2FF8F0000FF86F1F85902A0C304F75",
+                      "destination_sha256":  "E1FB3631F1C5F371B18557895E12A6EF973308D24510FD697FE846A0BB41D498",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/output_validation.py",
+                      "destination_path":  "clouda_data/validation/output_validation.py",
+                      "category":  "code",
+                      "source_sha256":  "E31C791D9EFFD7790774E2FB939B773A5D6339997DEE47992F081F4D81219054",
+                      "destination_sha256":  "E31C791D9EFFD7790774E2FB939B773A5D6339997DEE47992F081F4D81219054",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "src/validation/text_preservation.py",
+                      "destination_path":  "clouda_data/validation/text_preservation.py",
+                      "category":  "code",
+                      "source_sha256":  "39CB32EFE18F6309180AFC09467FEBF0E82256CC68497C3E06BF718E7B303ABA",
+                      "destination_sha256":  "E845661F8B66C3BF907DF96ABE2D6D9B8A0D3F7B0E93BEDE8029194638E198D0",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/__init__.py",
+                      "destination_path":  "tests/data_foundation/__init__.py",
+                      "category":  "test",
+                      "source_sha256":  "155D9701AC99102A1C317FEEF365D502B6E990EBCAAE9ECDB6CB13D181C3A47D",
+                      "destination_sha256":  "155D9701AC99102A1C317FEEF365D502B6E990EBCAAE9ECDB6CB13D181C3A47D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/ingestion/ground_truth.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/ingestion/ground_truth.txt",
+                      "category":  "test",
+                      "source_sha256":  "A4075D9C251FB305F1B2099760FB082D8EB1721358B42BC31EDB61B31CEE0177",
+                      "destination_sha256":  "A4075D9C251FB305F1B2099760FB082D8EB1721358B42BC31EDB61B31CEE0177",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/ingestion/source_manifest.json",
+                      "destination_path":  "tests/data_foundation/fixtures/ingestion/source_manifest.json",
+                      "category":  "test",
+                      "source_sha256":  "18EC591D7C44D56C635396F49A124A3DE7D87D4914561F17D9ED3EA3CAEEACBB",
+                      "destination_sha256":  "18EC591D7C44D56C635396F49A124A3DE7D87D4914561F17D9ED3EA3CAEEACBB",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/ingestion/source_text.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/ingestion/source_text.txt",
+                      "category":  "test",
+                      "source_sha256":  "A4075D9C251FB305F1B2099760FB082D8EB1721358B42BC31EDB61B31CEE0177",
+                      "destination_sha256":  "A4075D9C251FB305F1B2099760FB082D8EB1721358B42BC31EDB61B31CEE0177",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/README.md",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/README.md",
+                      "category":  "test",
+                      "source_sha256":  "4092C7F5C9C0BF7F8D0D034B6B1196B3ADD83CC08C06A1D04EA24D004D65CE37",
+                      "destination_sha256":  "4092C7F5C9C0BF7F8D0D034B6B1196B3ADD83CC08C06A1D04EA24D004D65CE37",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/arabic_body.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/arabic_body.txt",
+                      "category":  "test",
+                      "source_sha256":  "097CBB2EF8FEB3A33BD3519E8CAA111321E26503193FB952B9B288B3E485F5CF",
+                      "destination_sha256":  "097CBB2EF8FEB3A33BD3519E8CAA111321E26503193FB952B9B288B3E485F5CF",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/blank.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/blank.txt",
+                      "category":  "test",
+                      "source_sha256":  "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+                      "destination_sha256":  "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/footnote.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/footnote.txt",
+                      "category":  "test",
+                      "source_sha256":  "B9061BFB470F21F93A79713DF57980686839C0A62A4511748BBB16D0017BF26C",
+                      "destination_sha256":  "B9061BFB470F21F93A79713DF57980686839C0A62A4511748BBB16D0017BF26C",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/mixed_ar_en.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/mixed_ar_en.txt",
+                      "category":  "test",
+                      "source_sha256":  "E6E892B1C644A36600EC73D02B309A88E1DF3510D0BBA85D616747258DA953AF",
+                      "destination_sha256":  "E6E892B1C644A36600EC73D02B309A88E1DF3510D0BBA85D616747258DA953AF",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/near_blank.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/near_blank.txt",
+                      "category":  "test",
+                      "source_sha256":  "16647954C146404E2B7418AD84F45EA5430A2B844AE367CCB8AD371B8B8465F5",
+                      "destination_sha256":  "16647954C146404E2B7418AD84F45EA5430A2B844AE367CCB8AD371B8B8465F5",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/fixtures/synthetic_pages/two_column.txt",
+                      "destination_path":  "tests/data_foundation/fixtures/synthetic_pages/two_column.txt",
+                      "category":  "test",
+                      "source_sha256":  "05270CEF94268B6C05EEDABEBE13CF5CA24684A38EC7C495C1D79F0A0F6B2249",
+                      "destination_sha256":  "05270CEF94268B6C05EEDABEBE13CF5CA24684A38EC7C495C1D79F0A0F6B2249",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/integration/__init__.py",
+                      "destination_path":  "tests/data_foundation/integration/__init__.py",
+                      "category":  "test",
+                      "source_sha256":  "AC685699A0C0A25FDE518D92FD2F8D17C97948008060C87A9E33828CBA1092F4",
+                      "destination_sha256":  "AC685699A0C0A25FDE518D92FD2F8D17C97948008060C87A9E33828CBA1092F4",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/integration/test_cli.py",
+                      "destination_path":  "tests/data_foundation/integration/test_cli.py",
+                      "category":  "test",
+                      "source_sha256":  "ACDA50DFA5D133CC8C5AB9CA50944EB6DC27F64C89ECB142BB5368C41D5AEE26",
+                      "destination_sha256":  "5D2DD48C138685CAF7DC36AC1088E9F2970AEEB85119AFC0CA0B23F1203A1D0B",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/integration/test_dataset_cli.py",
+                      "destination_path":  "tests/data_foundation/integration/test_dataset_cli.py",
+                      "category":  "test",
+                      "source_sha256":  "639CE5435B14356EC17E4426E0EE00B0F04B63531CE80A94CD6DD4C9FD54C156",
+                      "destination_sha256":  "BFB5DAA7F46AB688FE409E54244E9E20C5A6FF70887936047D8279C2D2424861",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/integration/test_ingestion_cli.py",
+                      "destination_path":  "tests/data_foundation/integration/test_ingestion_cli.py",
+                      "category":  "test",
+                      "source_sha256":  "776519498B35507FB2DE0838671CAEE152BD6B3E8CFAB830E8541F6FF602175B",
+                      "destination_sha256":  "05329031E0EE51BFDDE297930F999F8EEBE4EE91672C1EB139F192E2E1B934FE",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/__init__.py",
+                      "destination_path":  "tests/data_foundation/unit/__init__.py",
+                      "category":  "test",
+                      "source_sha256":  "11726D586214D5329207FFB3A1DB86848BF02DA97FED29FFC3E2842398EACD2D",
+                      "destination_sha256":  "11726D586214D5329207FFB3A1DB86848BF02DA97FED29FFC3E2842398EACD2D",
+                      "import_rewritten":  false
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_config.py",
+                      "destination_path":  "tests/data_foundation/unit/test_config.py",
+                      "category":  "test",
+                      "source_sha256":  "CFD4FD40ACEF9D162EB5C22E9388B00D3B6BEBF8BCD86FE5D3FB5492EB8B022C",
+                      "destination_sha256":  "63FF6A3B2E7F950799BD22D568FC418DCF46F4636A54A1799B302EAE49981179",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_dataset_downloader.py",
+                      "destination_path":  "tests/data_foundation/unit/test_dataset_downloader.py",
+                      "category":  "test",
+                      "source_sha256":  "4FFAFA1D5650168CBA8098B9708A292BCD565A4EA3DD690155932C7CD90C2255",
+                      "destination_sha256":  "30B9EB9498475E1A2D093C36AA1C70AD1274F59BF1996E9FD766F2AE4636EE6B",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_dataset_registry.py",
+                      "destination_path":  "tests/data_foundation/unit/test_dataset_registry.py",
+                      "category":  "test",
+                      "source_sha256":  "A114AF2AD42F12A3848E1801D21D2A3FA7655E5F352218B38B1A6A99A7013688",
+                      "destination_sha256":  "147F18C1FF827A4D9CC90F82D96679A4EBF7B6B7F4ECD910FE2AA83B4FD924A0",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_distortion_profiles.py",
+                      "destination_path":  "tests/data_foundation/unit/test_distortion_profiles.py",
+                      "category":  "test",
+                      "source_sha256":  "8FED0D95B3BBEFF89655BDC5D1DBC698858F558B41174AB73595028B35049979",
+                      "destination_sha256":  "5A87C084032D30ED355DD3C94E9DFF81A823A2D16D8D4741F5C00274FB5B120A",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_evaluation.py",
+                      "destination_path":  "tests/data_foundation/unit/test_evaluation.py",
+                      "category":  "test",
+                      "source_sha256":  "CC6A56AB0C950BCCCCF56E3DFA6B7E0E6E7FEC004BB8FF0DFCE4FC206175FB01",
+                      "destination_sha256":  "D2EB96C723AF3FC4D39AB39CAEA0F4D51081D39559E3041D7219BE456F80CE08",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_ground_truth.py",
+                      "destination_path":  "tests/data_foundation/unit/test_ground_truth.py",
+                      "category":  "test",
+                      "source_sha256":  "0B378F2D050670A1955829AA471ECF6B415522302E4E716261AD1F2E50431F30",
+                      "destination_sha256":  "E6A26D56839E1291BD025E7563720AEACA77AD175B5B1790FCE3253B9E3ED22A",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_ingestion_workflow.py",
+                      "destination_path":  "tests/data_foundation/unit/test_ingestion_workflow.py",
+                      "category":  "test",
+                      "source_sha256":  "E13BAA0FF781C69F0CF1E279426D85D29F55943BB8E3990088724E59D7EA0D48",
+                      "destination_sha256":  "42FC3A8CADA6AEC29384229FE5B5F82AC6F83E5832533184807B768537BC9F78",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_layout_validation.py",
+                      "destination_path":  "tests/data_foundation/unit/test_layout_validation.py",
+                      "category":  "test",
+                      "source_sha256":  "F064243D4B62FE8B1EC312D36265E6D6291B8966DED8265047EADFCF064803B4",
+                      "destination_sha256":  "D64D476651735D0E793C4FA4038DB4729041F285B3B8E9D3BEBCA99181C9451E",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_manifest_status.py",
+                      "destination_path":  "tests/data_foundation/unit/test_manifest_status.py",
+                      "category":  "test",
+                      "source_sha256":  "B9A7215E45ED0084CBB5FB8136B436E7A94CCAB45B6E2090279D53DDBB822012",
+                      "destination_sha256":  "CEAF666A79EAD5B69CB549040B12F7A9E35D445BAEB25C6D3FFBD45C2EBC6DCF",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_rasam_batch.py",
+                      "destination_path":  "tests/data_foundation/unit/test_rasam_batch.py",
+                      "category":  "test",
+                      "source_sha256":  "AE7C13259FD9171681C9A6329FAA9CE8EF8239E054679E0AC5F3E9BC60C9A9CF",
+                      "destination_sha256":  "14268B28BCBC6275FEF71E9ADCE4FD19F4F4A4670AA48066BEDB6A7EE8D72897",
+                      "import_rewritten":  true
+                  },
+                  {
+                      "source_project":  "B",
+                      "source_path":  "tests/unit/test_validation.py",
+                      "destination_path":  "tests/data_foundation/unit/test_validation.py",
+                      "category":  "test",
+                      "source_sha256":  "5B3085BE293891E3C5DCAA92A4D29968B6C3CB5DEF9248D6E59B85D1BE9E32AF",
+                      "destination_sha256":  "8D13AB64673BA89A8570D12159E46449D59537CCC49047E9101BAD4F6D84C4E6",
+                      "import_rewritten":  true
+                  }
+              ],
+    "import_rewrite_files":  [
+                                 "clouda_data/datasets/downloader.py",
+                                 "clouda_data/datasets/rasam_batch.py",
+                                 "clouda_data/distortion/layout_aware.py",
+                                 "clouda_data/evaluation/normalization.py",
+                                 "clouda_data/ingestion/file_inspection.py",
+                                 "clouda_data/ingestion/validators.py",
+                                 "clouda_data/ingestion/workflow.py",
+                                 "clouda_data/pipeline/cli.py",
+                                 "clouda_data/pipeline/profiles.py",
+                                 "clouda_data/storage/manifest_store.py",
+                                 "clouda_data/validation/manifest_validation.py",
+                                 "clouda_data/validation/text_preservation.py",
+                                 "tests/data_foundation/integration/test_cli.py",
+                                 "tests/data_foundation/integration/test_dataset_cli.py",
+                                 "tests/data_foundation/integration/test_ingestion_cli.py",
+                                 "tests/data_foundation/unit/test_config.py",
+                                 "tests/data_foundation/unit/test_dataset_downloader.py",
+                                 "tests/data_foundation/unit/test_dataset_registry.py",
+                                 "tests/data_foundation/unit/test_distortion_profiles.py",
+                                 "tests/data_foundation/unit/test_evaluation.py",
+                                 "tests/data_foundation/unit/test_ground_truth.py",
+                                 "tests/data_foundation/unit/test_ingestion_workflow.py",
+                                 "tests/data_foundation/unit/test_layout_validation.py",
+                                 "tests/data_foundation/unit/test_manifest_status.py",
+                                 "tests/data_foundation/unit/test_rasam_batch.py",
+                                 "tests/data_foundation/unit/test_validation.py",
+                                 "docs/data_foundation/PROJECT_STATUS.md",
+                                 "docs/data_foundation/README.md",
+                                 "docs/data_foundation/reports/DATASET_DOWNLOAD_PLAN.md",
+                                 "docs/data_foundation/reports/INGESTION_WORKFLOW.md",
+                                 "docs/data_foundation/reports/LOCAL_SYSTEM_REPORT.md"
+                             ]
+}

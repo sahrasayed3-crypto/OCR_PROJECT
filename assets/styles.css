@@ -794,3 +794,135 @@ summary:focus-visible {
     transition-duration: 0.001ms !important;
   }
 }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.topbar,
+.brand-row {
+  position: sticky;
+  top: 0.35rem;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+}
+
+.page-header {
+  margin: 0.65rem 0 0.8rem;
+  padding: 0.25rem 0;
+}
+
+.page-header h1 {
+  max-width: 900px;
+}
+
+.section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.section-title > div {
+  min-width: 0;
+}
+
+.status-center {
+  justify-content: space-between;
+}
+
+.status-badge {
+  min-height: 30px;
+  white-space: nowrap;
+}
+
+.processing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem 0.9rem;
+  margin-top: 0.7rem;
+  color: var(--ui-muted);
+  font-size: 0.84rem;
+}
+
+.processing-head {
+  justify-content: space-between;
+}
+
+.processing-head small {
+  display: block;
+  color: var(--ui-muted);
+  font-size: 0.78rem;
+}
+
+.processing-head strong {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--ui-ink);
+  font-size: 1rem;
+}
+
+.progress-steps {
+  padding: 0;
+  list-style: none;
+}
+
+.progress-step {
+  overflow: hidden;
+  padding: 0.38rem;
+  border: 1px solid var(--ui-line);
+  border-radius: 10px;
+  background: rgba(13, 26, 46, 0.78);
+  text-overflow: ellipsis;
+}
+
+.step-todo {
+  color: var(--ui-muted);
+}
+
+.empty-state strong {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: var(--ui-ink);
+  font-size: 1rem;
+}
+
+.empty-state p {
+  color: var(--ui-muted);
+}
+
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] p {
+  text-align: right;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label {
+  border: 1px solid transparent;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+[data-testid="stSidebar"] label:has(input:checked) {
+  border-color: #77a2ef;
+}
+
+[data-testid="stFileUploaderDropzone"] > div {
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .processing-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .processing-grid {
+    grid-template-columns: 1fr;
+  }
+}

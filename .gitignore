@@ -26,6 +26,9 @@ __pycache__/
 .coverage.*
 coverage.xml
 htmlcov/
+build/
+dist/
+*.egg-info/
 
 # Virtual environments
 .venv/
@@ -57,6 +60,12 @@ samples/generated/benchmark_report_*.json
 samples/generated/benchmark_report_*.md
 training_data/
 datasets/
+!clouda_data/datasets/
+!clouda_data/datasets/**
+clouda_data/datasets/__pycache__/
+clouda_data/datasets/**/*.py[cod]
+!clouda_training/datasets/
+!clouda_training/datasets/**
 dataset/
 distorted_datasets/
 generated_distorted_datasets/
@@ -67,6 +76,18 @@ wandb/
 mlruns/
 train/
 training/
+!clouda_training/
+!clouda_training/**
+!configs/training/
+!configs/training/**
+!tests/training/
+!tests/training/**
+!docs/training/
+!docs/training/**
+clouda_training/**/__pycache__/
+clouda_training/**/*.py[cod]
+tests/training/**/__pycache__/
+tests/training/**/*.py[cod]
 training_cache/
 training_caches/
 
@@ -128,9 +149,27 @@ training_caches/
 *.gguf
 *.model
 models/
+!configs/models/
+!configs/models/**
+!tests/models/
+!tests/models/**
+tests/models/**/__pycache__/
+tests/models/**/*.py[cod]
 weights/
 checkpoints/
+!clouda_training/checkpoints/
+!clouda_training/checkpoints/**
+clouda_training/checkpoints/**/__pycache__/
+clouda_training/checkpoints/**/*.py[cod]
 adapters/
+!clouda_contracts/adapters/
+!clouda_contracts/adapters/**
+!clouda_models/adapters/
+!clouda_models/adapters/**
+clouda_contracts/adapters/__pycache__/
+clouda_contracts/adapters/**/*.py[cod]
+clouda_models/adapters/__pycache__/
+clouda_models/adapters/**/*.py[cod]
 lora_adapters/
 qlora_adapters/
 *.adapter

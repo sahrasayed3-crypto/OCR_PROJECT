@@ -1,7 +1,9 @@
+import os
 import tempfile
 import time
 import tomllib
 import unittest
+import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -55,15 +57,25 @@ class TestRuntimeFeatures(unittest.TestCase):
             self.assertEqual(restored[2].text_quality_score, 92.0)
             self.assertFalse(restored[2].requires_manual_review)
 
-    def test_pdf_size_is_unlimited_but_page_limit_is_enforced(self) -> None:
-        limits = ProcessingLimits(max_pdf_pages=2)
+    def test_pdf_byte_and_page_limits_are_enforced(self) -> None:
+        limits = ProcessingLimits(
+            max_pdf_pages=2,
+            max_upload_bytes=200 * 1024 * 1024,
+            max_pdf_bytes=200 * 1024 * 1024,
+        )
         validate_pdf_limits(101 * 1024 * 1024, 2, limits=limits)
         config = tomllib.loads(
             Path(".streamlit/config.toml").read_text(encoding="utf-8")
         )
         self.assertGreater(config["server"]["maxUploadSize"], 100)
-        with self.assertRaisesRegex(ValueError, "صفحات"):
+        with self.assertRaisesRegex(ValueError, "page count"):
             validate_pdf_limits(10, 3, limits=limits)
+        with self.assertRaisesRegex(ValueError, "byte limit"):
+            validate_pdf_limits(
+                101 * 1024 * 1024,
+                2,
+                limits=ProcessingLimits(max_pdf_pages=2),
+            )
 
     def test_queue_limit_and_user_owned_cancel(self) -> None:
         queue = JobQueue(max_workers=2)
@@ -111,6 +123,41 @@ class TestRuntimeFeatures(unittest.TestCase):
             self.assertTrue(validate_backup(archive)["valid"])
             restored = restore_backup(archive, root / "restored")
             self.assertTrue((restored / "data" / "clouda.sqlite3").is_file())
+
+    def test_backup_includes_external_storage_and_rejects_invalid_restore(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            database = Database(root / "source.sqlite3")
+            storage = root / "external-storage"
+            storage.mkdir()
+            (storage / "result.txt").write_text("result", encoding="utf-8")
+            backups = root / "backups"
+            backups.mkdir()
+            old = backups / "clouda_backup_20000101_000000.zip"
+            old.write_bytes(b"old")
+            os.utime(old, (0, 0))
+
+            archive = create_backup(
+                database,
+                storage_root=storage,
+                backup_root=backups,
+                retention_days=1,
+            )
+            assert not old.exists()
+            with zipfile.ZipFile(archive) as bundle:
+                assert any(name.endswith("result.txt") for name in bundle.namelist())
+
+            invalid = root / "invalid.zip"
+            with zipfile.ZipFile(invalid, "w") as bundle:
+                bundle.writestr("note.txt", "missing database")
+            with self.assertRaises(ValueError):
+                restore_backup(invalid, root / "invalid-restore")
+
+            nonempty = root / "nonempty"
+            nonempty.mkdir()
+            (nonempty / "keep.txt").write_text("keep", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                restore_backup(archive, nonempty)
 
     def test_registry_excludes_safety_and_ranks_free_vision(self) -> None:
         models = [

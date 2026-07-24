@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {"id": "ASSET-001", "name": "uploaded_pdfs", "root": "runtime://", "sensitivity": "confidential", "owner": "end_user"},
+    {"id": "ASSET-002", "name": "generated_docx", "root": "runtime://", "sensitivity": "confidential", "owner": "end_user"},
+    {"id": "ASSET-003", "name": "ocr_text_and_corrections", "root": "runtime://", "sensitivity": "confidential", "owner": "end_user"},
+    {"id": "ASSET-004", "name": "runtime_sqlite", "root": "runtime://", "sensitivity": "restricted", "owner": "runtime"},
+    {"id": "ASSET-005", "name": "worker_credentials", "root": "external_secret_source", "sensitivity": "secret", "owner": "operator"},
+    {"id": "ASSET-006", "name": "redis_jobs", "root": "private_redis", "sensitivity": "restricted", "owner": "runtime"},
+    {"id": "ASSET-007", "name": "datasets_and_ground_truth", "root": "dataset://", "sensitivity": "licensed", "owner": "data_foundation"},
+    {"id": "ASSET-008", "name": "dataset_license_catalog", "root": "tracked_metadata", "sensitivity": "integrity_critical", "owner": "legal_and_data"},
+    {"id": "ASSET-009", "name": "manifests_and_training_exports", "root": "dataset://,artifact://", "sensitivity": "integrity_critical", "owner": "data_foundation"},
+    {"id": "ASSET-010", "name": "model_weights_and_registry", "root": "model://", "sensitivity": "restricted", "owner": "model_operator"},
+    {"id": "ASSET-011", "name": "logs_metrics_and_reports", "root": "artifact://,runtime://", "sensitivity": "internal", "owner": "operator"},
+    {"id": "ASSET-012", "name": "backups", "root": "external_backup_root", "sensitivity": "restricted", "owner": "operator"},
+    {"id": "ASSET-013", "name": "source_and_ci", "root": "git", "sensitivity": "integrity_critical", "owner": "maintainers"}
+  ],
+  "entry_points": [
+    "app.py",
+    "pdfword.worker_api:app",
+    "clouda-data",
+    "clouda-training",
+    "RQ run_remote_job",
+    "local OCR adapters",
+    "dataset manifests and download registry",
+    "backup and lifecycle CLI",
+    "deployment scripts and CI"
+  ],
+  "external_integrations": [
+    "private Redis",
+    "optional OpenRouter",
+    "optional local OCR HTTP",
+    "optional approved dataset HTTPS",
+    "future OIDC and TLS proxy"
+  ]
+}

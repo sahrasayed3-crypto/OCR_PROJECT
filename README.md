@@ -1,5 +1,9 @@
 # Clouda PDF
 
+> The repository now includes the production runtime plus isolated data,
+> training-planning, model-registry, and shared-contract subsystems. Model
+> training and local OCR inference remain disabled by default.
+
 Clouda PDF is an open-source, model-agnostic PDF-to-DOCX project for Arabic, English, and mixed-language documents. Its long-term goal is reliable Arabic OCR for modern and historical books, including weak or medium-quality scanned pages, margins, footnotes, RTL text, and mixed Arabic-English reading order.
 
 The current verified implementation converts born-digital PDF documents into editable, text-only DOCX files while preserving page order, Arabic Unicode, RTL paragraph direction, footers, and page boundaries. Image-only scanned pages are detected and routed to `pending_ocr_model`; they are not treated as successful OCR output until the selected primary model candidate is licensed, integrated, trained or adapted as needed, and measured.
@@ -41,6 +45,23 @@ py -3.11 -m venv .venv311
 .\.venv311\Scripts\python.exe -m pip install -r requirements-dev.txt
 ```
 
+For the complete merged dependency set:
+
+```powershell
+.\.venv311\Scripts\python.exe -m pip install -c constraints\py311.txt -e ".[server,worker,data,training,models,test,dev]"
+```
+
+Runtime and dataset state must be external. Configure
+`CLOUDA_RUNTIME_ROOT`, `CLOUDA_DATASET_ROOT`, `CLOUDA_ARTIFACT_ROOT`,
+`CLOUDA_MODEL_ROOT`, and `CLOUDA_CACHE_ROOT`; see `.env.example`.
+
+The data foundation and training planner are available as:
+
+```powershell
+python -m clouda_data.pipeline.cli --help
+python -m clouda_training.cli plan --config configs\training\smoke-100.json --catalog dataset_catalog\registry\datasets_v1.json
+```
+
 ## Run
 
 ```powershell
@@ -73,6 +94,24 @@ The demo processes copyright-free local fixtures and writes a DOCX plus per-page
 ```
 
 It demonstrates digital text extraction, DOCX generation, a scanned page routed to `pending_ocr_model`, and a blank page routed to `blank_page`.
+
+## Arabic OCR data foundation
+
+The merged repository now includes a real CPU/Pillow image pipeline:
+
+- bounded PDF/image rendering;
+- deterministic real-pixel distortion with versioned YAML profiles;
+- batch checkpoint/resume, validation, quarantine, and HTML previews;
+- CER/WER execution and license-gated training-data export;
+- safe local OCR adapters with feature-flagged runtime integration.
+
+All generated files stay under `CLOUDA_STATE_HOME`. Local OCR and GPU training
+remain disabled by default. Start with:
+
+```powershell
+python -m clouda_data.pipeline.cli --help
+python -m clouda_training.cli --help
+```
 
 ## Example outcome
 

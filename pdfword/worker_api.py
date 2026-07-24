@@ -3,20 +3,92 @@ import json
 import os
 import re
 import tempfile
+import zipfile
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, Field
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from clouda_contracts.archive_security import ArchiveLimits, validate_zip_archive
 from .constants import MODEL_ACCURATE_PRIMARY, MODEL_FAST
 from .database import Database, utc_now
+from .limits import limits_from_env
 from .settings import load_settings, runtime_settings
 from .correction_learning import rules_checksum
+from .operations import (
+    OperationsMetrics,
+    RedisSecurityConfig,
+    SlidingWindowRateLimiter,
+    structured_log,
+)
 
 JOB_ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 app = FastAPI(title="Clouda Worker API", docs_url=None, redoc_url=None)
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=[
+        host.strip()
+        for host in os.getenv(
+            "CLOUDA_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver"
+        ).split(",")
+        if host.strip()
+    ],
+)
+_rate_limiter = SlidingWindowRateLimiter(
+    limit=max(1, int(os.getenv("CLOUDA_INTERNAL_RATE_LIMIT_PER_MINUTE", "120")))
+)
+_operations_metrics = OperationsMetrics()
+
+
+@app.middleware("http")
+async def security_headers(request, call_next):
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+    maximum_request_bytes = max(
+        1024, int(os.getenv("CLOUDA_MAX_REQUEST_BYTES", str(110 * 1024 * 1024)))
+    )
+    content_length = request.headers.get("Content-Length")
+    if content_length:
+        try:
+            declared_length = int(content_length)
+        except ValueError:
+            return JSONResponse(
+                {"detail": "Invalid Content-Length", "request_id": request_id},
+                status_code=400,
+                headers={"X-Request-ID": request_id},
+            )
+        if declared_length < 0 or declared_length > maximum_request_bytes:
+            return JSONResponse(
+                {"detail": "Request body is too large", "request_id": request_id},
+                status_code=413,
+                headers={"X-Request-ID": request_id},
+            )
+    client = request.client.host if request.client else "unknown"
+    if not _rate_limiter.allow(client):
+        structured_log("rate_limit_exceeded", request_id=request_id, client=client)
+        return JSONResponse(
+            {"detail": "Rate limit exceeded", "request_id": request_id},
+            status_code=429,
+            headers={"X-Request-ID": request_id, "Retry-After": "60"},
+        )
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["X-Request-ID"] = request_id
+    _operations_metrics.observe_request(request.method, response.status_code)
+    structured_log(
+        "http_request",
+        request_id=request_id,
+        method=request.method,
+        path=request.url.path,
+        status=response.status_code,
+    )
+    return response
 
 
 class WorkerMessage(BaseModel):
@@ -38,10 +110,14 @@ def _database() -> Database:
 
 def _authenticate(x_worker_api_key: str | None = Header(default=None)) -> None:
     expected = runtime_settings().worker_api_key
+    previous = os.getenv("CLOUDA_WORKER_API_KEY_PREVIOUS", "")
+    accepted = [candidate for candidate in (expected, previous) if candidate]
     if (
-        not expected
+        not accepted
         or not x_worker_api_key
-        or not hmac.compare_digest(expected, x_worker_api_key)
+        or not any(
+            hmac.compare_digest(candidate, x_worker_api_key) for candidate in accepted
+        )
     ):
         raise HTTPException(status_code=401, detail="Invalid worker credentials")
 
@@ -79,12 +155,8 @@ def _get_job(job_id: str) -> tuple[Database, dict]:
 def _redis_client():
     from redis import Redis
 
-    return Redis.from_url(
-        runtime_settings().redis_url,
-        decode_responses=True,
-        socket_connect_timeout=2,
-        socket_timeout=2,
-    )
+    config = RedisSecurityConfig.from_env()
+    return Redis.from_url(config.url, **config.client_kwargs())
 
 
 def _worker_status_payload(*, message: str = "") -> dict:
@@ -132,6 +204,34 @@ def public_health() -> dict:
         "role": config.app_role,
         "local_processing_enabled": config.local_processing_enabled,
     }
+
+
+@app.get("/ready")
+def readiness() -> dict:
+    try:
+        with _database().connect() as connection:
+            connection.execute("SELECT 1").fetchone()
+        return {"status": "ready"}
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="Service is not ready") from exc
+
+
+@app.get("/internal/metrics", dependencies=[Depends(_authenticate)])
+def metrics() -> Response:
+    queue_depth = 0
+    failed_jobs = 0
+    try:
+        redis = _redis_client()
+        queue_depth = int(redis.llen(f"rq:queue:{runtime_settings().rq_queue_name}"))
+        failed_jobs = int(redis.zcard("rq:failed"))
+    except Exception:
+        pass
+    return Response(
+        _operations_metrics.prometheus(
+            queue_depth=queue_depth, failed_jobs=failed_jobs
+        ),
+        media_type="text/plain; version=0.0.4",
+    )
 
 
 @app.get("/internal/health", dependencies=[Depends(_authenticate)])
@@ -325,17 +425,35 @@ def upload_result(
     ) as temporary:
         temporary_path = Path(temporary.name)
         total = 0
+        too_large = False
+        limits = limits_from_env()
         while chunk := result.file.read(1024 * 1024):
             total += len(chunk)
-            if total > 100 * 1024 * 1024:
-                temporary_path.unlink(missing_ok=True)
-                raise HTTPException(status_code=413, detail="Result is too large")
+            if total > limits.max_result_bytes:
+                too_large = True
+                break
             temporary.write(chunk)
-        temporary.flush()
-        os.fsync(temporary.fileno())
+        if not too_large:
+            temporary.flush()
+            os.fsync(temporary.fileno())
+    if too_large:
+        temporary_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=413, detail="Result is too large")
     if total < 4 or temporary_path.read_bytes()[:2] != b"PK":
         temporary_path.unlink(missing_ok=True)
         raise HTTPException(status_code=400, detail="Invalid DOCX content")
+    try:
+        with zipfile.ZipFile(temporary_path) as archive:
+            validate_zip_archive(
+                archive,
+                limits=ArchiveLimits(
+                    max_members=limits.max_archive_members,
+                    max_total_uncompressed_bytes=limits.max_decompressed_bytes,
+                ),
+            )
+    except (ValueError, zipfile.BadZipFile) as exc:
+        temporary_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=400, detail="Unsafe DOCX archive") from exc
     os.replace(temporary_path, target)
     updated = database.transition_conversion(
         job_id,

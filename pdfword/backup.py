@@ -1,9 +1,12 @@
 import sqlite3
 import json
+import shutil
 import tempfile
 import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+from clouda_contracts.archive_security import ArchiveLimits, validate_zip_archive
 
 from .database import Database
 
@@ -69,6 +72,7 @@ def create_backup(
 def validate_backup(archive_path: str | Path) -> dict:
     path = Path(archive_path)
     with zipfile.ZipFile(path, "r") as archive:
+        validate_zip_archive(archive)
         corrupt = archive.testzip()
         names = set(archive.namelist())
     return {
@@ -81,7 +85,10 @@ def validate_backup(archive_path: str | Path) -> dict:
 
 def restore_backup(archive_path: str | Path, destination: str | Path) -> Path:
     archive = Path(archive_path).resolve()
-    target = Path(destination).resolve()
+    requested_target = Path(destination).expanduser()
+    if requested_target.is_symlink():
+        raise PermissionError("Backup destination must not be a symbolic link")
+    target = requested_target.resolve()
     validation = validate_backup(archive)
     if not validation["valid"]:
         raise ValueError("ملف Backup غير صالح للاستعادة")
@@ -89,11 +96,19 @@ def restore_backup(archive_path: str | Path, destination: str | Path) -> Path:
         raise FileExistsError("مجلد الاستعادة يجب أن يكون فارغًا")
     target.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(archive, "r") as bundle:
+        validate_zip_archive(bundle, limits=ArchiveLimits())
         for member in bundle.infolist():
             member_target = (target / member.filename).resolve()
             if target != member_target and target not in member_target.parents:
                 raise ValueError(f"مسار غير آمن داخل Backup: {member.filename}")
-        bundle.extractall(target)
+            if member.is_dir():
+                member_target.mkdir(parents=True, exist_ok=True)
+                continue
+            member_target.parent.mkdir(parents=True, exist_ok=True)
+            if member_target.exists() or member_target.is_symlink():
+                raise FileExistsError(f"Refusing to overwrite {member.filename}")
+            with bundle.open(member, "r") as source, member_target.open("xb") as output:
+                shutil.copyfileobj(source, output, length=1024 * 1024)
     restored_database = target / "data" / "clouda.sqlite3"
     connection = sqlite3.connect(restored_database)
     try:

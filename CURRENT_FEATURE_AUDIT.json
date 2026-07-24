@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-23",
+  "branch": "completion/ocr-data-pipeline",
+  "verified_operator_count": 107,
+  "registry_entries": 108,
+  "verified_yaml_profile_count": 18,
+  "features": [
+    {"id": "rendering", "status": "implemented_and_tested"},
+    {"id": "real_pixel_distortion", "status": "implemented_and_tested"},
+    {"id": "metadata_only", "status": "disabled_by_design", "scope": "explicit_tests"},
+    {"id": "profiles", "status": "implemented_and_tested", "count": 18},
+    {"id": "batch_resume", "status": "implemented_and_tested", "checkpoint": "sqlite_wal"},
+    {"id": "validation_quarantine", "status": "implemented_and_tested"},
+    {"id": "preview", "status": "implemented_and_tested"},
+    {"id": "visual_difficulty", "status": "implemented_and_tested"},
+    {"id": "ocr_evaluation", "status": "implemented_and_tested"},
+    {"id": "training_export", "status": "implemented_and_tested"},
+    {"id": "perceptual_hash", "status": "implemented_as_hook", "classification": "optional_dependency"},
+    {"id": "local_ocr_adapters", "status": "implemented_and_tested"},
+    {"id": "runtime_mock_ocr", "status": "implemented_and_tested", "default": "disabled"},
+    {"id": "real_ocr_model", "status": "external_blocker", "default": "disabled"},
+    {"id": "data_foundation_ui", "status": "implemented_and_tested", "exposure": "local_only"},
+    {"id": "lifecycle", "status": "implemented_and_tested", "default": "dry_run"},
+    {"id": "parallel_batch_manifest", "status": "future_optimization", "current": "deterministic_sequential"},
+    {"id": "gpu_training", "status": "disabled_by_design"},
+    {"id": "public_oidc_tls", "status": "external_blocker"}
+  ],
+  "verification": {
+    "tests_passed": 304,
+    "tests_failed": 0,
+    "tests_skipped": 2,
+    "coverage_percent": 75,
+    "acceptance_passed": true,
+    "acceptance_report": "E:\\clouda_merged_state\\artifacts\\reports\\acceptance\\acceptance-20260723T205210Z.json",
+    "performance_report": "E:\\clouda_merged_state\\artifacts\\reports\\performance\\pipeline-benchmark-20260723T205155Z.json"
+  }
+}

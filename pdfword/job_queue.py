@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from .settings import runtime_settings
+from .operations import RedisSecurityConfig
 
 
 class JobCancelled(RuntimeError):
@@ -94,7 +95,8 @@ class DistributedJobQueue:
         from redis import Redis
         from rq import Queue
 
-        connection = Redis.from_url(self.redis_url)
+        security = RedisSecurityConfig.from_env()
+        connection = Redis.from_url(security.url, **security.client_kwargs())
         return Queue(self.queue_name, connection=connection)
 
     def enqueue(self, job_id: str):
@@ -145,6 +147,29 @@ class DistributedJobQueue:
 
     def ping(self) -> bool:
         return bool(self._queue().connection.ping())
+
+    def metrics(self) -> dict[str, int | float | bool]:
+        queue = self._queue()
+        connection = queue.connection
+        oldest_age_seconds = 0.0
+        job_ids = queue.get_job_ids(offset=0, length=1)
+        if job_ids:
+            job = queue.fetch_job(job_ids[0])
+            if job and job.enqueued_at:
+                from datetime import datetime, timezone
+
+                enqueued = job.enqueued_at
+                if enqueued.tzinfo is None:
+                    enqueued = enqueued.replace(tzinfo=timezone.utc)
+                oldest_age_seconds = max(
+                    0.0, (datetime.now(timezone.utc) - enqueued).total_seconds()
+                )
+        return {
+            "redis_available": bool(connection.ping()),
+            "queue_depth": len(queue),
+            "oldest_job_age_seconds": oldest_age_seconds,
+            "failed_jobs": int(connection.zcard("rq:failed")),
+        }
 
 
 _DISTRIBUTED_QUEUE: DistributedJobQueue | None = None

@@ -1,9 +1,11 @@
 import io
+from pathlib import Path
 
 from pypdf import PdfWriter
 
 from pdfword.engines import (
     EngineRegistry,
+    FeatureFlaggedLocalModelEngine,
     OCRBox,
     OCRResult,
     OCR_STATUS_FAILED,
@@ -44,6 +46,19 @@ class MockOcrEngine:
             processing_time=0.01,
             confidence=0.91,
         )
+
+
+class MockLocalProvider:
+    def __init__(self, result: OCRResult) -> None:
+        self.result = result
+        self.calls = 0
+
+    def available(self) -> bool:
+        return True
+
+    def extract_page(self, **_kwargs) -> OCRResult:
+        self.calls += 1
+        return self.result
 
 
 def test_engine_registry_can_register_new_engine() -> None:
@@ -137,6 +152,88 @@ def test_configuration_is_cpu_gpu_neutral() -> None:
     assert "cuda" not in str(payload).lower()
     assert "rocm" not in str(payload).lower()
     assert "device" not in payload
+
+
+def test_local_model_boundary_is_disabled_by_default(monkeypatch) -> None:
+    monkeypatch.delenv("CLOUDA_LOCAL_OCR_ENABLED", raising=False)
+    engine = FeatureFlaggedLocalModelEngine()
+    result = engine.extract_page(image_bytes=b"image", page_no=1)
+    assert engine.available() is False
+    assert result.status == OCR_STATUS_PENDING_MODEL
+
+
+def test_local_model_requires_text_quality_and_pinned_revision() -> None:
+    provider = MockLocalProvider(
+        OCRResult(
+            engine_name="provider",
+            status=OCR_STATUS_SUCCEEDED,
+            text="نص صالح",
+            confidence=0.9,
+        )
+    )
+    engine = FeatureFlaggedLocalModelEngine(
+        provider,
+        enabled=True,
+        model_name="test-model",
+        model_revision="abc123",
+    )
+    result = engine.extract_page(image_bytes=b"image", page_no=1)
+    assert result.status == OCR_STATUS_SUCCEEDED
+    assert result.metadata["model_revision"] == "abc123"
+
+
+def test_local_model_rejects_success_without_quality_metadata() -> None:
+    provider = MockLocalProvider(
+        OCRResult(
+            engine_name="provider",
+            status=OCR_STATUS_SUCCEEDED,
+            text="نص بلا ثقة",
+        )
+    )
+    engine = FeatureFlaggedLocalModelEngine(
+        provider,
+        enabled=True,
+        model_revision="abc123",
+        retry_count=1,
+    )
+    result = engine.extract_page(image_bytes=b"image", page_no=1)
+    assert result.status == OCR_STATUS_FAILED
+    assert provider.calls == 2
+
+
+def test_feature_flagged_local_model_can_process_scanned_fixture() -> None:
+    provider = MockLocalProvider(
+        OCRResult(
+            engine_name="provider",
+            status=OCR_STATUS_SUCCEEDED,
+            text="نص عربي مستخرج من صورة ممسوحة ضوئياً",
+            confidence=0.97,
+        )
+    )
+    engine = FeatureFlaggedLocalModelEngine(
+        provider,
+        enabled=True,
+        model_name="test-model",
+        model_revision="abc123",
+    )
+    registry = get_engine_registry()
+    original = registry.get(engine.name)
+    registry.register(engine, replace=True)
+    pdf_bytes = (Path(__file__).parent / "fixtures" / "scanned.pdf").read_bytes()
+    try:
+        rows, text = process_pdf(
+            pdf_bytes=pdf_bytes,
+            from_page=1,
+            to_page=1,
+            progress_bar=None,
+            status_placeholder=None,
+            enabled_engines=["direct_pdf_text", engine.name],
+        )
+    finally:
+        registry.register(original, replace=True)
+    assert text
+    assert rows[0].route_used == engine.name
+    assert rows[0].metadata["model_revision"] == "abc123"
 
 
 def test_blank_page_is_reported_without_requesting_an_ocr_model() -> None:

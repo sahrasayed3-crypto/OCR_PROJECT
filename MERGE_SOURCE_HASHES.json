@@ -1,0 +1,3045 @@
+{
+  "created_at_utc": "2026-07-23T13:37:01.377938+00:00",
+  "algorithm": "SHA-256",
+  "sources": {
+    "A": [
+      {
+        "path": ".env.example",
+        "size_bytes": 619,
+        "sha256": "b732b49f3d78e04a4935b75a6796760513d523c61871e3504cbbd93b87e275c7"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "size_bytes": 892,
+        "sha256": "5148da435f02b9fac7c91e2696d7645962f44a73a5e915990a265b82ae776428"
+      },
+      {
+        "path": ".gitignore",
+        "size_bytes": 1972,
+        "sha256": "8fe6106afd78ae6afd6fc3d2dda37d9d9de28a87ab150f9c3ce1b626667bff6f"
+      },
+      {
+        "path": ".streamlit/config.toml",
+        "size_bytes": 386,
+        "sha256": "011a7dac3de34c06fee14efac6bf672f666cc4046704d4a21559f4fedf261103"
+      },
+      {
+        "path": "AMD_DEVELOPER_CLOUD_READINESS.md",
+        "size_bytes": 3068,
+        "sha256": "83871fd15ba503dd5348ff4c3a3cb764ea7930659f9bbed21751aa910befe7f4"
+      },
+      {
+        "path": "ANTHROPIC_SUPPORT_READINESS.md",
+        "size_bytes": 2164,
+        "sha256": "ef3346cd68afaf6d0007571a8b1c8863d77fa5694fcf89466e68f09da73186b0"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size_bytes": 331,
+        "sha256": "77b2bbe605e92b839e47e81be8d04063a24ec576415c40a3180a94456e0d8f07"
+      },
+      {
+        "path": "CODE_OF_CONDUCT.md",
+        "size_bytes": 396,
+        "sha256": "53f4d8d42e8e48cc679980372ebd3156f23357b12e172da3bbf7d54b19c94720"
+      },
+      {
+        "path": "COMMERCIAL_COMPONENTS_POLICY.md",
+        "size_bytes": 2043,
+        "sha256": "bbb5f49d9653f8c8ed7c6bbca8c48ea9465990990a9e1472d09fe8a544985aaf"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "size_bytes": 1580,
+        "sha256": "e6d81f118f64654161a8b9083a0c2faee3fdabac4070fba55f743ec95ac9009f"
+      },
+      {
+        "path": "DATA_LICENSES.md",
+        "size_bytes": 1471,
+        "sha256": "907a95257a700e9e1e2926fa660e72024f4865f54d1cc32ffbb0ff8de4548559"
+      },
+      {
+        "path": "DATA_PIPELINE_PLAN.md",
+        "size_bytes": 1908,
+        "sha256": "84f1d961a6f47276a3fcce3ae59b8bcb5952aac6a42755c82f7211cd3fdafc02"
+      },
+      {
+        "path": "FINAL_PUBLICATION_REPORT.md",
+        "size_bytes": 7894,
+        "sha256": "5aac650b402e45914b3abad7c5f56ea145daa491f633a778dd4be317bf843b0a"
+      },
+      {
+        "path": "LICENSE",
+        "size_bytes": 10258,
+        "sha256": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b"
+      },
+      {
+        "path": "LICENSE_RECOMMENDATION.md",
+        "size_bytes": 3084,
+        "sha256": "20433b5fac659fea372cadbeb253e78d407b702374466630753274789588fcf8"
+      },
+      {
+        "path": "MICROSOFT_STARTUP_READINESS.md",
+        "size_bytes": 2683,
+        "sha256": "4bf249d03986e02e1ad3a022ba9a648c0b403fde05861f7240c4df8b589db982"
+      },
+      {
+        "path": "MODEL_EVALUATION_PLAN.md",
+        "size_bytes": 1780,
+        "sha256": "3b084efb446ccecec4dead92258e80fa2e3a33dbedf8083217edaffaedfaf128"
+      },
+      {
+        "path": "NOTICE",
+        "size_bytes": 1409,
+        "sha256": "f4a6c827b70ad9c08be4d7c944a337c14ee0a002c80bfee54a7766e5c36f3850"
+      },
+      {
+        "path": "OPENAI_APPLICATION_MANUAL_CHECKLIST.md",
+        "size_bytes": 4109,
+        "sha256": "74871d7df67d28ffd64afa364dc669c7bc77f55b7ce6af23babe01db46ed6092"
+      },
+      {
+        "path": "OPENAI_APPLICATION_SHORT_SUMMARY.md",
+        "size_bytes": 3544,
+        "sha256": "2fba97da2e158a9f70bd3064327153106b1edd5644115db1abe27a2aa42f8054"
+      },
+      {
+        "path": "OPENAI_CODEX_FUND_APPLICATION_DRAFT.md",
+        "size_bytes": 11235,
+        "sha256": "b17b2c43f0e0584dd57d89d30a79912e0ca7db501ff12180c92b0a340f43b3cf"
+      },
+      {
+        "path": "OPENAI_CODEX_FUND_READINESS.md",
+        "size_bytes": 4122,
+        "sha256": "5520b824c71a14d412116546620910f203b56864c7c74acb199f6b9c645f0e72"
+      },
+      {
+        "path": "OPEN_SOURCE_SPLIT_AUDIT.md",
+        "size_bytes": 6425,
+        "sha256": "68267fc102fc4ec39edf441dfac7873c79c35f6cceee931e46e89ffce5abcbb8"
+      },
+      {
+        "path": "POST_PUBLISH_AUDIT.md",
+        "size_bytes": 4649,
+        "sha256": "00d95d68648f243cc0a2562ea71f32eabcf430090e01b5c6f2b940a79b203276"
+      },
+      {
+        "path": "PRE_PUBLISH_CHECKLIST.md",
+        "size_bytes": 1529,
+        "sha256": "d39e16197ea0657692db28fc2476669e81f0da209f650cf9fc23666023fd6b70"
+      },
+      {
+        "path": "PRE_SUBMISSION_AUDIT.md",
+        "size_bytes": 4053,
+        "sha256": "c18ec927059213dad905d8099dcd991295ea8cc302b430bd4d0eae8b9f1ed279"
+      },
+      {
+        "path": "PROJECT_READINESS_REPORT.md",
+        "size_bytes": 6783,
+        "sha256": "0fa4b91848ce89f0875e49b5dd5f389e22e1a6c3d8ad498097f9f57c73160f70"
+      },
+      {
+        "path": "PUBLIC_PRIVATE_BOUNDARY.md",
+        "size_bytes": 4721,
+        "sha256": "ca7731b63687117a963ec53b3fe0cea152797dce23d2c3fae56e5d54435270d5"
+      },
+      {
+        "path": "README.md",
+        "size_bytes": 6926,
+        "sha256": "cf95832146b508a9a22c469a0310857daa8935fe996446ac31c3aa1b7a13d6e7"
+      },
+      {
+        "path": "ROADMAP.md",
+        "size_bytes": 2183,
+        "sha256": "9b7c0990636f75894dd22590dc8911217369629652390d660b2fcfe06d546dba"
+      },
+      {
+        "path": "SECURITY.md",
+        "size_bytes": 653,
+        "sha256": "f902b10c8455a791ac15baf75ce4370ad629bd439e3b396e5214d278b5c70103"
+      },
+      {
+        "path": "STAGED_FILES_REVIEW.md",
+        "size_bytes": 6565,
+        "sha256": "266dfa2e8100e3b33aa8eba8937c230b732b7283f35cbc054b8c4997bdd82ed6"
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "size_bytes": 2088,
+        "sha256": "cc964a51baf7cb758b8d083b6f82b28017d91330fe7525bd17c0b6565d2ff9c3"
+      },
+      {
+        "path": "app.py",
+        "size_bytes": 12194,
+        "sha256": "ff029559b946d1a2900020156a68e8a8edb2de9384c49c38afc3737ec5b3f03b"
+      },
+      {
+        "path": "assets/styles.css",
+        "size_bytes": 14815,
+        "sha256": "03bd8d7993c60c30666e1ac84fb23423802782878359886a2b3f5a30c6d15447"
+      },
+      {
+        "path": "assets/web_window.png",
+        "size_bytes": 1491807,
+        "sha256": "ab2d5b71db3643762dd100eb0062e52e74e75ef9d461cffa70a42b91314170e1"
+      },
+      {
+        "path": "deploy/linux/README.md",
+        "size_bytes": 1056,
+        "sha256": "b77a31d5d4474caec26c8d2948e06a51646b36dc5edfcf9e58b6f784568463fb"
+      },
+      {
+        "path": "deploy/linux/backup.sh",
+        "size_bytes": 204,
+        "sha256": "f5064e3faa5119b4216e7d51b6a03d69eb07f877e5c48391c23f1f35bbe59d06"
+      },
+      {
+        "path": "deploy/linux/cleanup.sh",
+        "size_bytes": 205,
+        "sha256": "5f62f44b27ddba1b53fd9d39d89c00e6f36edf3d28975a3fe21acf45b06056cb"
+      },
+      {
+        "path": "deploy/linux/clouda-api.service",
+        "size_bytes": 479,
+        "sha256": "598dc94bdf6bbf1ba6326ace4b91295a2fa4127b4e2a4b0ceddc53419f2f905f"
+      },
+      {
+        "path": "deploy/linux/clouda-backup.service",
+        "size_bytes": 163,
+        "sha256": "ec9dbbd05637fa4e193b903d42749b9cd99cfd146c27823a94389c0daa851e5a"
+      },
+      {
+        "path": "deploy/linux/clouda-backup.timer",
+        "size_bytes": 115,
+        "sha256": "878049afaa63cf53ca84f8d410fe2cec15b7a6d52382b6237dd3da5305271711"
+      },
+      {
+        "path": "deploy/linux/clouda-cleanup.service",
+        "size_bytes": 172,
+        "sha256": "9c0db5ed4ee78172ee0a5cd6edd260da839c86e3f9b7b90fbe08b4538a0b1434"
+      },
+      {
+        "path": "deploy/linux/clouda-cleanup.timer",
+        "size_bytes": 126,
+        "sha256": "aa0d0f0e4ec1f895bc8af66145f51c75fbe516a90c84bd3c762dd398b48d042c"
+      },
+      {
+        "path": "deploy/linux/clouda.env.example",
+        "size_bytes": 457,
+        "sha256": "a02331733dde357b19763c95ee86f4c7320d0893155c718aac401eb768528fd4"
+      },
+      {
+        "path": "deploy/linux/clouda.service",
+        "size_bytes": 519,
+        "sha256": "d4ec59b30c8d393831a316b5158a80282c1ed963fb57406a6bef2f3f4e9eaee9"
+      },
+      {
+        "path": "deploy/linux/health_check.sh",
+        "size_bytes": 156,
+        "sha256": "efff6f8dc2a5000c83389bfe51251ac694ae8be85ed5dbb876fa87e7d7e2592a"
+      },
+      {
+        "path": "deploy/linux/install.sh",
+        "size_bytes": 693,
+        "sha256": "50623f9eee2f43ba9778b785c2ed3e636f506965982fbe7b5bc2bfc3fbe77269"
+      },
+      {
+        "path": "deploy/linux/run.sh",
+        "size_bytes": 359,
+        "sha256": "f797be0d5ecce3efcfc26916069456aefe8948610d84faba8691ed5747784c70"
+      },
+      {
+        "path": "deploy/linux/run_api.sh",
+        "size_bytes": 308,
+        "sha256": "9ff2cc071d7bb5a83d57c90746ee68f4ba1568bfd2cf4e422b8a276d9b968f17"
+      },
+      {
+        "path": "deploy/linux/stop.sh",
+        "size_bytes": 73,
+        "sha256": "d278f4e3a0ab373de14a467dad3785df5b40d83bc0e2ff34644081b642f14f52"
+      },
+      {
+        "path": "docs/AMD_ROCM_ROADMAP.md",
+        "size_bytes": 1187,
+        "sha256": "d8d96a233fe560ef85b645b0e55802742c23e6afebc05c72f2e98abbedd260b9"
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "size_bytes": 2480,
+        "sha256": "3854a20da15c11180033344bf8a1880eadda944abcb4c0f8c22324c69fc5efa6"
+      },
+      {
+        "path": "docs/MICROSOFT_STARTUPS_APPLICATION.md",
+        "size_bytes": 3739,
+        "sha256": "cfaf4b92d5b6441be059a8a8c2b1b6c3219c10ec943d900d8d38fa50940e3e37"
+      },
+      {
+        "path": "docs/MODEL_EVALUATION_TEMPLATE.md",
+        "size_bytes": 1530,
+        "sha256": "7ae1fc724af7a14120ffc58ba655b1e76435e2a494c74d99772b047a8706e380"
+      },
+      {
+        "path": "docs/MODEL_INTEGRATION.md",
+        "size_bytes": 1685,
+        "sha256": "f6f7d954697ef0299b64705ad814e8c23f2d9cb3f320b9a930bc3dff192e1934"
+      },
+      {
+        "path": "docs/MODEL_SELECTION_STATUS.md",
+        "size_bytes": 1692,
+        "sha256": "5ba777c92fb2433c2be216b3519d64963faa4a664eb3072969e4eabd66143b92"
+      },
+      {
+        "path": "docs/ROADMAP.md",
+        "size_bytes": 874,
+        "sha256": "56a048d8da458d2dfd2d210e12eb358ee295d331d7d460c7acf94a14632c000f"
+      },
+      {
+        "path": "docs/TESTING.md",
+        "size_bytes": 1858,
+        "sha256": "2fb1dc85cab04077d4acf0047b30c3bc14689906ea9f12d2d44da2910db4e366"
+      },
+      {
+        "path": "mypy.ini",
+        "size_bytes": 255,
+        "sha256": "f7721a6ef965362b0c7b1e04f123876a30877397cb7c85610084b5ccd732d05b"
+      },
+      {
+        "path": "openrouter_api_key.example.txt",
+        "size_bytes": 31,
+        "sha256": "c16150fd02f4628634d2b1dcafe604c289b2913400978286099d6bf7e1f59ccc"
+      },
+      {
+        "path": "pdfword/__init__.py",
+        "size_bytes": 21,
+        "sha256": "a70b79f32b8a4b4202cf50c5cea44e182affb1393da42bb6dc831720764d6bec"
+      },
+      {
+        "path": "pdfword/accuracy.py",
+        "size_bytes": 15622,
+        "sha256": "cbacfe5f23abe42ef73b36a52b50a74f152e0653e9d991661c14daa8956a395d"
+      },
+      {
+        "path": "pdfword/ai_model_router.py",
+        "size_bytes": 10334,
+        "sha256": "fb0828f5ad99182e9bea3b518202dac3c4fce8ba43fce62d21acc2dfb0bbfe02"
+      },
+      {
+        "path": "pdfword/auto_eval.py",
+        "size_bytes": 3358,
+        "sha256": "dcecfccbb25b3fa19a032ea63ae02b3e019b880e48dd6ca0146bbe667c87ba84"
+      },
+      {
+        "path": "pdfword/backup.py",
+        "size_bytes": 4770,
+        "sha256": "ae97a2f1dc047a09d561753806f15ecfe8b6d5c1eaebc23977fcfc4ff1443663"
+      },
+      {
+        "path": "pdfword/checkpoints.py",
+        "size_bytes": 1737,
+        "sha256": "811aea5decdd9371c848983eb9f3b85850b6e1d3c1fab7db7dc4e71327ba11f2"
+      },
+      {
+        "path": "pdfword/cleanup.py",
+        "size_bytes": 1478,
+        "sha256": "365cd1ace2d234803aec5f90a188ffd02a7ce7571334209bec5fba444318ba62"
+      },
+      {
+        "path": "pdfword/constants.py",
+        "size_bytes": 3493,
+        "sha256": "9d76674e3e24273289db43ed727bc371658d8852f1d99de28c03a1740ab99f0b"
+      },
+      {
+        "path": "pdfword/conversion_service.py",
+        "size_bytes": 21569,
+        "sha256": "56326732a5825889d6698e439a7001b79d1a86a146ee1a764341f64b8260cbda"
+      },
+      {
+        "path": "pdfword/correction_learning.py",
+        "size_bytes": 11676,
+        "sha256": "bf70a559b93bcd55f4e46a8e47db8a9bb77e1aa9e4593d188ae5d9031ef404b8"
+      },
+      {
+        "path": "pdfword/corrections.py",
+        "size_bytes": 1479,
+        "sha256": "6e87415f367633a14a84a9faaf79ea9fc838ac6a36792d32a0c0705530f132c9"
+      },
+      {
+        "path": "pdfword/database.py",
+        "size_bytes": 45041,
+        "sha256": "40f857ffc69431eb632cddf595a3ed294cfbcb6ac7006fa5a2f200c40195fd1c"
+      },
+      {
+        "path": "pdfword/document_analysis.py",
+        "size_bytes": 3158,
+        "sha256": "90f3c10114af020c3f1945c0ab3a7ba54642b591bd278a0e4a467afe2cec737b"
+      },
+      {
+        "path": "pdfword/docx_export.py",
+        "size_bytes": 5101,
+        "sha256": "45dad72a52b6801925382b5dcaa86b56fecc35f7f1865f1ce74da6ef6e399b3c"
+      },
+      {
+        "path": "pdfword/engines.py",
+        "size_bytes": 7526,
+        "sha256": "cc60c068e764ea7b2eda6f629b89f666899b39c873569dd8695fbc57e4f15ff6"
+      },
+      {
+        "path": "pdfword/health.py",
+        "size_bytes": 3098,
+        "sha256": "f8bfcf1ee6c482478ed5ae5ce0d94e9585f3c38859a93e4f38e760305c2f5e30"
+      },
+      {
+        "path": "pdfword/intelligence.py",
+        "size_bytes": 5493,
+        "sha256": "5f03885ad72af0a58494cac435ff5ba82de7dd6e5b70e6500a34b876e55fbb1e"
+      },
+      {
+        "path": "pdfword/job_queue.py",
+        "size_bytes": 4957,
+        "sha256": "c0ba120cf4f5b4b7d1961280f4840ce8f2f1accb212e48556b20da71b77072d6"
+      },
+      {
+        "path": "pdfword/key_store.py",
+        "size_bytes": 1055,
+        "sha256": "97a15c88a8a40e4dc1712a24a39f48086f287fae1348ac95d24b9440d4cf85c5"
+      },
+      {
+        "path": "pdfword/limits.py",
+        "size_bytes": 1375,
+        "sha256": "035083e9947df989eb200b0258eaca9c2d4f5ae35dc5c3a2e3d238fb8a445c09"
+      },
+      {
+        "path": "pdfword/local_engines.py",
+        "size_bytes": 694,
+        "sha256": "256df047e589c36a2f45a461110cfc314ac4f55b2f2290e070ba523a7266220d"
+      },
+      {
+        "path": "pdfword/model_registry.py",
+        "size_bytes": 5581,
+        "sha256": "2d75012cd4943cf2eafd8358ad8407c31d05038a73caa628771b0ca5514fdf91"
+      },
+      {
+        "path": "pdfword/models.py",
+        "size_bytes": 1224,
+        "sha256": "a02c6ad113827959726b97d8b6006021a28d9b5fa265ce6230741c61aa5f9296"
+      },
+      {
+        "path": "pdfword/ocr_pipeline.py",
+        "size_bytes": 17652,
+        "sha256": "74009185b96616700c2f83ac5285bfbbd1c97a5942e3097f1822a7e8035900bc"
+      },
+      {
+        "path": "pdfword/openrouter_client.py",
+        "size_bytes": 14290,
+        "sha256": "002e9959fd883302fb94acebe94b67a0bd110418ebf895d5908ea34f1ceb9611"
+      },
+      {
+        "path": "pdfword/provider_client.py",
+        "size_bytes": 9069,
+        "sha256": "89ccce138ed157d2d3ee911147aa0dc5ade045e1616e24e300cc50147f6cffda"
+      },
+      {
+        "path": "pdfword/provider_router.py",
+        "size_bytes": 6023,
+        "sha256": "eee602a568cbf936894ce3241df4fdb7b92d97b75616a51b76cd0a25753ffc91"
+      },
+      {
+        "path": "pdfword/ranges.py",
+        "size_bytes": 2954,
+        "sha256": "432d5dac0ead168ee4df946d85b6fe648dea1f620608464ca32447a5c8726cf5"
+      },
+      {
+        "path": "pdfword/self_learning.py",
+        "size_bytes": 15596,
+        "sha256": "6e6a0ece3dc02aa90c5096be707bbc944e1090dc02ea14ae39b3bd979e8f1943"
+      },
+      {
+        "path": "pdfword/settings.py",
+        "size_bytes": 6073,
+        "sha256": "869c338149217bad4245ffe9bc1cd2d4114a6ab096d4b3a5e4a0a054cbe3eecf"
+      },
+      {
+        "path": "pdfword/storage.py",
+        "size_bytes": 3363,
+        "sha256": "7b3b7a9ccb3316bf2844ca404dde817f85d52736519a6bcb1c894e17dc5e6c68"
+      },
+      {
+        "path": "pdfword/styles.py",
+        "size_bytes": 2586,
+        "sha256": "453d616bdcf7261a73180b52c018417b371c81008f046533b22fecdc629ba57f"
+      },
+      {
+        "path": "pdfword/ui_components.py",
+        "size_bytes": 4657,
+        "sha256": "e7390b0df6889f0d5d6af824c60b5e799b8c94afa0e120eee03fa1df1949af0b"
+      },
+      {
+        "path": "pdfword/ui_status.py",
+        "size_bytes": 3445,
+        "sha256": "5fef7132ded1320068db3f469dd99c464f7a7e379eed71d7ffcb96c5a6c2dd3c"
+      },
+      {
+        "path": "pdfword/worker.py",
+        "size_bytes": 2852,
+        "sha256": "deaf0e49dd41ee90fe10a3b43e1b873c371eb083d168fc18c79b171b5ba92212"
+      },
+      {
+        "path": "pdfword/worker_api.py",
+        "size_bytes": 15565,
+        "sha256": "0e0a39552a042ee90bb85711073e20bbd46125868b792294f43b34cb9f22e4e9"
+      },
+      {
+        "path": "pdfword/worker_client.py",
+        "size_bytes": 3375,
+        "sha256": "dcd26ca1c103852a7525e0a9cbf2f98558edfe924861c557ed9bd793dba31ee4"
+      },
+      {
+        "path": "pdfword/worker_tasks.py",
+        "size_bytes": 3172,
+        "sha256": "a42d6cf8d73e1bc60dbae55dcd78aa19f44866270f0888b23f801612299d07ea"
+      },
+      {
+        "path": "pytest.ini",
+        "size_bytes": 543,
+        "sha256": "425cc578c6b91cbb9b6ca1ace44b0bd0adc2a529240b00eff6df94bbccebf963"
+      },
+      {
+        "path": "requirements-base.txt",
+        "size_bytes": 180,
+        "sha256": "5e58bde2b84225ff35f0e29bbef30fc6a3b4fca86fd54407633ae979122c2eec"
+      },
+      {
+        "path": "requirements-dev.txt",
+        "size_bytes": 163,
+        "sha256": "4d0bcb3d14e842f4ea7b314be2726af3a0461ca281cf09ea6f18035a5568fa98"
+      },
+      {
+        "path": "requirements-linux.txt",
+        "size_bytes": 25,
+        "sha256": "3a3cd21a80448ab31c1fb35a32d16287e06180937c609fbddf50f6b436b262ed"
+      },
+      {
+        "path": "requirements-rocm.txt",
+        "size_bytes": 264,
+        "sha256": "d65fb7dfe370997ef0994bf06ff37aacb2c8b51683c01416fd515cd1ce86c0c6"
+      },
+      {
+        "path": "requirements-server.txt",
+        "size_bytes": 25,
+        "sha256": "3a3cd21a80448ab31c1fb35a32d16287e06180937c609fbddf50f6b436b262ed"
+      },
+      {
+        "path": "requirements-worker.txt",
+        "size_bytes": 25,
+        "sha256": "3a3cd21a80448ab31c1fb35a32d16287e06180937c609fbddf50f6b436b262ed"
+      },
+      {
+        "path": "requirements.txt",
+        "size_bytes": 25,
+        "sha256": "3a3cd21a80448ab31c1fb35a32d16287e06180937c609fbddf50f6b436b262ed"
+      },
+      {
+        "path": "run_project_collected.bat",
+        "size_bytes": 442,
+        "sha256": "7bbe163f27e387305f1a4ae0617710f3da343b8676f24e19ab24c44588344577"
+      },
+      {
+        "path": "run_server.ps1",
+        "size_bytes": 1251,
+        "sha256": "811e97c0f27a38a67fb454fbd977cdc41aea222af00bb3c50ac502c921db3d9e"
+      },
+      {
+        "path": "samples/generated/arabic_mixed_multipage_ref.txt",
+        "size_bytes": 887,
+        "sha256": "7d4c5732a2d428aeb71235cff16da0a35f10ce2c1cf8534bb722fa2c9fcb7355"
+      },
+      {
+        "path": "samples/generated/cases_manifest.json",
+        "size_bytes": 10814,
+        "sha256": "ae13ca354f678fd820d9688587ace28d919d037b7fafd0654b1df86cbb06d820"
+      },
+      {
+        "path": "samples/generated/clear_ar_blurry_docs_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_ar_clean_scans.pdf",
+        "size_bytes": 223438,
+        "sha256": "7bbc4e653970802bac41f9844260910bca377700eb0b5530811a02d3a86abd77"
+      },
+      {
+        "path": "samples/generated/clear_ar_clean_scans_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_ar_fax_style_pdfs_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_ar_low_quality_scans.pdf",
+        "size_bytes": 205278,
+        "sha256": "cda1e7cabc2347fdaf7943afc63b983edf651ac3e317eab15aeb57dd3ac73fc1"
+      },
+      {
+        "path": "samples/generated/clear_ar_low_quality_scans_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_ar_old_archived_scans_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_blurry_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_clean_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_fax_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_low_contrast_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_old_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_scan_tilted_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/clear_ar_tilted_rotated_scans_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/generated/clear_en_blurry_docs_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_clean_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_fax_style_pdfs_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_low_quality_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_old_archived_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_blurry_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_clean_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_fax_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_low_contrast_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_old_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_scan_tilted_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/clear_en_tilted_rotated_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_ar_blurry_docs_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_ar_clean_scans_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_ar_fax_style_pdfs_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_ar_low_quality_scans_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_ar_old_archived_scans_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_blurry_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_clean_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_fax_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_low_contrast_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_old_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_scan_tilted_ref.txt",
+        "size_bytes": 201,
+        "sha256": "0bf2f2730474db3fe7b8231482da9caae085c6e18bed72b1a60ee4268a7f0936"
+      },
+      {
+        "path": "samples/generated/complex_ar_tilted_rotated_scans_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/generated/complex_en_blurry_docs_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_clean_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_fax_style_pdfs_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_low_quality_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_old_archived_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_blurry_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_clean_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_fax_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_low_contrast_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_old_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_scan_tilted_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/complex_en_tilted_rotated_scans_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/generated/english_mixed_multipage_ref.txt",
+        "size_bytes": 268,
+        "sha256": "c80da02697f6c0ae4e5feaf4faae58ce658ddfd38361b8818eef05c01a789b51"
+      },
+      {
+        "path": "samples/sample_clear_ar.pdf",
+        "size_bytes": 232881,
+        "sha256": "583ab036a8ad5cff3a92b28d9c153bc247693ccf37a93daec055467a831452fa"
+      },
+      {
+        "path": "samples/sample_clear_ar_ref.txt",
+        "size_bytes": 391,
+        "sha256": "c0f77ccdb693c84c9eaed89537672cf9d5b01be3a91557e1d7d0ff2554f1f162"
+      },
+      {
+        "path": "samples/sample_clear_en.pdf",
+        "size_bytes": 119866,
+        "sha256": "da4631e0473b37d62c4dd10e300e579d7d4ebe41309482db19626722bcddac9c"
+      },
+      {
+        "path": "samples/sample_clear_en_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "samples/sample_complex_ar.pdf",
+        "size_bytes": 181542,
+        "sha256": "e9c06fadd1bc3980e42d74a077a8d1131b7db25de3f0d39198e386c37f71a26b"
+      },
+      {
+        "path": "samples/sample_complex_ar_ref.txt",
+        "size_bytes": 496,
+        "sha256": "c2df0dd5e675cf1d34d389a1dc8f8bc9e7584403ad5c4f99b6f928e5f61fb711"
+      },
+      {
+        "path": "samples/sample_complex_en.pdf",
+        "size_bytes": 176434,
+        "sha256": "8d6d0f49cee3a442405fce7599d21ff74ff788d46527784bff936c7d8a46732e"
+      },
+      {
+        "path": "samples/sample_complex_en_ref.txt",
+        "size_bytes": 132,
+        "sha256": "c2fbe8a66626ab03d1e88f6f4bab64527aeab29f7992afa99d24753bed4865b3"
+      },
+      {
+        "path": "scripts/demo.py",
+        "size_bytes": 1671,
+        "sha256": "08b0f3ba42474d9343ec6010e8a0e9a271f12de04d373c73f7a37f874918ee3b"
+      },
+      {
+        "path": "start_clouda_all.bat",
+        "size_bytes": 284,
+        "sha256": "0120e769b6459660153d1c967618cc6d2bd4e2c18c5f41180941143e8b89cba9"
+      },
+      {
+        "path": "start_clouda_all.ps1",
+        "size_bytes": 1720,
+        "sha256": "0228c96ff892ce8b0a4f1f0b081a1fe471582bff357dfaacd2e7d9c323a5cd24"
+      },
+      {
+        "path": "stop_clouda_all.bat",
+        "size_bytes": 282,
+        "sha256": "315acd6b8f9cd9c76b95b3244272940bd36f49dba674cf1b43091771a2aabdc0"
+      },
+      {
+        "path": "stop_clouda_all.ps1",
+        "size_bytes": 948,
+        "sha256": "e718be2322dcb9ef9cdd7f7846d615eb5d163edc1dc3857fe7932fcf13d880c1"
+      },
+      {
+        "path": "stop_server.ps1",
+        "size_bytes": 417,
+        "sha256": "45cf12d3fce8971fc50f8886eaec7eef76425d1edc8dbd45dd659562d59018d9"
+      },
+      {
+        "path": "test_project_collected.bat",
+        "size_bytes": 693,
+        "sha256": "c5032cafc63d52d5d6db55e06610b64a7e5c59ba9ecfd3cd80673564b423f1f5"
+      },
+      {
+        "path": "tests/fixtures/blank.pdf",
+        "size_bytes": 668,
+        "sha256": "060e621a29d956fa110fb8305a342583810948086c4b54001d52dd766a60ef32"
+      },
+      {
+        "path": "tests/fixtures/corrupt.pdf",
+        "size_bytes": 25,
+        "sha256": "5c4ed2cc21fd6acefdb72b2488905d492ac68c813ee071614dcc89798ca21bd2"
+      },
+      {
+        "path": "tests/fixtures/digital_text.pdf",
+        "size_bytes": 1000,
+        "sha256": "9951190da1384784cb1e7ee8bff10a868fd3f455d030b81a5b22d1b42e2bbdcd"
+      },
+      {
+        "path": "tests/fixtures/empty.pdf",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "tests/fixtures/generate_fixtures.py",
+        "size_bytes": 2600,
+        "sha256": "54fe9f7a4eb560dcc4f388dda2076b34da63491ef3ac4e2de29765b8641cb340"
+      },
+      {
+        "path": "tests/fixtures/mixed.pdf",
+        "size_bytes": 14637,
+        "sha256": "09293c502b2db4f74f54a36dbbad64475f6112fb9ac011a70b30da6b58092f70"
+      },
+      {
+        "path": "tests/fixtures/near_blank_page_number.pdf",
+        "size_bytes": 941,
+        "sha256": "f8cc1a057ab62dc735c3fc53d5229c88a6b7860d9486f4b2fc2b0dbd44d79fea"
+      },
+      {
+        "path": "tests/fixtures/near_blank_stamp.pdf",
+        "size_bytes": 3651,
+        "sha256": "3113be2e36b740441477b50d05b6964a77602b27d91a585d7a9c5898c295d795"
+      },
+      {
+        "path": "tests/fixtures/not_a_pdf.txt",
+        "size_bytes": 18,
+        "sha256": "5e944743426dc21dde2eef223f17c90e30c31a8015b4f244402e27181e2ffa8d"
+      },
+      {
+        "path": "tests/fixtures/scanned.pdf",
+        "size_bytes": 13888,
+        "sha256": "be70465d7223a2d9e05fb1213c69451c812e0c5951487f1a6601ebe5c9eb475a"
+      },
+      {
+        "path": "tests/test_accuracy.py",
+        "size_bytes": 2390,
+        "sha256": "4a0dd048209b7458018931aa8ea389ca2a509ddb68f0d8f3c7ac2a5048f7605c"
+      },
+      {
+        "path": "tests/test_ai_model_router.py",
+        "size_bytes": 4033,
+        "sha256": "0caea9c1fdc16a51552aca4733594fb499688793873d7aa7cfa8fc282fd469d5"
+      },
+      {
+        "path": "tests/test_arabic_fixtures.py",
+        "size_bytes": 3862,
+        "sha256": "441da6572331ec50fb8c96eb18eaaa5f907f4b3a248c92458a3734f751987d50"
+      },
+      {
+        "path": "tests/test_benchmark_categories.py",
+        "size_bytes": 3698,
+        "sha256": "d33f71113ac96705983e9de481e77a3bbe186dffe44a154de00125d9bb7664c9"
+      },
+      {
+        "path": "tests/test_conversion_service_paths.py",
+        "size_bytes": 6166,
+        "sha256": "bbf183f74bf74b9c817a5ff7dace561af771085ec84af399d129a9ee8c2e1dbf"
+      },
+      {
+        "path": "tests/test_correction_learning.py",
+        "size_bytes": 12102,
+        "sha256": "c846e6ddc5cd09708912353a6a3f4672ab26d05f3c9ab096e33ddf01dd832d1e"
+      },
+      {
+        "path": "tests/test_distributed_worker.py",
+        "size_bytes": 14582,
+        "sha256": "9003604e9e78eb7d4abbb64e5c00d687966078bd98e2d1e789fcf4e179c334ca"
+      },
+      {
+        "path": "tests/test_document_analysis.py",
+        "size_bytes": 1121,
+        "sha256": "70cdee638c69e5ffbbfbfc54847478828a02abe8cd4817f241f5e3e2c96e850f"
+      },
+      {
+        "path": "tests/test_final_readiness.py",
+        "size_bytes": 4880,
+        "sha256": "6557c436195a29e1f3d279b66e8e50faa5acafb87d1343bd25644f89fb34be3d"
+      },
+      {
+        "path": "tests/test_intelligence.py",
+        "size_bytes": 1157,
+        "sha256": "48660e7bac1e31b6f4ade3b965caefe7a837e8a77c1c03dd224879f87eac4819"
+      },
+      {
+        "path": "tests/test_model_agnostic_engines.py",
+        "size_bytes": 4277,
+        "sha256": "38da4e8981597fb268a1aa6586a41c079fe7ee547851445904d05ae971fa1812"
+      },
+      {
+        "path": "tests/test_openrouter_provider_clients.py",
+        "size_bytes": 9564,
+        "sha256": "2f7334071dd2d3cea35730c54ca54a53bc2143e2450a746548532ff987aaca0b"
+      },
+      {
+        "path": "tests/test_provider_router.py",
+        "size_bytes": 1505,
+        "sha256": "6618863f6dcb5036a9081cf47aa5f3f3c3303673935585e0405c217f1fa58704"
+      },
+      {
+        "path": "tests/test_quality_acceptance_policy.py",
+        "size_bytes": 1911,
+        "sha256": "2c75fdb49be4148321e2e819514fff942acaa4682151891d0c2347c549d91ffb"
+      },
+      {
+        "path": "tests/test_ranges.py",
+        "size_bytes": 988,
+        "sha256": "8358447f289273fa5c0fa8b7da9c73ca36e3d956f22c1be4b7ec618561670551"
+      },
+      {
+        "path": "tests/test_readiness_pipeline.py",
+        "size_bytes": 4764,
+        "sha256": "2f24c0accd9a1842548e3f36d1d78dc4c986babe273ef3049a56749e9eb8842a"
+      },
+      {
+        "path": "tests/test_router_safety.py",
+        "size_bytes": 1637,
+        "sha256": "957a61b6e7542c65602b1a47d79ca44116bf097f533f4fe2b48bae06ff573d5d"
+      },
+      {
+        "path": "tests/test_runtime_features.py",
+        "size_bytes": 5600,
+        "sha256": "78387099bc1c3832f49ac1483725c261f961c6b22e44148dca121f48a0b14c41"
+      },
+      {
+        "path": "tests/test_self_learning_deep.py",
+        "size_bytes": 3141,
+        "sha256": "3176eb1204dcc1bdd4e68dbeef586a18b446437e187aa0895523239f4fefd25c"
+      },
+      {
+        "path": "tests/test_self_learning_runtime.py",
+        "size_bytes": 1493,
+        "sha256": "da2ebf8082fa54fe16da883613d8a431ef7170262a87bad6f83d9197313c779b"
+      },
+      {
+        "path": "tests/test_settings_storage_worker.py",
+        "size_bytes": 4737,
+        "sha256": "64a5cc375e3abdbf1e998f4b9ad861faca6a3ecacc18acf828ad89c0d15d4a47"
+      },
+      {
+        "path": "tests/test_storage_streaming.py",
+        "size_bytes": 1423,
+        "sha256": "958b8296fcf77af9f217845905ddc0fb15c1bd69ede8d43d3b95ad1d1cdd16a3"
+      },
+      {
+        "path": "tests/test_ui_redesign.py",
+        "size_bytes": 7782,
+        "sha256": "c4415cf56dbf6d07a51b7c5a858f2d223d1e57880e02eee7ec2240d869fd7000"
+      },
+      {
+        "path": "tools/configure_single_machine_env.py",
+        "size_bytes": 1621,
+        "sha256": "b1412f9ad2eaa5559d53b510826a1fdf1e31956707c0e4f11cd1db2353367038"
+      },
+      {
+        "path": "tools/generate_test_pdfs.py",
+        "size_bytes": 18468,
+        "sha256": "69fb22279db0d3b6bcd1e5c967951d399b8be34606f2f051f8cf5558532cc0ab"
+      },
+      {
+        "path": "tools/post_benchmark_autoreview.ps1",
+        "size_bytes": 5535,
+        "sha256": "83b2643b606815ef199f027fc5280218da842a57d881bc743489992333ddb326"
+      },
+      {
+        "path": "tools/post_benchmark_autoreview.py",
+        "size_bytes": 9318,
+        "sha256": "bc71fe05dbaaf402bdca66ef1787669c5f21bbde66596976b28c197736722492"
+      },
+      {
+        "path": "tools/refresh_openrouter_models.py",
+        "size_bytes": 538,
+        "sha256": "51c2038ad896665b51e942b52d4349ab482ef133b32cd40847992de70199143d"
+      },
+      {
+        "path": "tools/run_full_benchmark.py",
+        "size_bytes": 27470,
+        "sha256": "30d640729adc3a0e2549883f5b6d17f82806450fad582e999a421a139fc7a9fc"
+      },
+      {
+        "path": "tools/system_rocm_info.py",
+        "size_bytes": 2929,
+        "sha256": "e258d412305b6a3166d2236f45085ff71894fce9e445af3018e44b34f424c516"
+      }
+    ],
+    "B": [
+      {
+        "path": ".env.example",
+        "size_bytes": 73,
+        "sha256": "e45508022b9919290c5c8bdc09fd0098a47b24eb8ea871a497555ff3ecff6033"
+      },
+      {
+        "path": ".gitignore",
+        "size_bytes": 376,
+        "sha256": "be0e6f116de7c687346f5dfb89ddf533490c90c5b217acc3a7f8ac5d5de917ab"
+      },
+      {
+        "path": "ARCHITECTURE.md",
+        "size_bytes": 816,
+        "sha256": "f60894e8f970a60830bed11fd61cdabae694cb72d0b2f6c257f67ee03ce71439"
+      },
+      {
+        "path": "AWS_DEPLOYMENT_PLAN.md",
+        "size_bytes": 425,
+        "sha256": "39a1ab13c6a11970fb3524b79f661f48375e3429ddabfb4d48e0a4b7d1840ec4"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size_bytes": 1306,
+        "sha256": "7b39c772d62d242f7e14b23bba02dc62d1fa39c4a227d9347f71ec43d86e3895"
+      },
+      {
+        "path": "DATA_FORMAT.md",
+        "size_bytes": 1440,
+        "sha256": "9d70504c4441be38de210a95e884e90a1e96d88d77caa2ca0becd6bba60720d9"
+      },
+      {
+        "path": "DISTORTION_DESIGN.md",
+        "size_bytes": 512,
+        "sha256": "aad19f753c7aa3b61ba3d790f3dd4acb7ffadbb4550632b5acf3b8eb4ef90070"
+      },
+      {
+        "path": "EVALUATION_PLAN.md",
+        "size_bytes": 367,
+        "sha256": "d81992fb21fec0c05a2f72f2ff84367d73d74d97ee428e36d7b05d94db2ab414"
+      },
+      {
+        "path": "GROUND_TRUTH_POLICY.md",
+        "size_bytes": 980,
+        "sha256": "d0a55cb9176ba9d7a898581dc44ae295b8cfabd3df9c4f59d06bfd8906834a6d"
+      },
+      {
+        "path": "LICENSE_REVIEW.md",
+        "size_bytes": 937,
+        "sha256": "2924504dbc907c91a2818322fb3c555bbdeb290ad7c8ce991ad7f6eeeb02254a"
+      },
+      {
+        "path": "LOCAL_SETUP.md",
+        "size_bytes": 443,
+        "sha256": "dfbb1d3759797d8b3753bc24ef328cc4fea9fe5617e82828fb051a91943085ab"
+      },
+      {
+        "path": "PROJECT_STATUS.md",
+        "size_bytes": 4871,
+        "sha256": "eecd80e3879c47a6d5b84617a1e9fc30dd7c4791dad9ddaf47cf11a7cb4c1487"
+      },
+      {
+        "path": "README.md",
+        "size_bytes": 2261,
+        "sha256": "2314d1dd2e2a4959046c14e34b956c5c202805f94898d62fe4da4a7460f1cdf7"
+      },
+      {
+        "path": "ROADMAP.md",
+        "size_bytes": 512,
+        "sha256": "b86e0979d881b5e99a69dd9c60cba644f064e19ce659fa97f22d7756f1ffef29"
+      },
+      {
+        "path": "SECURITY.md",
+        "size_bytes": 401,
+        "sha256": "538d407fb857e8fb6aa2c7d79b05e7113a7ec984bd1eaedecff11a89c3d118d8"
+      },
+      {
+        "path": "TROUBLESHOOTING.md",
+        "size_bytes": 521,
+        "sha256": "f712331746dc9d2dbe3c4535493cf599eed8bc98bb11c65e7e3de5c987146054"
+      },
+      {
+        "path": "config.example.yaml",
+        "size_bytes": 905,
+        "sha256": "4e63a401f0b34f524e00d4336ea14f580342f548c196bb0fdbe683ed5e04ca78"
+      },
+      {
+        "path": "configs/aws/least_privilege_policy.template.json",
+        "size_bytes": 443,
+        "sha256": "9af370dea0432958dee4a128f76aea5bdbae955f764f4a1bf728fb12d75c202e"
+      },
+      {
+        "path": "configs/aws/template.yaml",
+        "size_bytes": 237,
+        "sha256": "16488c5756ca04c4f58c186ab927deec23dcea3412a6a0207c3c5a272d3347ca"
+      },
+      {
+        "path": "configs/distortions/binding_shadow.json",
+        "size_bytes": 677,
+        "sha256": "92715efb66a9f6a26cfc94f39ad2aac480a25f4ef3272af246d38bc7cb707e95"
+      },
+      {
+        "path": "configs/distortions/clean_control.json",
+        "size_bytes": 409,
+        "sha256": "bbc84de4bc6189782ecd2a60f5704e05db325bc83ff84d6972b26ce96053fce1"
+      },
+      {
+        "path": "configs/distortions/faded_text.json",
+        "size_bytes": 618,
+        "sha256": "6ed5b1f34220b31ed132a6e90d07047650e87ac3ffb4e7f5a367871a613e4ecb"
+      },
+      {
+        "path": "configs/distortions/footnote_heavy.json",
+        "size_bytes": 796,
+        "sha256": "2faf5029fae210aecc1c1977ac9cf76169c8963d40ad7bce8bba97bf31f8f362"
+      },
+      {
+        "path": "configs/distortions/historical_heavy.json",
+        "size_bytes": 779,
+        "sha256": "a5866a64ee010fd6e3b29803274529c06b0a7f4a511a60037baa4c329b33e3a8"
+      },
+      {
+        "path": "configs/distortions/historical_light.json",
+        "size_bytes": 711,
+        "sha256": "2b11f1730938134921703152d9331712315fbb9e08ca0c11d76a8164eaa5f480"
+      },
+      {
+        "path": "configs/distortions/historical_medium.json",
+        "size_bytes": 770,
+        "sha256": "82fe63430ea2591f13e70c921c0f0ba69ff63bc50275d06073cd27dae1c2ffd3"
+      },
+      {
+        "path": "configs/distortions/mixed_layout.json",
+        "size_bytes": 817,
+        "sha256": "9a3257b2efe2c7438337d821d543156eef0f31a6dce2f504f67721a6ca3e9b08"
+      },
+      {
+        "path": "configs/distortions/modern_heavy.json",
+        "size_bytes": 729,
+        "sha256": "913a086d0e2ebb6a63fd18be67549ebba06860cd590807a80f0a56cb6de93510"
+      },
+      {
+        "path": "configs/distortions/modern_light.json",
+        "size_bytes": 674,
+        "sha256": "1ef797182a9f7a42a5783fb52595144f30f3672392bbe19555d3540615df3cb9"
+      },
+      {
+        "path": "configs/distortions/modern_medium.json",
+        "size_bytes": 701,
+        "sha256": "5072bf250f4c2e28883f89dca9c688f64ff1f2abaeaf3e1afcb2b4abf179f89b"
+      },
+      {
+        "path": "configs/distortions/noisy_compressed.json",
+        "size_bytes": 727,
+        "sha256": "a487ec084fc39dffffccaf8573d37410adc514f9e762fd8cca67e8f802e0f864"
+      },
+      {
+        "path": "configs/distortions/phone_camera.json",
+        "size_bytes": 765,
+        "sha256": "9f34284defe4bea268386a3305a34625326a4dccd7ef33cded7a0ff6a6c8bc0d"
+      },
+      {
+        "path": "configs/distortions/scanner_office.json",
+        "size_bytes": 691,
+        "sha256": "9a9278a63e3748198acb030517444903bc4783a114e4b89b5bb6fe49787598b3"
+      },
+      {
+        "path": "configs/distortions/small_text.json",
+        "size_bytes": 770,
+        "sha256": "bda3c0631c6531c1b979aa5c6ad0974abe63bba32c0baf115f135dabd5754135"
+      },
+      {
+        "path": "configs/distortions/weak_scan.json",
+        "size_bytes": 705,
+        "sha256": "639527f0e61d0cbc424b6582da4ae5c210d11c9d0ca239d2e016dbef5839da46"
+      },
+      {
+        "path": "configs/evaluation/default.json",
+        "size_bytes": 165,
+        "sha256": "ef799f11f54da4e4a1aae84890ab4b90da9cde018dd825fe583246e3b9e51cca"
+      },
+      {
+        "path": "configs/local/default.yaml",
+        "size_bytes": 88,
+        "sha256": "bb0642cfeed783f971a25f0d29fbaa583a8ad5bc3f9357a8430b0460e39abb50"
+      },
+      {
+        "path": "configs/pipelines/foundation_dry_run.json",
+        "size_bytes": 185,
+        "sha256": "f5815f0a755abeb997ba46f1616e331ab93b4d799cbc2e2aec7e808d8796b0da"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/BULAC_MS_ARA_1977_0012.xml",
+        "size_bytes": 27478,
+        "sha256": "1ec56fd912e403680340a4cdaf8908853f93b16137e10f024b30adebf4f8f3f3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/LICENSE",
+        "size_bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/LICENSE_METADATA.json",
+        "size_bytes": 431,
+        "sha256": "287a137e5337fe936d8d91bc1d69d1270944b2178ee8485a15f3689746aed431"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0031.jpg",
+        "size_bytes": 399160,
+        "sha256": "a50be2b309183f1e519d6d8a15fe73a3e4cde351085529a408003ea031beb8f8"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0033.jpg",
+        "size_bytes": 410691,
+        "sha256": "4fe1f8bb3d6fbd03b042c12da82ae4d9e70663f447c225996be30b5aeebac85a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0076.jpg",
+        "size_bytes": 428252,
+        "sha256": "dc9d174d92896ee8dcfacc7cfebadd1147f0e1a9afdfcda890b41080e74e0f36"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0077.jpg",
+        "size_bytes": 400130,
+        "sha256": "b9580e3151f1715da31b529358f241b3856fb0967682371078d5d56f66af0b51"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0114.jpg",
+        "size_bytes": 398949,
+        "sha256": "dc7c72229fd9374f5df30fa7885fc8ed0ebd48d77bc98f91db4c9b254ea8c661"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0127.jpg",
+        "size_bytes": 386829,
+        "sha256": "2ff7680b7cfb2c8abb964380d5bbd8e8ebc80738b214da676e56486ef97bbf65"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0138.jpg",
+        "size_bytes": 505196,
+        "sha256": "ea5b1c3f79a1b500c477e103d6a45ef5baa08179db54f3106a39c66b65152420"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0139.jpg",
+        "size_bytes": 398349,
+        "sha256": "4ca4eafa1c1939b3522eeeae4336649da947a2eab5b972752ccd09f329a26486"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0144.jpg",
+        "size_bytes": 381772,
+        "sha256": "ac559a06641f96978c160e54fde43c136bd363e51feddb63d46b620fcde7ed15"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0145.jpg",
+        "size_bytes": 387585,
+        "sha256": "5f6741c7612a52d6c8f842a3f92253ed1796c92f24710de0b45fef174c836e46"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0156.jpg",
+        "size_bytes": 365880,
+        "sha256": "cd9f9e1c75babaf0d0fc6163a579436648b432f76277ef9d3db7cd16f9ee133d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0157.jpg",
+        "size_bytes": 374256,
+        "sha256": "655a049652369904d540d63ac398cf0218bc2a8bccdf8a9ecfa10b7f2e8ffff9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0166.jpg",
+        "size_bytes": 373434,
+        "sha256": "793b77f817a918d175e0852a7fccbc735f8b5545b8faee8c5dd7d88363644587"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0167.jpg",
+        "size_bytes": 366368,
+        "sha256": "c8095b2494b65b6036f01b1c8271d7b4e25f712381bfd93050b41a58b787ffd4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0169.jpg",
+        "size_bytes": 383788,
+        "sha256": "0580d888446a04410efd2dcdf81c53be8e64bc57ef16e801c29d2b850e5a72ac"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0172.jpg",
+        "size_bytes": 377597,
+        "sha256": "5bafac416697daf026f20a8f8ecf062396a37f53f786c882bd73558570585795"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0178.jpg",
+        "size_bytes": 401236,
+        "sha256": "88561dc04cc0db9e6776ffe7def566cf96a3bd46cf47495f9dadec3ffdf25cb3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0179.jpg",
+        "size_bytes": 440995,
+        "sha256": "6b0e90abbf728ef2a082a8998cb0d9d2acf233f1fb58cd7a3b87ffac5a5c54bb"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0182.jpg",
+        "size_bytes": 377217,
+        "sha256": "9912c3424748f38aadba17de4274f042493f2a4d702ad70795e2e7ec6a9cb38b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0183.jpg",
+        "size_bytes": 376823,
+        "sha256": "fff72143961e2ab31d888f8d56b7ca876ff9463bb53e627909f93a9d7c7ca600"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0194.jpg",
+        "size_bytes": 349472,
+        "sha256": "1296fb6ba9db2edf8f7d7057fcd7f28d20e1a777028e9b185a2c813dfd4cc08d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0212.jpg",
+        "size_bytes": 362509,
+        "sha256": "e43a4df4e19d11f71b8e45592c3cd0550f399e7795ef027391a579af94cb512f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0217.jpg",
+        "size_bytes": 377117,
+        "sha256": "7eb68c045e6056ad4dba76e06ceecdae3880fbd364e89ee6ccdd63a2d8b1bd37"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0228.jpg",
+        "size_bytes": 453177,
+        "sha256": "1c62a39f7d7b47ce11f7f47945c6e8d16de8f9a82ff179bc8e6fb86a009720d0"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0230.jpg",
+        "size_bytes": 362006,
+        "sha256": "27f7ef7362208f325341d609130c32a6ac2b8b8da4511a734e2f035a871dac2a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0246.jpg",
+        "size_bytes": 430150,
+        "sha256": "f8df564e44b0381de5f315f08a1c99c1f7c1d3dfa8fdf4a7a753f24846d62b3a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0256.jpg",
+        "size_bytes": 365358,
+        "sha256": "5eb7b725ab69621c607f644a8b85a28531eb9da5139c7cda0b0d33835fd823c0"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0273.jpg",
+        "size_bytes": 372468,
+        "sha256": "656fcd66669bbb5be4aed73e10dd8f10713052ee4fa0ca2331f7f008007c5f2e"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0283.jpg",
+        "size_bytes": 384610,
+        "sha256": "dd5a2af97c997ffca73ba65a8cb06fbf8768679196cc078590e721587e3bf27e"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0295.jpg",
+        "size_bytes": 396330,
+        "sha256": "b44a016ad1e98b3bdb976614655d925e3db5a481d4dc9aadb95fea39ee6dcd46"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0304.jpg",
+        "size_bytes": 368608,
+        "sha256": "b6c18f033d9bcb66c9e061f5305ad7d84935f66c0ffe6a9a39f918f229b90c16"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0312.jpg",
+        "size_bytes": 371583,
+        "sha256": "a8dac2c5c09072a202372173f6f8bb93b2dfdf28b52b1cf9d5299b0bc794bb67"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0313.jpg",
+        "size_bytes": 371551,
+        "sha256": "cdb6d64aea141fe5e28f01fcf9511043102e670e15e58ff4908f9fc1fa1fb99a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1926_0314.jpg",
+        "size_bytes": 514482,
+        "sha256": "6be3d72f1bbe0aba19337ce262a854fafa41d59c8ed96e96ba6ee586fca2a400"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1936_174453.jpg",
+        "size_bytes": 563099,
+        "sha256": "d378e2be96329e2cceaf70efaf76e9b7196f19f5a1dd944578de33ef0949cba8"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1936_174479.jpg",
+        "size_bytes": 514529,
+        "sha256": "5eecb68b99f63d164ec3f74510f6df9ac0f9a88fbbf21de77c51d6c709755585"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1936_174492.jpg",
+        "size_bytes": 508836,
+        "sha256": "2df171bc734f7f459f940e479920ccd24861c2d5f8028a169375b141544922d3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1936_175365.jpg",
+        "size_bytes": 480045,
+        "sha256": "1e10de129b04888b51296134d6de8f0d2bcfcf28a639a04cc9d57692e9a1eb5a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0004.jpg",
+        "size_bytes": 397655,
+        "sha256": "afd1b6c3d97b2f4d41ed3cfc8820b280b4622bc1d07e77a5be2e216acfce4e11"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0005.jpg",
+        "size_bytes": 445006,
+        "sha256": "9d1f49753d14898c7f5d79b093b7b9c2e4648673e1a086577a3f0f6f479e3af9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0006.jpg",
+        "size_bytes": 419993,
+        "sha256": "bd9f001ff04240e61a3c5e06cf14f4ce4c8fab01d2b1bb899c86778966a2b90b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0007.jpg",
+        "size_bytes": 442128,
+        "sha256": "ef50b96fe1fc0c7a0c6a69cbac2308e0225eb058ff3ea4486d268200f615063b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0008.jpg",
+        "size_bytes": 438049,
+        "sha256": "a6b29a50df87f143076c461d5627052c33b432c74f338adfc9b4767f00038d2f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0009.jpg",
+        "size_bytes": 432270,
+        "sha256": "4d7dd83b092c82f4d887e643f5c480757ce5dbe9f885247ab02eedd8c4df45fc"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0010.jpg",
+        "size_bytes": 405051,
+        "sha256": "982c99e368fe68d0ef1a717902b1e5c5d8cea1c90839660476d8331009026b1c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0011.jpg",
+        "size_bytes": 410096,
+        "sha256": "b8df00d524a72ddd26b18bbf9b9591a838937d2193fbba1c4641b02ae55b2ada"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0012.jpg",
+        "size_bytes": 382559,
+        "sha256": "ae01f9c8812f0cc9a4afce0a14c3e3be38a1d1e3efaabd228201771edf0bfca1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0013.jpg",
+        "size_bytes": 401991,
+        "sha256": "83015bd36c23c7f27dc9b2fb036f859f5c8b272c641de9725a982abee8947f0c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0014.jpg",
+        "size_bytes": 424019,
+        "sha256": "d69514dafb3824c1b1376fd8bc83190bd3cc26be0272c6a57ce8800464363fa5"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1944_0015.jpg",
+        "size_bytes": 418550,
+        "sha256": "a2cd581032f0e5191bb0090324913e748c5cf275ef4180aa017c98dcb58b0767"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0012.jpg",
+        "size_bytes": 564042,
+        "sha256": "13cc063d152bfc48cdea0d124b825578fc305565c785ecc79364e2fcb88755b6"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0013.jpg",
+        "size_bytes": 559635,
+        "sha256": "79138f183b0b9d1520edbd2c7cfb4b31113c6180fcd9ba4c8311e15b62516455"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0015.jpg",
+        "size_bytes": 571780,
+        "sha256": "85f8c9b4bdf6825e81aa80d10e588ec965c763124e6d3f025ede56b05fb4fb8a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0016.jpg",
+        "size_bytes": 551961,
+        "sha256": "6e698b51ddf74d38014cc2179790309d2df1490ff230fb0153fabcbb6cf6de28"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0017.jpg",
+        "size_bytes": 541707,
+        "sha256": "327128d9d2a92f8902f6ec5b281f5762d2e5b24bea301a4ec4d7d462756322c1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0019.jpg",
+        "size_bytes": 543064,
+        "sha256": "9f2c28567d38803f94cc64030c784cf27cad029504bd5f88315e7d94d51da7ec"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0020.jpg",
+        "size_bytes": 549103,
+        "sha256": "1bb241a761284558504cb542f2e4337b1bf3b2f76c15405ea7048f464fc6486a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0021.jpg",
+        "size_bytes": 546917,
+        "sha256": "a5e229fca026413531af1789494801b9d6893a0a0495974384cbf3b6e12e270f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0022.jpg",
+        "size_bytes": 525688,
+        "sha256": "7fcd518999d34d1538ddec666dcd75d552787d30a778e02b47ad033c515771ec"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0023.jpg",
+        "size_bytes": 529551,
+        "sha256": "63a84de22cbcf0f22227cbb972c75340fc083a8aed7fcc45f33f1e88c1483b37"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0028.jpg",
+        "size_bytes": 537155,
+        "sha256": "61a2ec890f9aa0838ef1ec4b4e7902a6f971cfa16026c909e6b01da7c2b5d6a1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0029.jpg",
+        "size_bytes": 526501,
+        "sha256": "73f38b58050b3e7dd53a5bc2a412146b36b28f2dc66d9f57dc77b2a04a6770c3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0030.jpg",
+        "size_bytes": 521091,
+        "sha256": "4672e83da39ac962a3acead98e9b039a151a6b50a4397d7a8a4eeb73a3dc540c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0031.jpg",
+        "size_bytes": 530088,
+        "sha256": "26e978f76718b280a9b00bcaca7a02acf3b5c5bca00b54fe176b535c19cafe35"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0033.jpg",
+        "size_bytes": 536805,
+        "sha256": "f12a2c87925fee20b2382e97752cf992efcb1eb003c7e77e64db3352ab84aa58"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0034.jpg",
+        "size_bytes": 530521,
+        "sha256": "fea21acc098fa480715da69a13648a05f42de15e40116a8f50424a357f47952a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0038.jpg",
+        "size_bytes": 501152,
+        "sha256": "86f7eaad4779a130ac7c9e1bfe11822bf3a4a74a56027493b7aec997919f46c4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0039.jpg",
+        "size_bytes": 477502,
+        "sha256": "db24f2339703d73a4959c99ad708cd7c6b8a37be2a7118dcfbfd40ff14818b57"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0041.jpg",
+        "size_bytes": 517053,
+        "sha256": "b48f50778c77cd381340de891575082a6ef26406155537d550e044c207fbcb8f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0042.jpg",
+        "size_bytes": 530354,
+        "sha256": "e9a176cc2381625878c9563b16ebc909e5fe9f67d3a1657da5f329743c948b43"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0046.jpg",
+        "size_bytes": 520629,
+        "sha256": "e695c62806c8501213f49c0d81f37603724c36f54fbca17d88ec3d25410b6810"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0047.jpg",
+        "size_bytes": 510707,
+        "sha256": "3bdb10eefa6f1f77df6cf80fbab44ea4c0c8be282261474a790720696dbb1ba2"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0050.jpg",
+        "size_bytes": 503218,
+        "sha256": "2b2823a2804cf241eab65da5c13e982aeb9a9dec4908353d32552830be718795"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0052.jpg",
+        "size_bytes": 512834,
+        "sha256": "9ea0c8a96873ce78f78cde5e91641e57e0de34b9ceda082c1b9399da98a1efbf"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0053.jpg",
+        "size_bytes": 534608,
+        "sha256": "e91f32aff42010ad5572b9f7a64da2f7564ca893c2e79268e9180e165c49273c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0054.jpg",
+        "size_bytes": 532344,
+        "sha256": "921b7ab236acc284ee52dfa4322523c7ff24fb8d9961205f5d41798d20c95a94"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0056.jpg",
+        "size_bytes": 526389,
+        "sha256": "cfc8c8606bfd8be92d75b16cfa3a032f75d2d62134f7e1b873d2316a18868feb"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0058.jpg",
+        "size_bytes": 493709,
+        "sha256": "2d339be7fb495aab1c7ee3834ad4f53862c7215fe34b968ec54fbdd428984a6b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0061.jpg",
+        "size_bytes": 511588,
+        "sha256": "207caa273a9ec56d1a4768c52b6bb7e71071f6be230b20aaee8b466346d651f3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0062.jpg",
+        "size_bytes": 520149,
+        "sha256": "d43128652b31fd9f055e968b9aaed13b312cd9b3c09d9b961f7e3529c0f2d17e"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0063.jpg",
+        "size_bytes": 507256,
+        "sha256": "94b102da41d089b002be893c361c46e89688e53e8011707ac961cc4253c1b22d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0066.jpg",
+        "size_bytes": 500917,
+        "sha256": "b3c9e7b25991c62377d6bd16c21f7363b1c84caf359e4f34ae4e20d80ea4bf21"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0067.jpg",
+        "size_bytes": 510862,
+        "sha256": "c9cfe02b429fcff356ac3b3ddeb03e5c314ab15cbf41a97672de68f8a3ea80a6"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0069.jpg",
+        "size_bytes": 511804,
+        "sha256": "5c4f4cbbd57d0a3f495de0d8712c3c2285987d000a46fdc12a427aaa014e6ba2"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0071.jpg",
+        "size_bytes": 520873,
+        "sha256": "c55520d8ab3c7f735773fc7e6950e15e7e9ea1ba887afab59b34a78071695ccf"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0072.jpg",
+        "size_bytes": 504627,
+        "sha256": "1f61870af1ef9e867919c768d1c4619e31f125c09f9cac4e2c2d5c4710ca1f7b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0074.jpg",
+        "size_bytes": 518728,
+        "sha256": "d0e8978db2b42df6a5d712c2a77be8947c20caf6b9050ea71c91cf88fd10841c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0075.jpg",
+        "size_bytes": 500437,
+        "sha256": "0cae8c9c2ddaaa7e047f196c4d8244a3b4b56a661c677fec80bfb88ac1399f91"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0078.jpg",
+        "size_bytes": 504047,
+        "sha256": "28a5df9256f5d4d19e4ec8c1cb2f48184c37f85a694ae09dd577eb71bb894548"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0080.jpg",
+        "size_bytes": 513159,
+        "sha256": "94e6f555105901162febe8aa4f22f0e76820d9796a48b8137218f649639145e1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0081.jpg",
+        "size_bytes": 495584,
+        "sha256": "b2e35bea2c71cbc8b6325638004d1481f3c772ffdb5ef773fc731012c0201f88"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0085.jpg",
+        "size_bytes": 504907,
+        "sha256": "ac9dd384f35fcc32ef9ea26432b18c3bfdc7845317dc737aaeaab0d1123f1ffe"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0087.jpg",
+        "size_bytes": 519342,
+        "sha256": "5a9c3320ddd5b21ca360b5195de9f213e60e89b304ce90429932bcf1f882ebf3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0090.jpg",
+        "size_bytes": 519179,
+        "sha256": "9975b7093730f0e2020a0212d6ed2dcd408b7ec0baa992c211cb1fcc0446dc64"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0092.jpg",
+        "size_bytes": 532458,
+        "sha256": "785edb197e44a001d86c0b7f625aedc4d13dabd43f5f36991799df392b75a629"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0093.jpg",
+        "size_bytes": 532346,
+        "sha256": "df767e78f39b94bfa6ac8b90dcb2099bb5104954a5285f004d516dbce82f7880"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0094.jpg",
+        "size_bytes": 526645,
+        "sha256": "86483639a91b1560b1717bde0d4a96c669b32dd8639de6a30bf77868e41caf8d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0095.jpg",
+        "size_bytes": 526534,
+        "sha256": "3c893e6e8b048ea41ff123135d638efa10a468dcc9f45daa66214e6e99b2ca39"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0097.jpg",
+        "size_bytes": 513630,
+        "sha256": "4504ad9744516beee4a6bc6bc3edf9f699448a7bdaba47fbcb12a4d08b59b25f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/images/BULAC_MS_ARA_1977_0099.jpg",
+        "size_bytes": 519572,
+        "sha256": "9b546f60690f66fc2a4c95f9900d5f627cf4e84b019a0b03314b412464517331"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/metadata/LICENSE",
+        "size_bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/metadata/README.md",
+        "size_bytes": 8611,
+        "sha256": "27acbcd2c8ae33c4381f86c6b36af929b44fa9c265547fb7d3123c4400da31e2"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/metadata/contributing.md",
+        "size_bytes": 39494,
+        "sha256": "f59db1f0cb1ca4530bafa7c6bf139330820ec8f041568141611b86355a47a0b2"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/metadata/list-images.tsv",
+        "size_bytes": 85965,
+        "sha256": "3f2ad899146c9bb1423680b3f60eb0881eb11e5f688816ff691342cea6f7901c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0031.xml",
+        "size_bytes": 8255,
+        "sha256": "5e4a6738a4fe848fc8ab14ab5e34339c84c1538daf006a5a749765393e5a2dcc"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0033.xml",
+        "size_bytes": 10017,
+        "sha256": "7afbdb558d476bb7b3769ea31987a8c456be6d257debc7715ea48a16ffa92ab9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0076.xml",
+        "size_bytes": 9925,
+        "sha256": "b06cb3a693be12b19b5b6ee689c0576a20f3d99a80e56dbdbe92b8bed742f3d1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0077.xml",
+        "size_bytes": 7973,
+        "sha256": "942028c2ca3b99372e9faa32c93eb180c2c7b2817308249f8ba919015e87c569"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0114.xml",
+        "size_bytes": 8770,
+        "sha256": "39db82764d42ef30454887833a38d9b1d1c49d3b264adae1c710a140f6d25e65"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0127.xml",
+        "size_bytes": 7152,
+        "sha256": "4038a2f04c0cb81d3b1a97a94203280005e8825ea00958d0a06d680b23b265df"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0138.xml",
+        "size_bytes": 6592,
+        "sha256": "6a588b3e6f45a71f652905b70beb668003616549617fee201e1b7f78ff2a368b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0139.xml",
+        "size_bytes": 8175,
+        "sha256": "509f948abcb760c3f814a8bfd6f1d8856e9d71cd65f797fb5d943ec202baeb2b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0144.xml",
+        "size_bytes": 8643,
+        "sha256": "d56bdf08f80d2d99078943cf1ebf68d6b62a486d4625bdbfccd42aee1dd4141c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0145.xml",
+        "size_bytes": 8757,
+        "sha256": "cc8af142513c90a188449c515a614410038a41ea3e4df9a72521d6b5e4ccb112"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0156.xml",
+        "size_bytes": 8246,
+        "sha256": "aa38b8ad4324e12e6a58112162a5a12216420c76e47d8da2c63618d04c7c615c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0157.xml",
+        "size_bytes": 7899,
+        "sha256": "bf6d0aea99fa26013b093d6c96c17e7d660194f76581abefc89a970533e78135"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0166.xml",
+        "size_bytes": 8340,
+        "sha256": "02cb3cc9ba141dbc5a862f9fc2922d56a2a9daafead49c66b3bd5d6bc71dee3a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0167.xml",
+        "size_bytes": 8623,
+        "sha256": "1328a8e8c4f23080fbb8ff611c73ce78f5911a2e49e27596339e3f8128d3da94"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0169.xml",
+        "size_bytes": 8070,
+        "sha256": "35b47ffce3d8e851468ae12edd158ea4eb59780ee7995dd43d992e35e5512627"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0172.xml",
+        "size_bytes": 9020,
+        "sha256": "fb572ab3005875181a7dc6252e2d3fe268f4f926367ad28e1e1169e2897895c0"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0178.xml",
+        "size_bytes": 8365,
+        "sha256": "232f273d4bf8fb908ba21c7f68a576d2c258d65b5dc71dffec848c910ed38722"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0179.xml",
+        "size_bytes": 5726,
+        "sha256": "4b9f02fdb0acf8146d379e49265a64a6046d866262201e5a0dc8497c43ac9465"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0182.xml",
+        "size_bytes": 8219,
+        "sha256": "73d2a3eb3fb6516ed72c816ed1e573e81ee21e7ec7a59cfa33d1b3f669977dc7"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0183.xml",
+        "size_bytes": 7947,
+        "sha256": "d1fa61d12cff2f97945bf5d5bced49c048d62efd66ad747f24e87ee71e127791"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0194.xml",
+        "size_bytes": 7365,
+        "sha256": "ef59239e1a9a83b6e94eebf423890c7c21f6c22bffd1c1a874f649c33c3128b9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0212.xml",
+        "size_bytes": 11728,
+        "sha256": "1b031f38bdf5335d2816b4196a9e09b0243f23f2b257d8f45ecc9370861fa4a9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0217.xml",
+        "size_bytes": 7232,
+        "sha256": "11d9036f377483247845be2596ea519e75d55ab80fbd0cef29f04d548035400b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0228.xml",
+        "size_bytes": 7271,
+        "sha256": "37928416c24e6961e7bfa9882995de31d936c6b5298c2965adbe36b63aceafa5"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0230.xml",
+        "size_bytes": 7776,
+        "sha256": "ff0c2b16315a1aecb329de027e81932a8e787ccedd7e9d468629fea70498eb4d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0246.xml",
+        "size_bytes": 7004,
+        "sha256": "e2b9daba5319799c3c8e4ed950de469e41474059c6566ec95a7656bb23da4d95"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0256.xml",
+        "size_bytes": 8875,
+        "sha256": "85fa112d02aa531c8500d22b86e0d4b3b747cf763630f82ba7b49f029b91666d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0273.xml",
+        "size_bytes": 7352,
+        "sha256": "7037b6770de2ae3949d9500244ff4548e23385a8365e3f1084c91915683fd608"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0283.xml",
+        "size_bytes": 8315,
+        "sha256": "7f4f30191fc0e7d365df1d552dbba36d7bd646b1c95a36c21ff95be52b4a16f7"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0295.xml",
+        "size_bytes": 10103,
+        "sha256": "932733eac7ee598565bca4ddecfb27d40b2fd4ef46ae2f3ddb5877617a80ac9a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0304.xml",
+        "size_bytes": 8243,
+        "sha256": "a583ed70d4890b68367e10b11566c74fb23a7d99521eaf679ff107868a7e826d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0312.xml",
+        "size_bytes": 7379,
+        "sha256": "3362cd2fdfc36aae344b2e6cb3509a7ad765d3a257e4c03ffb7d261eca7fd283"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0313.xml",
+        "size_bytes": 8905,
+        "sha256": "6e132f6d708412621396d74ce8535d5294996908bfd73add803b167445ba11b4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1926_0314.xml",
+        "size_bytes": 7742,
+        "sha256": "06cf602ce3715bb9ccd0a59eb4a03e26b1ef66de74bad62ffe8948ddca55690a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1936_174453.xml",
+        "size_bytes": 28971,
+        "sha256": "19b397cf9317521053fb3ec11eba3878a7df02780529d94d9c45ff7fc84f178b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1936_174479.xml",
+        "size_bytes": 24335,
+        "sha256": "4f1db8f6fa3808a052543ad858a6299297efa5f8835abb45fe16ccb6678c7761"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1936_174492.xml",
+        "size_bytes": 25538,
+        "sha256": "3360b840894c488475083c6ed4689b20f1b942f89697d04931a3083817eb1aca"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1936_175365.xml",
+        "size_bytes": 24989,
+        "sha256": "a412b478b2a9512c7e88a9f93a90b58fbad295fd79b1b83bb0277e2972ba338c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0004.xml",
+        "size_bytes": 19337,
+        "sha256": "f3d3f35c122631fa4b8d0a35ad24abe4cd87d7f49d5bdca6396d38ae4ca02e82"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0005.xml",
+        "size_bytes": 24341,
+        "sha256": "e770ee2bfcf93dee906ef607d0eafd112f1c5fa35ca42ddcc260d2415a2f879a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0006.xml",
+        "size_bytes": 22938,
+        "sha256": "6a950cb7d281e841ccae39cd11e79e9f16479cca116c34e6be2edd6bbd184d84"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0007.xml",
+        "size_bytes": 22605,
+        "sha256": "9c389eb5165e1c08c6e5ada64c0c026a34f947ea46236128edce6f7896fc850e"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0008.xml",
+        "size_bytes": 22333,
+        "sha256": "e1cb78e3577b35b16e6c3051a66e28b039527af27615bd658db8e53a5a851b59"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0009.xml",
+        "size_bytes": 20523,
+        "sha256": "ad770329e968a28d2e402af0a951a31e1f38485ef473426858e037c43c4623d9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0010.xml",
+        "size_bytes": 22228,
+        "sha256": "e542ad19677cded224b3e8f98afc4d95fa4e6c2d4c6ec43592ad1c62bac40840"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0011.xml",
+        "size_bytes": 19839,
+        "sha256": "93f81304f355d7aca9246109e4aa56333e268647c9194bbe2df95dd956a216fa"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0012.xml",
+        "size_bytes": 16470,
+        "sha256": "c7a380196d58b2c2dcae564f9312b445518433c71f10ee2e251f05f4206cf606"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0013.xml",
+        "size_bytes": 20105,
+        "sha256": "c7b90425cf8358f51b9d54c45ec2199907aee00febb98c6e48e1d310ae63cdfb"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0014.xml",
+        "size_bytes": 21626,
+        "sha256": "6f09486b315522ee111abed0b4e240b01c7af3770f40d0ead2d50e6cde9077f6"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1944_0015.xml",
+        "size_bytes": 17669,
+        "sha256": "306817edb36a26a59883fdf9a8e97b209738cb32bb60f7479d19d806c601de24"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0012.xml",
+        "size_bytes": 27478,
+        "sha256": "1ec56fd912e403680340a4cdaf8908853f93b16137e10f024b30adebf4f8f3f3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0013.xml",
+        "size_bytes": 33255,
+        "sha256": "5c02f6083567a02e2f51bf1956c9cde5a376f32a46bb2480022d3a4805d8915a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0015.xml",
+        "size_bytes": 26332,
+        "sha256": "a66d602bd451872f9173dbc849868cb58ff0c8cde6500e4af6083e05b31abc69"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0016.xml",
+        "size_bytes": 27275,
+        "sha256": "a834138c457bc877d6d1c8b5d8a3d4ba7d8ef28d56c6147d89205ee81b4d372a"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0017.xml",
+        "size_bytes": 27133,
+        "sha256": "bfdd4ea9bec4b99e01e3f2c8b1509250e452aa42c509dfc54307ebf96958f378"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0019.xml",
+        "size_bytes": 27295,
+        "sha256": "6ce4f24de75a5b93b6bc56033ff8ead04aa8c41b35cffb3e72722cb1e78206bf"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0020.xml",
+        "size_bytes": 33205,
+        "sha256": "639d8d0c127004f56013b3969dd8635635e2b9e924bf40b2686ac5db84d046cf"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0021.xml",
+        "size_bytes": 30732,
+        "sha256": "52f15450375a261d4f29e7144888b87ad1ee539c9ad20238847d688b6934e43b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0022.xml",
+        "size_bytes": 28779,
+        "sha256": "88aa420a1cb2cedd6fffde93ab515c66209b28e77f79325ef6233c0352ea88e9"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0023.xml",
+        "size_bytes": 26048,
+        "sha256": "5288ac5584e47f221ba1b7005a56182d519763e17a0e581d7c288cbc392459c6"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0028.xml",
+        "size_bytes": 30431,
+        "sha256": "78f31cdc8816b447def7deafa58fabad95ae2ef7293782de469513cbd0003ded"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0029.xml",
+        "size_bytes": 28873,
+        "sha256": "8a67784463c7cdead307327b6b988ace1f4bf20d83299967cb7d873b6a56c2f5"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0030.xml",
+        "size_bytes": 29602,
+        "sha256": "b2b7f11c323be17ede8db2beaf49842cd54362c7a2eb0c2e3824ec4cf3df6543"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0031.xml",
+        "size_bytes": 28873,
+        "sha256": "1f5e3694211248353445d717e5090cb46f5812d093942af86821a71c1e822fb2"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0033.xml",
+        "size_bytes": 29393,
+        "sha256": "19e926f313ba372287726570f08a7c06767be4da282178d1915179e010af260f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0034.xml",
+        "size_bytes": 28447,
+        "sha256": "48f1a20ca8ce2c1c42cba7f2c494c5b89c281ff8b6adaf4e5eadf52e56e95888"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0038.xml",
+        "size_bytes": 26427,
+        "sha256": "92fa4690ae88cf638f09615b1d29011240e45f511ff1fe84ae34cf8856399550"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0039.xml",
+        "size_bytes": 32992,
+        "sha256": "6e77ee245886b2dc747cf87d79bac40967b8d95023a1ff9c5042b43638920143"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0041.xml",
+        "size_bytes": 25506,
+        "sha256": "8fb0104d8bcc2812681f47983f25c8db8dcefd74d0c277b4e4197340f352a54b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0042.xml",
+        "size_bytes": 31248,
+        "sha256": "c8adcd1e59c561a314fcedc7ea95dea7de2c012ada49158a9224a589ae7105fb"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0046.xml",
+        "size_bytes": 32577,
+        "sha256": "52401088ca390eb0a387fbcdae31cb98aa8f775da8358cda41ea3050191aa4ce"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0047.xml",
+        "size_bytes": 27823,
+        "sha256": "97eca5eae61ee49b9ffb7fa27ab6d1310af6f763fb8613fa5a8e0ea11fe41f47"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0050.xml",
+        "size_bytes": 24677,
+        "sha256": "ee6d0cecbf85f35d78597cdbcc5ef2d48e916bd0251c1a4247b8a0198fa777a5"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0052.xml",
+        "size_bytes": 24048,
+        "sha256": "2c4ee25279eeac683eb82a87b7621abc7d90ab41943037ab14e06b9c0282423e"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0053.xml",
+        "size_bytes": 42570,
+        "sha256": "523b0adf31fc1e15e4c549383c6253ccb4ae61d99ee670834a21f1df6ed7a90f"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0054.xml",
+        "size_bytes": 26117,
+        "sha256": "4ae437b9943ce26662cb85e0512be5bc402b16833b700b4c2fc59b13b111eac4"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0056.xml",
+        "size_bytes": 26079,
+        "sha256": "a5b974bc4d2cabc2e0a322b820ba331bd894d1520342f4d2f08c2b7c4b2257ef"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0058.xml",
+        "size_bytes": 25816,
+        "sha256": "cf166ccd096dce57e879177efbc0e12b17ce5e9ba8f34bbec48b9fb06ae09d3c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0061.xml",
+        "size_bytes": 26395,
+        "sha256": "5a9ec7d0317c3ce7053c4af8b253c68a552f8c61e89709ba07928697aa90acec"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0062.xml",
+        "size_bytes": 28341,
+        "sha256": "1ed96d53ee13dde1f59cf4add2d93d2149a66e5d04096626dbc96abf6d066007"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0063.xml",
+        "size_bytes": 27188,
+        "sha256": "7f19d5bcd5934c3930cce8a0474a8eadc11447e9e6a8abdb8581ee54a384f6df"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0066.xml",
+        "size_bytes": 27312,
+        "sha256": "55720f0acf28ac27e5d5f2104257f7b2926abdf4521364dc3c074d8f6ac8602c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0067.xml",
+        "size_bytes": 26573,
+        "sha256": "de77411d2a979d11ad0e0aa994c97a8418b1feeeb6662ec7953cf9010ee188c6"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0069.xml",
+        "size_bytes": 25728,
+        "sha256": "ecfcac5f0cfc4ed6f2d3ff42edc30795b6e936690b8dcadc9ca9c46d19e61ad3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0071.xml",
+        "size_bytes": 26901,
+        "sha256": "847bad61967c1454f7887dc6f41ca255ed81eaa5306641781dfb99386ad04426"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0072.xml",
+        "size_bytes": 28114,
+        "sha256": "acf0ef45ec02e6d5491f3b2bd9a874dbfeab98e76785c48421708fd83ad439d1"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0074.xml",
+        "size_bytes": 34709,
+        "sha256": "f1b50f12af1c514d5e2d4a324e44264ab64e243b72fad353ea0920006459077d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0075.xml",
+        "size_bytes": 26177,
+        "sha256": "86a124711da8fe68d051d7bf0c498cdaca0b75801701b9bd4e224356c654ee6d"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0078.xml",
+        "size_bytes": 27874,
+        "sha256": "55c139a99a1c6a6741eb37c54c37dd49c915f3c2bd7cf2aad5459a27d01d97f7"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0080.xml",
+        "size_bytes": 27399,
+        "sha256": "3400a278de71cef03708116fcd23d23b1a21a9208865c6f74242c9040b31c569"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0081.xml",
+        "size_bytes": 27678,
+        "sha256": "7761a05c43eca00cb894ef820cf0c5b0d220b8f143bf0f1b8782c7b65ba8e384"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0085.xml",
+        "size_bytes": 29312,
+        "sha256": "b01de4eb1d8fcbff53f724e9df54c9701b84b48737217045800fa066a3515d33"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0087.xml",
+        "size_bytes": 28644,
+        "sha256": "79b5c5fedc5d02f1c2647cc45c258777c98bcb784e4645b8f107c4f507585599"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0090.xml",
+        "size_bytes": 28116,
+        "sha256": "7550fdc0cd3f42ed0a91526286e8c263d50d80984991dd28053e98e91841aa3c"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0092.xml",
+        "size_bytes": 32424,
+        "sha256": "f7c04079173fc1e7f151889c215321a2e8b92c4eb4f2a57512fcf2e9183a28a3"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0093.xml",
+        "size_bytes": 29630,
+        "sha256": "1ca58baed4cd1fb52c1cc584b942426b075c3a7a600839ce4945a06e61c14a89"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0094.xml",
+        "size_bytes": 28812,
+        "sha256": "700c376a9ed2bf22584f099d53245e7c9d22c4387b374202fb7792d9a57c32ee"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0095.xml",
+        "size_bytes": 28006,
+        "sha256": "fe269e075e806433d22abd26a6f42bf072db91a7bf9277977640baaebc09da23"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0097.xml",
+        "size_bytes": 27586,
+        "sha256": "1ada9c9ee32b084e8bbd0620493f8c9ca1e89708a8dcc4f4df3b96a257478911"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/page_xml/BULAC_MS_ARA_1977_0099.xml",
+        "size_bytes": 26326,
+        "sha256": "d2b77b5c5912f249a48ef9004c3ba7d388e1bcca88973325a8a2be420222d108"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/first_batch/source_manifest.json",
+        "size_bytes": 45518,
+        "sha256": "1b930baacf2f2e6b5122f3e1250a569d44a92c3fec8acca1a930c3e5502fcc2b"
+      },
+      {
+        "path": "data/downloads/rasam_dataset/source_manifest.json",
+        "size_bytes": 733,
+        "sha256": "db35497a2a809579a61cc0d2fb92609fa14bac7883288165c4f2563bbcff7c4a"
+      },
+      {
+        "path": "data/manifests/dataset_registry.json",
+        "size_bytes": 30537,
+        "sha256": "8b032834d009987b1f70e23edc0aa05ef0e4dbeaa3ad6928f7ffa04f2cd1eab0"
+      },
+      {
+        "path": "data/manifests/download_manifests/rasam_dataset.json",
+        "size_bytes": 933,
+        "sha256": "7b8f89719228ab68c7c9fc5edbb7ead6b1654cc350b0349a12f83d75284fa046"
+      },
+      {
+        "path": "data/manifests/download_manifests/rasam_dataset_first_batch.json",
+        "size_bytes": 84807,
+        "sha256": "b444823670e8d116e9ed83ed2bb7bb98141896d60242436be2604062a5a22e16"
+      },
+      {
+        "path": "data/manifests/file_registry.json",
+        "size_bytes": 72645,
+        "sha256": "01d77dc767e478560fd90da292f560608f451c65b6df297b5c55730562fbcafe"
+      },
+      {
+        "path": "data/manifests/page_manifest.json",
+        "size_bytes": 666979,
+        "sha256": "856331b815c0e479a19b177ff66146a9218ae5700221f57519d99fea296e8598"
+      },
+      {
+        "path": "data/manifests/rasam_first_batch_manifest.json",
+        "size_bytes": 107051,
+        "sha256": "07c4ef986e0a55ab48aaf560d762d24a1fd8a9cf27513aa1a832a333a5bd61fd"
+      },
+      {
+        "path": "data/manifests/rasam_first_batch_rejections.jsonl",
+        "size_bytes": 10874,
+        "sha256": "24f2ddebdd537b0ec429e1af125373a654491441ecc1d5d292d00837e769ae3b"
+      },
+      {
+        "path": "data/manifests/source_document_manifest.json",
+        "size_bytes": 323,
+        "sha256": "941626312539ba3799a37cb6f7d4bcd99ea4413729f69b6e478d396aae939027"
+      },
+      {
+        "path": "data/raw/incoming/.gitkeep",
+        "size_bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "path": "data/synthetic_tests/README.md",
+        "size_bytes": 169,
+        "sha256": "b869677c9f68a2008589db6603aeb8a93981df6bea7dd29c582182f7f28671d4"
+      },
+      {
+        "path": "data/synthetic_tests/synthetic_manifest.json",
+        "size_bytes": 740,
+        "sha256": "51de1aca9d28cb79549feafaf434791779a2f2fb130ce21df3f7318c92cf4c12"
+      },
+      {
+        "path": "docs/DATASET_DOWNLOAD_PLAN.md",
+        "size_bytes": 3330,
+        "sha256": "9c76d9a66ff8f4d7077030f71648811fb71c55d4235934a7a9f9c7b80efd3b4b"
+      },
+      {
+        "path": "docs/DATASET_LICENSE_MATRIX.md",
+        "size_bytes": 2666,
+        "sha256": "ff89b950e47e01f8fb955c4646ab997682c9eb61f00e5c0685399e8026620e26"
+      },
+      {
+        "path": "docs/DATASET_SOURCE_REPORT.md",
+        "size_bytes": 6436,
+        "sha256": "ca1476cc52978f6cbc3df31ebfae4cdfecea55ddda25600a6521233776f71eaf"
+      },
+      {
+        "path": "docs/DATA_FORMAT.md",
+        "size_bytes": 149,
+        "sha256": "1f2cda20b3f30dc1c286997ae83cc7aeba6261e44b1bbc074ef77dd0665f5b57"
+      },
+      {
+        "path": "docs/ENVIRONMENT_REPORT.json",
+        "size_bytes": 601,
+        "sha256": "a83116cf78835d220e62ce9a3ce304f1abed5e142efd169e051bee35609dec6b"
+      },
+      {
+        "path": "docs/GROUND_TRUTH_POLICY.md",
+        "size_bytes": 115,
+        "sha256": "5429d31bf621b4c5fc7b56774ec775967250a05040c45c437e18616d49e0f843"
+      },
+      {
+        "path": "docs/INGESTION_WORKFLOW.md",
+        "size_bytes": 3146,
+        "sha256": "7af8513143d5b0d4d00d28f23185d83eb5082bc74d56470d7075c15fb76e9cda"
+      },
+      {
+        "path": "docs/LOCAL_SYSTEM_REPORT.md",
+        "size_bytes": 2138,
+        "sha256": "6d25a7a76637ff910e8ed66f3636b95db908af6b1a048e447ac34b95ae4d2c8d"
+      },
+      {
+        "path": "docs/RASAM_FIRST_BATCH_REPORT.md",
+        "size_bytes": 2351,
+        "sha256": "eebed73f4514fb5f7ca44804a58accc3fab39fa33c19ccdfe093c5fbfc7d46f7"
+      },
+      {
+        "path": "logs/execution_history.log",
+        "size_bytes": 1128,
+        "sha256": "74a29bb779719b167ab2de6ce5832941d33aa396e781602ebd0dc363646e0fc5"
+      },
+      {
+        "path": "outputs/reports/dataset_download_report.json",
+        "size_bytes": 1062,
+        "sha256": "04870401a3831f80dbcc6bb8323bb10acf8a6c2d0108ec3100ca7281d553ebce"
+      },
+      {
+        "path": "outputs/reports/ingestion_last_report.json",
+        "size_bytes": 746413,
+        "sha256": "3e73cd69f0289651e8b533ccf3e9d99ae2eb6a5ecbdc4117df614532c2a2a1fe"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_duplicates.json",
+        "size_bytes": 7,
+        "sha256": "9e1ab83190bccc9ea53ba40f856fbe5e5718bbc45eaf43a0cbd4f42fd4f01657"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_ingest_copy.json",
+        "size_bytes": 746418,
+        "sha256": "60df296f2a4e22a7c047b75082519112843d912b35f5cde069b49f6ea2bf10e0"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_ingest_dry_run.json",
+        "size_bytes": 673930,
+        "sha256": "050291c94a0b99f4ecf0fe8178cb0004f8e83e6f2152d79e5c4317e658a2486d"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_inspection.json",
+        "size_bytes": 65393,
+        "sha256": "21a9493ee4eb0b6acdbd86c562831106f5b1ee130806bc1d649ac9e8c060cf81"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_quality.json",
+        "size_bytes": 107051,
+        "sha256": "07c4ef986e0a55ab48aaf560d762d24a1fd8a9cf27513aa1a832a333a5bd61fd"
+      },
+      {
+        "path": "outputs/reports/rasam_first_batch_validate_source.json",
+        "size_bytes": 673930,
+        "sha256": "e675a532e5207523b856d88fcd73a3143493f21861a9425d28e7dfbd3289d39a"
+      },
+      {
+        "path": "pyproject.toml",
+        "size_bytes": 583,
+        "sha256": "2419684eee5dd4e53252572aec3374d34f1bfc295b9f5f0be68602978530df15"
+      },
+      {
+        "path": "requirements-base.txt",
+        "size_bytes": 49,
+        "sha256": "89f1c4b0a7f745d40db305a1373824312bb99fb11fd187b8a15dcb9cd28a2f40"
+      },
+      {
+        "path": "requirements-cpu.txt",
+        "size_bytes": 26,
+        "sha256": "081bac7e1698d117012ad605af66536148b02b3327b3eb0218a626ff1f1533f1"
+      },
+      {
+        "path": "requirements-dev.txt",
+        "size_bytes": 52,
+        "sha256": "674c59e5651c0ba627c1f2846b1003a1a7ac7eaa2610706019b2f80cb3cfbf0d"
+      },
+      {
+        "path": "requirements-gpu.txt",
+        "size_bytes": 195,
+        "sha256": "0ca40e521133aa382db752b4a5252b48c823898d4d343659f424af12a0feb343"
+      },
+      {
+        "path": "scripts/aws/automatic_shutdown_plan.md",
+        "size_bytes": 291,
+        "sha256": "126337bd0a1d88fe03788649ff04b51ede7adba72ad36699270a3e0ccfa601e6"
+      },
+      {
+        "path": "scripts/aws/checkpoint_upload_plan.md",
+        "size_bytes": 271,
+        "sha256": "1258e8577ddf48e2184580068a832acca197a3698a61e9bf99177108b9d17bba"
+      },
+      {
+        "path": "scripts/aws/cost_estimation_placeholder.py",
+        "size_bytes": 235,
+        "sha256": "4d53de7336d548fceaca2fde340434b8ae437e010b064c9edb5eead02a664726"
+      },
+      {
+        "path": "scripts/aws/environment_setup_template.sh",
+        "size_bytes": 91,
+        "sha256": "6627571db2577948f103fa18ef35891d06195f4c80369655d618bb1fa8bf9689"
+      },
+      {
+        "path": "scripts/aws/gpu_verification.py",
+        "size_bytes": 290,
+        "sha256": "0648e34a4c6115ab4c96e1dab74affeca40b49d6b637980a88dc729043758796"
+      },
+      {
+        "path": "scripts/aws/job_runner_template.py",
+        "size_bytes": 227,
+        "sha256": "684118fc423d4281bb3bb8f3b7368a7a789d44cdfa277864eff0f687433e9793"
+      },
+      {
+        "path": "scripts/aws/project_upload_plan.md",
+        "size_bytes": 408,
+        "sha256": "13ad9ccaad9dc36da50a2e97e008e3ae21396c3cfec7feff8f2b80bfeb84746f"
+      },
+      {
+        "path": "scripts/aws/result_download_plan.md",
+        "size_bytes": 289,
+        "sha256": "75e0d1dfa7ab45549a2e89493731cd7154538990ccded47b659a31deb4586704"
+      },
+      {
+        "path": "scripts/aws/s3_configuration_template.json",
+        "size_bytes": 244,
+        "sha256": "4301e6b4f515813e2fac43acfa0f1333cd7d3077e02ff6cddffa40283ccac416"
+      },
+      {
+        "path": "scripts/aws/spot_interruption_plan.md",
+        "size_bytes": 287,
+        "sha256": "8724b3d8e03076b17a8e6e80ff69f6bd3cb11b0c6307c4da371de598fb39d91a"
+      },
+      {
+        "path": "scripts/maintenance/cleanup_temp.py",
+        "size_bytes": 346,
+        "sha256": "6b5feacec25642d2d7a0eede3621b5a292dd98328a52da82443c11e36026c301"
+      },
+      {
+        "path": "scripts/setup/check_system.py",
+        "size_bytes": 1486,
+        "sha256": "30315d2b01e6147430f3ec3373a5203312eb39b4e5f7d6f981b69bd89ccff38d"
+      },
+      {
+        "path": "scripts/setup/create_environment.py",
+        "size_bytes": 483,
+        "sha256": "8618b5733495132d020260b7b8a47dd68022207326d23995977fe74117426c9f"
+      },
+      {
+        "path": "scripts/setup/create_synthetic_fixtures.py",
+        "size_bytes": 1073,
+        "sha256": "d8a291bf3e30eba9cd93ea4f85aca9e48d3be8004df5d82470ce8fa81f7fa489"
+      },
+      {
+        "path": "scripts/setup/export_environment_report.py",
+        "size_bytes": 638,
+        "sha256": "0a41fe748e5eea335e2b4caa24fb81c020cf2b9b820a3f65bd626cf89e48df00"
+      },
+      {
+        "path": "scripts/setup/install_base_dependencies.py",
+        "size_bytes": 565,
+        "sha256": "0231ba2f066b06637fcea706c9ce5dc0e20201af05a44a9d9e4e14d03393133b"
+      },
+      {
+        "path": "scripts/setup/validate_environment.py",
+        "size_bytes": 994,
+        "sha256": "27c9e4e74248a3a455ad886f2bcefc6d9a5839405f74f79d12650207b27a7fb6"
+      },
+      {
+        "path": "src/__init__.py",
+        "size_bytes": 54,
+        "sha256": "5918bbfe7184484b851081ff9acb3a5fbf0024bce69b8247ff32a56c9cbbd051"
+      },
+      {
+        "path": "src/aws/__init__.py",
+        "size_bytes": 65,
+        "sha256": "6d064c5d3f846dabbd0781b240e3d7a8a17bef8c0a483294990ce8cacd7a7483"
+      },
+      {
+        "path": "src/aws/templates.py",
+        "size_bytes": 447,
+        "sha256": "08cbde56c154ed45c7174dd73c07a94a8654b6e0aaa8784d5dee1f5aa5e5a62e"
+      },
+      {
+        "path": "src/config/__init__.py",
+        "size_bytes": 45,
+        "sha256": "e59c00fd041d21e6426b6d9775ab9319bb8bdf1184ec735058cab74f4c4bd81a"
+      },
+      {
+        "path": "src/config/loader.py",
+        "size_bytes": 992,
+        "sha256": "109ea4d23901136af6a92c37d8907ec052352a4c808f08b03dd97fd12f0531ec"
+      },
+      {
+        "path": "src/config/models.py",
+        "size_bytes": 5135,
+        "sha256": "d81f57b51f3a3c5bd618d0c86dc556fc5f536c092656f49d7aefd11d94f5ea6c"
+      },
+      {
+        "path": "src/core/__init__.py",
+        "size_bytes": 47,
+        "sha256": "90855ef60ae7ca3a729225678c403825347fe585a2eafef588b9105e8b7df174"
+      },
+      {
+        "path": "src/core/checkpoint.py",
+        "size_bytes": 1564,
+        "sha256": "bd3e9187aec41775ff0427852451c5dbd6d0d78a14dd8dfe65b41850a96c5fed"
+      },
+      {
+        "path": "src/core/manifest.py",
+        "size_bytes": 1047,
+        "sha256": "d70b575535814310a7d88ef185ce86a81e918574e4b86c4b2a55c5ddc2cddaef"
+      },
+      {
+        "path": "src/core/status.py",
+        "size_bytes": 1304,
+        "sha256": "183a3a61164e3f92e1469ea2bfc541947857a52867ed1614e0b32fd160d07f2f"
+      },
+      {
+        "path": "src/datasets/__init__.py",
+        "size_bytes": 66,
+        "sha256": "246f7c9a0c63405c1cfe0a9fe41ebff2a54c0228cc7f3cb68e966ffd73c0996a"
+      },
+      {
+        "path": "src/datasets/downloader.py",
+        "size_bytes": 12850,
+        "sha256": "7acac99a0e3d545ed01dada355abd1cc9f84de1a46825e36592b21555c8b46a7"
+      },
+      {
+        "path": "src/datasets/rasam_batch.py",
+        "size_bytes": 27556,
+        "sha256": "548a8ca56ab1a588e73813765010b7e91e6c5809a51197044e833bff92797596"
+      },
+      {
+        "path": "src/datasets/registry.py",
+        "size_bytes": 3642,
+        "sha256": "cf3e97ba9a81a0e75f05342d1c1f6f7f2cf4fe127e086a3f71d35baf40a6a054"
+      },
+      {
+        "path": "src/datasets/reports.py",
+        "size_bytes": 1369,
+        "sha256": "a9272f5e4bc4b31b3c90c53334b894c22be3b7e33920536db8df4a7210af9d15"
+      },
+      {
+        "path": "src/distortion/__init__.py",
+        "size_bytes": 62,
+        "sha256": "bbf414d8ca19a8083f553a6d42fd4c36f29102971a405776e74b93b704715818"
+      },
+      {
+        "path": "src/distortion/base.py",
+        "size_bytes": 1952,
+        "sha256": "348dcbb79040ab5d44e16a0b018ca5483ff702073a2549308d97936336713c14"
+      },
+      {
+        "path": "src/distortion/layout_aware.py",
+        "size_bytes": 1305,
+        "sha256": "126c96ff5091d5c5700c7da7326192f5a6e2d568dda79c9d54237e3ded4387f3"
+      },
+      {
+        "path": "src/distortion/metadata.py",
+        "size_bytes": 539,
+        "sha256": "444b2679c2d40fdfb72bbb4b7408dff68a57aaac6c407ebebee5679d50557598"
+      },
+      {
+        "path": "src/distortion/pipeline.py",
+        "size_bytes": 1224,
+        "sha256": "9a9015908f9615fe89efa4dc1b0e43a0b6ffc8017be8f9b09ad8a98aaf379136"
+      },
+      {
+        "path": "src/distortion/randomness.py",
+        "size_bytes": 370,
+        "sha256": "89cbf5fd9b482c5117a9bb953a2462c8ce11322d5e5d4d5593945648d3cff8b4"
+      },
+      {
+        "path": "src/distortion/registry.py",
+        "size_bytes": 1619,
+        "sha256": "fb5fe7805456ef20bd7d311955d522d6d77ddaaba4db7f41b465fb537a6eee3f"
+      },
+      {
+        "path": "src/evaluation/__init__.py",
+        "size_bytes": 35,
+        "sha256": "76dc978ea0d3541ee5c04c040fb0029c7404fa52cfa9fbf9ef8350ccacc2e652"
+      },
+      {
+        "path": "src/evaluation/aggregations.py",
+        "size_bytes": 800,
+        "sha256": "252eb3232924638ab5834178149258c08993cf6a8c36c5a6855bc3e1bf72d3a6"
+      },
+      {
+        "path": "src/evaluation/cer.py",
+        "size_bytes": 608,
+        "sha256": "e8d23345b66b77dc77e8e90811914828026ec3ddcb0fbf0b381dc5952ce8bc5c"
+      },
+      {
+        "path": "src/evaluation/normalization.py",
+        "size_bytes": 209,
+        "sha256": "130f56d360e30629161db35f5ff555c4c8417b5bc9027c1712586e592953d100"
+      },
+      {
+        "path": "src/evaluation/reports.py",
+        "size_bytes": 1109,
+        "sha256": "efd57cafd306a9f444c3b9056a5fbef6987a493343d03fefc1425cf5576ab501"
+      },
+      {
+        "path": "src/evaluation/wer.py",
+        "size_bytes": 317,
+        "sha256": "783176ad863b6316f08f1a5dbfc46035a2958a8d5d9e17446b5495c69b495add"
+      },
+      {
+        "path": "src/ground_truth/__init__.py",
+        "size_bytes": 57,
+        "sha256": "082e9240de0a71cd70915b01a7950e78a394d3dd41906ff5524ebe9d9948d5c5"
+      },
+      {
+        "path": "src/ground_truth/alignment.py",
+        "size_bytes": 630,
+        "sha256": "c48175204e2abc4e0cd3ea67daa505459150f2c62b6a6a90357751f119c4d0e8"
+      },
+      {
+        "path": "src/ground_truth/checksums.py",
+        "size_bytes": 449,
+        "sha256": "b33b84ffcd89004fc015213943fad00784d0ffdd271de8f139159cfae16574ce"
+      },
+      {
+        "path": "src/ground_truth/normalization.py",
+        "size_bytes": 1385,
+        "sha256": "818f0a58b4226d731a08ca2e8e6902fe6d72c63b170770cd49b541d6dff6cd00"
+      },
+      {
+        "path": "src/ground_truth/validators.py",
+        "size_bytes": 538,
+        "sha256": "1aae19846822a0861ae130beb15b025413b41a2187a9a87fe2b858da6df487f2"
+      },
+      {
+        "path": "src/ingestion/__init__.py",
+        "size_bytes": 45,
+        "sha256": "3ea5938066f1c022a0a6fc92143a9ee0fcf09606b7b7f4bcea3de34b10c055c1"
+      },
+      {
+        "path": "src/ingestion/file_inspection.py",
+        "size_bytes": 5090,
+        "sha256": "154e1175cb00c011f74407fdfa2d231cd637ac54174d8a5f173192cea25f225c"
+      },
+      {
+        "path": "src/ingestion/manifest.py",
+        "size_bytes": 688,
+        "sha256": "560e1fe96d3d8fd6c70f78b4065fe8d9d1781308a4b923df82a672e87df55fde"
+      },
+      {
+        "path": "src/ingestion/page_record.schema.json",
+        "size_bytes": 1517,
+        "sha256": "521901e6b8be127ae3e1be8aa8d27ae241d41537f9c6a0522460610c536682e2"
+      },
+      {
+        "path": "src/ingestion/registry.py",
+        "size_bytes": 2553,
+        "sha256": "71de49688a8667fe15711525807c63e9f56ae90759d56d497054ed23a54207a5"
+      },
+      {
+        "path": "src/ingestion/schema.py",
+        "size_bytes": 2308,
+        "sha256": "26946478bb726db0ca3b72897905cb6ceef21d4d47203f9c0a0a96c18d030582"
+      },
+      {
+        "path": "src/ingestion/source_manifest.py",
+        "size_bytes": 2198,
+        "sha256": "9342b3453f8c798c343156c80f618c31607885e6abbd70f31a88ffb18adec337"
+      },
+      {
+        "path": "src/ingestion/source_manifest.schema.json",
+        "size_bytes": 2135,
+        "sha256": "420e88745be16d51e3b259d568f36b29d090839a6506ad025d5fbc02a091556c"
+      },
+      {
+        "path": "src/ingestion/validators.py",
+        "size_bytes": 3195,
+        "sha256": "72310d0be67005c649680208eab3e4f787c437775540b297d37848e3c8746f0d"
+      },
+      {
+        "path": "src/ingestion/workflow.py",
+        "size_bytes": 9778,
+        "sha256": "b707700801e1c99202cab3b9ea04ce6939ad36b099b9e231971fe36c15f07228"
+      },
+      {
+        "path": "src/layout/__init__.py",
+        "size_bytes": 35,
+        "sha256": "3117d1ca1d4a3e84ffa8ece1a6840bf7b1f24b53717cdd8374443891ecd7571e"
+      },
+      {
+        "path": "src/layout/reading_order.py",
+        "size_bytes": 340,
+        "sha256": "da5477751ec7daf0c635b6a552728575e463ba5effc1600d101ab3eb9c448f9d"
+      },
+      {
+        "path": "src/layout/region_masks.py",
+        "size_bytes": 795,
+        "sha256": "2e7c424897cdc50b9a446298e5ec55b55e4d9aeac905d0272e955505279198b5"
+      },
+      {
+        "path": "src/layout/regions.py",
+        "size_bytes": 839,
+        "sha256": "a994e124a771846716f88dad4ba6d539f58d4416f2b38d1b4709747025407b20"
+      },
+      {
+        "path": "src/layout/validators.py",
+        "size_bytes": 899,
+        "sha256": "e025df21d840fc82b2c235557765d12c7d0b97a52eef91bd217805b058d71484"
+      },
+      {
+        "path": "src/pipeline/__init__.py",
+        "size_bytes": 48,
+        "sha256": "87e704565fb9bff023071c187245d7608535f73d3d84905f0230d5fd1b385db9"
+      },
+      {
+        "path": "src/pipeline/cli.py",
+        "size_bytes": 14982,
+        "sha256": "21b6b9aaa83a8bc07a95ffbf0a08c08c1fafbbf74cee9cb7d02d24d552565020"
+      },
+      {
+        "path": "src/pipeline/profiles.py",
+        "size_bytes": 1952,
+        "sha256": "e5eb99e24087649d861897359c6aad16e98beda977187e8e54b82a4a61e7616b"
+      },
+      {
+        "path": "src/rendering/__init__.py",
+        "size_bytes": 47,
+        "sha256": "02be310719e3011b637ecd5df196e32019a7b2ddec3fa3702d5d75ddc763634c"
+      },
+      {
+        "path": "src/rendering/interfaces.py",
+        "size_bytes": 322,
+        "sha256": "993de2d19cd18928c71bdad44dd9738383bfc18e1f73b88c4d857e652708956e"
+      },
+      {
+        "path": "src/reporting/__init__.py",
+        "size_bytes": 26,
+        "sha256": "66ec2f44031581ada882a62390b725cb3d174af729cf0fdda9e27cf77abf3440"
+      },
+      {
+        "path": "src/reporting/status_report.py",
+        "size_bytes": 345,
+        "sha256": "7c618da6e873a5d9cccaa388dab60f8510837bac8909353b06ed34c2a1e32887"
+      },
+      {
+        "path": "src/storage/__init__.py",
+        "size_bytes": 35,
+        "sha256": "03b9e09a1b374bfaec4d1d7e6f936979cd38d0aaf1128e7d9f5d46f770cdc264"
+      },
+      {
+        "path": "src/storage/manifest_store.py",
+        "size_bytes": 2145,
+        "sha256": "dd7e2232a58d70a491305987cf50d999cfb715c30bed96db88eb3c67636a0baa"
+      },
+      {
+        "path": "src/utils/__init__.py",
+        "size_bytes": 24,
+        "sha256": "b1889dd76636ac4f0500078d8bfdc713987755e20dc8746e0be28baaa5fc59ad"
+      },
+      {
+        "path": "src/utils/paths.py",
+        "size_bytes": 506,
+        "sha256": "d419b66077b678b276acea286402d45312793816406e85ad445e5dcf21be3005"
+      },
+      {
+        "path": "src/validation/__init__.py",
+        "size_bytes": 43,
+        "sha256": "f1dc224ecf22ada9ee23381d860d13f311d1402595b9a8709fdf1ea9ea3f74a7"
+      },
+      {
+        "path": "src/validation/image_quality.py",
+        "size_bytes": 1479,
+        "sha256": "d73815647df0a908e12b63d2ffa99a323e6a62eaa47a0c70bb4e059c369812d4"
+      },
+      {
+        "path": "src/validation/layout_preservation.py",
+        "size_bytes": 386,
+        "sha256": "c7cb8d4d32d5f3bb15acc37c2e5cfbe84bc6d68c25549357cedf3bcea1a7a8b2"
+      },
+      {
+        "path": "src/validation/manifest_validation.py",
+        "size_bytes": 744,
+        "sha256": "032847c16abaca6e65d454c984f097d15e2ff8f0000ff86f1f85902a0c304f75"
+      },
+      {
+        "path": "src/validation/output_validation.py",
+        "size_bytes": 537,
+        "sha256": "e31c791d9effd7790774e2fb939b773a5d6339997dee47992f081f4d81219054"
+      },
+      {
+        "path": "src/validation/text_preservation.py",
+        "size_bytes": 469,
+        "sha256": "39cb32efe18f6309180afc09467febf0e82256cc68497c3e06bf718e7b303aba"
+      },
+      {
+        "path": "tests/__init__.py",
+        "size_bytes": 21,
+        "sha256": "155d9701ac99102a1c317feef365d502b6e990ebcaae9ecdb6cb13d181c3a47d"
+      },
+      {
+        "path": "tests/fixtures/ingestion/ground_truth.txt",
+        "size_bytes": 55,
+        "sha256": "a4075d9c251fb305f1b2099760fb082d8eb1721358b42bc31edb61b31cee0177"
+      },
+      {
+        "path": "tests/fixtures/ingestion/source_manifest.json",
+        "size_bytes": 696,
+        "sha256": "18ec591d7c44d56c635396f49a124a3de7d87d4914561f17d9ed3ea3caeeacbb"
+      },
+      {
+        "path": "tests/fixtures/ingestion/source_text.txt",
+        "size_bytes": 55,
+        "sha256": "a4075d9c251fb305f1b2099760fb082d8eb1721358b42bc31edb61b31cee0177"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/README.md",
+        "size_bytes": 102,
+        "sha256": "4092c7f5c9c0bf7f8d0d034b6b1196b3add83cc08c06a1d04ea24d004d65ce37"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/arabic_body.txt",
+        "size_bytes": 112,
+        "sha256": "097cbb2ef8feb3a33bd3519e8caa111321e26503193fb952b9b288b3e485f5cf"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/blank.txt",
+        "size_bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/footnote.txt",
+        "size_bytes": 89,
+        "sha256": "b9061bfb470f21f93a79713df57980686839c0a62a4511748bbb16d0017bf26c"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/mixed_ar_en.txt",
+        "size_bytes": 74,
+        "sha256": "e6e892b1c644a36600ec73d02b309a88e1df3510d0bba85d616747258da953af"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/near_blank.txt",
+        "size_bytes": 3,
+        "sha256": "16647954c146404e2b7418ad84f45ea5430a2b844ae367ccb8ad371b8b8465f5"
+      },
+      {
+        "path": "tests/fixtures/synthetic_pages/two_column.txt",
+        "size_bytes": 73,
+        "sha256": "05270cef94268b6c05eedabebe13cf5ca24684a38ec7c495c1d79f0a0f6b2249"
+      },
+      {
+        "path": "tests/integration/__init__.py",
+        "size_bytes": 25,
+        "sha256": "ac685699a0c0a25fde518d92fd2f8d17c97948008060c87a9e33828cba1092f4"
+      },
+      {
+        "path": "tests/integration/test_cli.py",
+        "size_bytes": 720,
+        "sha256": "acda50dfa5d133cc8c5ab9ca50944eb6dc27f64c89ecb142bb5368c41d5aee26"
+      },
+      {
+        "path": "tests/integration/test_dataset_cli.py",
+        "size_bytes": 1274,
+        "sha256": "639ce5435b14356ec17e4426e0ee00b0f04b63531ce80a94cd6dd4c9fd54c156"
+      },
+      {
+        "path": "tests/integration/test_ingestion_cli.py",
+        "size_bytes": 2428,
+        "sha256": "776519498b35507fb2de0838671caee152bd6b3e8cfab830e8541f6ff602175b"
+      },
+      {
+        "path": "tests/unit/__init__.py",
+        "size_bytes": 19,
+        "sha256": "11726d586214d5329207ffb3a1db86848bf02da97fed29ffc3e2842398eacd2d"
+      },
+      {
+        "path": "tests/unit/test_config.py",
+        "size_bytes": 1164,
+        "sha256": "cfd4fd40acef9d162eb5c22e9388b00d3b6bebf8bcd86fe5d3fb5492eb8b022c"
+      },
+      {
+        "path": "tests/unit/test_dataset_downloader.py",
+        "size_bytes": 4234,
+        "sha256": "4ffafa1d5650168cba8098b9708a292bcd565a4ea3dd690155932c7cd90c2255"
+      },
+      {
+        "path": "tests/unit/test_dataset_registry.py",
+        "size_bytes": 1354,
+        "sha256": "a114af2ad42f12a3848e1801d21d2a3fa7655e5f352218b38b1a6a99a7013688"
+      },
+      {
+        "path": "tests/unit/test_distortion_profiles.py",
+        "size_bytes": 1271,
+        "sha256": "8fed0d95b3bbeff89655bdc5d1dbc698858f558b41174ab73595028b35049979"
+      },
+      {
+        "path": "tests/unit/test_evaluation.py",
+        "size_bytes": 544,
+        "sha256": "cc6a56ab0c950bccccf56e3dfa6b7e0e6e7fec004bb8ff0dfce4fc206175fb01"
+      },
+      {
+        "path": "tests/unit/test_ground_truth.py",
+        "size_bytes": 834,
+        "sha256": "0b378f2d050670a1955829aa471ecf6b415522302e4e716261ad1f2e50431f30"
+      },
+      {
+        "path": "tests/unit/test_ingestion_workflow.py",
+        "size_bytes": 7054,
+        "sha256": "e13baa0ff781c69f0cf1e279426d85d29f55943bb8e3990088724e59d7ea0d48"
+      },
+      {
+        "path": "tests/unit/test_layout_validation.py",
+        "size_bytes": 838,
+        "sha256": "f064243d4b62fe8b1ec312d36265e6d6291b8966ded8265047eadfcf064803b4"
+      },
+      {
+        "path": "tests/unit/test_manifest_status.py",
+        "size_bytes": 2373,
+        "sha256": "b9a7215e45ed0084cbb5fb8136b436e7a94ccab45b6e2090279d53ddbb822012"
+      },
+      {
+        "path": "tests/unit/test_rasam_batch.py",
+        "size_bytes": 3991,
+        "sha256": "ae7c13259fd9171681c9a6329faa9ce8ef8239e054679e0ac5f3e9bc60c9a9cf"
+      },
+      {
+        "path": "tests/unit/test_validation.py",
+        "size_bytes": 804,
+        "sha256": "5b3085be293891e3c5dcaa92a4d29968b6c3cb5def9248d6e59b85d1be9e32af"
+      }
+    ]
+  }
+}
