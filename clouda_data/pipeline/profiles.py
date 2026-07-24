@@ -44,11 +44,22 @@ def load_profile(path: str | Path) -> dict[str, Any]:
 
 def validate_profile(profile: dict[str, Any]) -> None:
     if "profile_id" in profile:
-        schema_path = (
+        repository_schema = (
             Path(__file__).resolve().parents[2]
             / "schemas"
             / "distortion-profile-v1.schema.json"
         )
+        packaged_schema = (
+            Path(__file__).resolve().parents[1]
+            / "resources"
+            / "schemas"
+            / "distortion-profile-v1.schema.json"
+        )
+        schema_path = (
+            repository_schema if repository_schema.is_file() else packaged_schema
+        )
+        if not schema_path.is_file():
+            raise FileNotFoundError("Distortion profile schema is not installed")
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         errors = sorted(
             Draft202012Validator(schema).iter_errors(profile),

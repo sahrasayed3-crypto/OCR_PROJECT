@@ -90,6 +90,17 @@ def _write_jsonl_atomic(path: Path, records: Iterable[dict[str, Any]]) -> None:
     temp.replace(path)
 
 
+def _write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    with temp.open("w", encoding="utf-8", newline="\n") as handle:
+        json.dump(payload, handle, ensure_ascii=False, sort_keys=True, indent=2)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    temp.replace(path)
+
+
 def read_jsonl(
     path: str | Path,
     *,
@@ -128,6 +139,37 @@ def _safe_generated_id(value: object) -> str:
     if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", identifier):
         raise ValueError("Unsafe generated page identifier")
     return identifier
+
+
+def _validate_resume_record(
+    record: dict[str, Any],
+    *,
+    roots: StorageRoots,
+    expected_output: Path,
+    dry_run: bool,
+) -> None:
+    status = str(record.get("status", ""))
+    if status == "skipped" and dry_run:
+        return
+    output = _dataset_uri_path(roots, record.get("output_uri"))
+    if output.resolve() != expected_output.resolve():
+        raise ValueError("Resume manifest output path does not match the run")
+    checksum = str(record.get("output_checksum") or "")
+    if not output.is_file() or not checksum or _sha256(output) != checksum:
+        raise ValueError("Resume manifest output is missing or has a checksum mismatch")
+
+
+def _matches_existing_image(path: Path, expected: Image.Image) -> bool:
+    try:
+        with Image.open(path) as existing:
+            existing.load()
+            return (
+                existing.size == expected.size
+                and existing.convert("RGBA").tobytes()
+                == expected.convert("RGBA").tobytes()
+            )
+    except Exception:
+        return False
 
 
 def classify_visual_difficulty(
@@ -404,24 +446,21 @@ def run_distortion_batch(
     if resume:
         checkpoints.recover_stale(stale_after_seconds=stale_after_seconds)
     run_manifest = run_root / "run_manifest.v1.json"
-    run_manifest.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "run_id": run_id,
-                "profile_id": profile["name"],
-                "profile_hash": profile_hash,
-                "state": "processing",
-                "heartbeat_at": datetime.now(timezone.utc).isoformat(),
-                "max_pages": max_pages,
-                "variants": variants,
-                "dry_run": dry_run,
-                "workers_requested": workers,
-                "execution_mode": "deterministic_sequential",
-            },
-            indent=2,
-        ),
-        encoding="utf-8",
+    _write_json_atomic(
+        run_manifest,
+        {
+            "schema_version": 1,
+            "run_id": run_id,
+            "profile_id": profile["name"],
+            "profile_hash": profile_hash,
+            "state": "processing",
+            "heartbeat_at": datetime.now(timezone.utc).isoformat(),
+            "max_pages": max_pages,
+            "variants": variants,
+            "dry_run": dry_run,
+            "workers_requested": workers,
+            "execution_mode": "deterministic_sequential",
+        },
     )
     output_bytes = sum(
         _dataset_uri_path(roots, item["output_uri"]).stat().st_size
@@ -461,13 +500,7 @@ def run_distortion_batch(
             generated_id = hashlib.sha256(
                 f"{run_id}:{source_page_id}:{variant}".encode()
             ).hexdigest()[:32]
-            if generated_id in by_id and by_id[generated_id].get("status") in {
-                "complete",
-                "manual_review",
-                "quarantined",
-                "skipped",
-            }:
-                continue
+            output_path = run_root / "pages" / f"{generated_id}.png"
             checkpoint_status = checkpoints.queue_page(
                 run_id=run_id,
                 generated_page_id=generated_id,
@@ -475,21 +508,57 @@ def run_distortion_batch(
                 variant=variant,
                 max_retries=max_retries,
             )
+            existing_record = by_id.get(generated_id)
+            if existing_record and existing_record.get("status") in {
+                "complete",
+                "manual_review",
+                "quarantined",
+                "skipped",
+            }:
+                _validate_resume_record(
+                    existing_record,
+                    roots=roots,
+                    expected_output=output_path,
+                    dry_run=dry_run,
+                )
+                checkpoints.reconcile_page(
+                    generated_id,
+                    status=str(existing_record["status"]),
+                    output_uri=(
+                        str(existing_record["output_uri"])
+                        if existing_record.get("output_uri")
+                        else None
+                    ),
+                    output_checksum=(
+                        str(existing_record["output_checksum"])
+                        if existing_record.get("output_checksum")
+                        else None
+                    ),
+                    error=(
+                        ";".join(
+                            str(item)
+                            for item in existing_record.get("warning_list", [])
+                        )
+                        or None
+                    ),
+                )
+                continue
             if checkpoint_status in {
                 "complete",
                 "manual_review",
                 "quarantined",
                 "skipped",
-                "cancelled",
+                "quarantined",
             }:
-                continue
+                if not resume:
+                    continue
+                checkpoints.requeue_for_manifest_recovery(generated_id)
             if not checkpoints.claim_page(generated_id):
                 if fail_fast:
                     raise RuntimeError(
                         f"Page {generated_id} cannot be claimed for processing"
                     )
                 continue
-            output_path = run_root / "pages" / f"{generated_id}.png"
             if output_path.exists() and not resume:
                 raise FileExistsError(output_path)
             started = time.perf_counter()
@@ -584,7 +653,15 @@ def run_distortion_batch(
                         raise OSError(
                             "Free disk space is below CLOUDA_MIN_FREE_DISK_BYTES"
                         )
-                    _atomic_save(result, output_path)
+                    if output_path.exists():
+                        if not resume or not _matches_existing_image(
+                            output_path, result
+                        ):
+                            raise FileExistsError(
+                                f"Existing resume output does not match {output_path}"
+                            )
+                    else:
+                        _atomic_save(result, output_path)
                     output_bytes += output_path.stat().st_size
                     if output_bytes > maximum_output_bytes:
                         output_path.unlink(missing_ok=True)
@@ -617,6 +694,9 @@ def run_distortion_batch(
                 if fail_fast:
                     raise
                 continue
+            records.append(record)
+            by_id[generated_id] = record
+            _write_jsonl_atomic(output_manifest, records)
             checkpoints.finish_page(
                 generated_id,
                 status=str(record["status"]),
@@ -632,9 +712,6 @@ def run_distortion_batch(
                     else None
                 ),
             )
-            records.append(record)
-            by_id[generated_id] = record
-            _write_jsonl_atomic(output_manifest, records)
             if interrupt_after is not None and len(records) >= interrupt_after:
                 payload = json.loads(run_manifest.read_text(encoding="utf-8"))
                 payload.update(
@@ -644,7 +721,7 @@ def run_distortion_batch(
                         "records": len(records),
                     }
                 )
-                run_manifest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                _write_json_atomic(run_manifest, payload)
                 checkpoints.finish_run(run_id, "interrupted")
                 raise RunInterrupted(
                     f"Intentional interruption after {len(records)} records"
@@ -665,7 +742,7 @@ def run_distortion_batch(
             "records": len(records),
         }
     )
-    run_manifest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    _write_json_atomic(run_manifest, payload)
     checkpoints.finish_run(run_id, status)
     if not dry_run:
         (run_root / "COMPLETE.v1.json").write_text(

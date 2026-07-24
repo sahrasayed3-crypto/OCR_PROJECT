@@ -93,6 +93,16 @@ def test_required_yaml_profiles_validate() -> None:
         assert profile["maximum_severity_budget"] > 0
 
 
+def test_required_yaml_profiles_and_schema_are_packaged(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("clouda_data.locations.repository_root", lambda: None)
+    packaged = [path for path in list_profile_paths() if path.suffix == ".yaml"]
+    assert len(packaged) == 18
+    for path in packaged:
+        assert load_profile(path)["profile_id"]
+
+
 def test_profile_rejects_unknown_operator_and_resource_exhaustion() -> None:
     base = {
         "name": "unsafe",
@@ -223,6 +233,33 @@ def test_render_image_is_copy_on_write_and_valid(state: Path) -> None:
     assert record["output_checksum"]
 
 
+def test_render_resume_recovers_orphan_output_and_rejects_corruption(
+    state: Path,
+) -> None:
+    source = state / "datasets" / "resume-source.png"
+    _synthetic_page(source)
+    config = RenderConfig(dpi=144, color_mode="grayscale")
+    manifest = render_document(source, config=config)
+    record = read_jsonl(manifest)[0]
+    output = state / "datasets" / str(record["output_uri"]).removeprefix("dataset://")
+
+    manifest.unlink()
+    recovered = render_document(
+        source,
+        config=RenderConfig(dpi=144, color_mode="grayscale", resume=True),
+        run_id=str(record["run_id"]),
+    )
+    assert read_jsonl(recovered)[0]["output_checksum"] == record["output_checksum"]
+
+    output.write_bytes(b"corrupt")
+    with pytest.raises(ValueError, match="checksum mismatch"):
+        render_document(
+            source,
+            config=RenderConfig(dpi=144, color_mode="grayscale", resume=True),
+            run_id=str(record["run_id"]),
+        )
+
+
 def test_render_pdf_page(state: Path) -> None:
     fixture = Path(__file__).resolve().parents[1] / "fixtures" / "digital_text.pdf"
     source = state / "datasets" / "digital_text.pdf"
@@ -351,6 +388,79 @@ def test_distortion_batch_resume_validate_preview_and_export(state: Path) -> Non
     assert (
         state / "artifacts" / "reports" / "validation" / "invalid-run.jsonl"
     ).is_file()
+
+
+def test_distortion_resume_recovers_missing_manifest_and_reconciles_checkpoint(
+    state: Path,
+) -> None:
+    source = state / "datasets" / "resume-clean.png"
+    _synthetic_page(source)
+    source_checksum = __import__("hashlib").sha256(source.read_bytes()).hexdigest()
+    input_manifest = state / "datasets" / "resume-input.jsonl"
+    input_manifest.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "output_uri": "dataset://resume-clean.png",
+                "output_checksum": source_checksum,
+                "source_document_id": "resume-document",
+                "source_page_number": 1,
+                "page_id": "resume-document:1",
+                "dataset_id": "synthetic_evaluation",
+                "license_status": "evaluation_only",
+                "commercial_training_allowed": False,
+                "ground_truth_reference": "synthetic://resume/1",
+                "ground_truth_text": "نص استئناف اصطناعي",
+            },
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    profile = (
+        Path(__file__).resolve().parents[2]
+        / "configs"
+        / "data_foundation"
+        / "distortions"
+        / "modern_scan_light.yaml"
+    )
+    manifest = run_distortion_batch(
+        input_manifest,
+        profile,
+        seed=91,
+        variants=1,
+        max_pages=1,
+    )
+    first = read_jsonl(manifest)[0]
+    checkpoint = RunCheckpointStore(manifest.parent / "checkpoints.sqlite3")
+
+    with checkpoint.connect() as connection, connection:
+        connection.execute(
+            "UPDATE pages SET status = 'processing' WHERE generated_page_id = ?",
+            (first["generated_page_id"],),
+        )
+    run_distortion_batch(
+        input_manifest,
+        profile,
+        seed=91,
+        variants=1,
+        max_pages=1,
+        resume=True,
+    )
+    assert checkpoint.page(first["generated_page_id"])["status"] == first["status"]
+
+    manifest.unlink()
+    recovered = run_distortion_batch(
+        input_manifest,
+        profile,
+        seed=91,
+        variants=1,
+        max_pages=1,
+        resume=True,
+    )
+    recovered_record = read_jsonl(recovered)[0]
+    assert recovered_record["generated_page_id"] == first["generated_page_id"]
+    assert recovered_record["output_checksum"] == first["output_checksum"]
 
 
 def test_commercial_export_fails_closed_for_synthetic(state: Path) -> None:

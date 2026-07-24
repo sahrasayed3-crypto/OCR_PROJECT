@@ -82,7 +82,9 @@ exclude = ["tests*"]
 [tool.setuptools.package-data]
 clouda_data = [
   "resources/*.json",
-  "resources/distortions/*.json"
+  "resources/distortions/*.json",
+  "resources/distortions/*.yaml",
+  "resources/schemas/*.json"
 ]
 
 [tool.black]

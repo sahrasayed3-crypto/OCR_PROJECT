@@ -22,6 +22,10 @@ def _database(path: Path, *, schema_version: int | None) -> None:
             )
 
 
+def _identifier(value: str) -> str:
+    return '"' + value.replace('"', '""') + '"'
+
+
 def test_inventory_is_read_only_and_redacts_rows(tmp_path: Path) -> None:
     path = tmp_path / "clouda.sqlite3"
     _database(path, schema_version=3)
@@ -32,6 +36,24 @@ def test_inventory_is_read_only_and_redacts_rows(tmp_path: Path) -> None:
     assert inventory["row_counts"]["records"] == 1
     assert "relative/file" not in str(inventory)
     assert path.read_bytes() == before
+
+
+def test_inventory_quotes_hostile_schema_identifiers(tmp_path: Path) -> None:
+    path = tmp_path / "hostile.sqlite3"
+    table = 'records" WHERE 0 UNION SELECT name FROM sqlite_master --'
+    column = 'path" OR 1=1 --'
+    with sqlite3.connect(path) as connection:
+        connection.execute(
+            f"CREATE TABLE {_identifier(table)} ({_identifier(column)} TEXT)"
+        )
+        connection.execute(
+            f"INSERT INTO {_identifier(table)} " f"({_identifier(column)}) VALUES (?)",
+            (r"C:\legacy\file.pdf",),
+        )
+
+    inventory = inventory_database(path)
+    assert inventory["row_counts"][table] == 1
+    assert inventory["absolute_path_value_count"] == 1
 
 
 def test_recommendation_keeps_databases_separate(tmp_path: Path) -> None:

@@ -160,6 +160,30 @@ def _atomic_image_save(image: Image.Image, target: Path, fmt: str, dpi: int) -> 
         temp.unlink(missing_ok=True)
 
 
+def _write_manifest_atomic(manifest: Path, records: list[dict[str, object]]) -> None:
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    temp = manifest.with_suffix(manifest.suffix + ".tmp")
+    with temp.open("w", encoding="utf-8", newline="\n") as handle:
+        for item in records:
+            handle.write(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    temp.replace(manifest)
+
+
+def _matches_existing_image(path: Path, expected: Image.Image) -> bool:
+    try:
+        with Image.open(path) as existing:
+            existing.load()
+            return (
+                existing.size == expected.size
+                and existing.convert("RGBA").tobytes()
+                == expected.convert("RGBA").tobytes()
+            )
+    except Exception:
+        return False
+
+
 def render_document(
     source: str | Path,
     *,
@@ -204,6 +228,20 @@ def render_document(
         for line in manifest.read_text(encoding="utf-8").splitlines():
             loaded_record = json.loads(line)
             if loaded_record.get("status") == "complete":
+                uri = str(loaded_record.get("output_uri", ""))
+                if not uri.startswith("dataset://"):
+                    raise ValueError("Resume manifest contains an unsafe output URI")
+                output = roots.dataset_root / uri.removeprefix("dataset://")
+                checksum = str(loaded_record.get("output_checksum") or "")
+                if (
+                    not _inside(output, roots.dataset_root)
+                    or not output.is_file()
+                    or not checksum
+                    or _sha256(output) != checksum
+                ):
+                    raise ValueError(
+                        "Resume manifest output is missing or has a checksum mismatch"
+                    )
                 completed[int(loaded_record["source_page_number"])] = loaded_record
     records: list[dict[str, object]] = list(completed.values())
     for page_number, raw, renderer, version in _iter_pages(source_path, config):
@@ -235,26 +273,17 @@ def render_document(
         record["width"], record["height"] = image.size
         if not config.dry_run:
             if output.exists():
-                if config.resume and _sha256(output) == completed.get(
-                    page_number, {}
-                ).get("output_checksum"):
-                    continue
-                raise FileExistsError(output)
-            _atomic_image_save(
-                image, output, SUPPORTED_FORMATS[config.output_format], config.dpi
-            )
+                if not config.resume or not _matches_existing_image(output, image):
+                    raise FileExistsError(
+                        f"Existing resume output does not match {output}"
+                    )
+            else:
+                _atomic_image_save(
+                    image, output, SUPPORTED_FORMATS[config.output_format], config.dpi
+                )
             record["output_checksum"] = _sha256(output)
         records.append(record)
-        run_root.mkdir(parents=True, exist_ok=True)
-        temp = manifest.with_suffix(".tmp")
-        temp.write_text(
-            "".join(
-                json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
-                for item in records
-            ),
-            encoding="utf-8",
-        )
-        temp.replace(manifest)
+        _write_manifest_atomic(manifest, records)
     completion = run_root / "COMPLETE.v1.json"
     if not config.dry_run:
         completion.write_text(

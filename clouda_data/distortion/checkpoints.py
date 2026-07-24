@@ -183,6 +183,55 @@ class RunCheckpointStore:
             if cursor.rowcount != 1:
                 raise ValueError("Checkpoint page is not processing")
 
+    def requeue_for_manifest_recovery(self, generated_page_id: str) -> None:
+        """Reopen a final checkpoint whose portable manifest record is missing."""
+        with self.connect() as connection, connection:
+            cursor = connection.execute(
+                """
+                UPDATE pages
+                SET status = 'queued', error = NULL,
+                    heartbeat_at = NULL, updated_at = ?
+                WHERE generated_page_id = ? AND status IN (
+                    'complete', 'manual_review', 'skipped', 'quarantined'
+                )
+                """,
+                (utc_now(), generated_page_id),
+            )
+            if cursor.rowcount != 1:
+                raise ValueError("Checkpoint page cannot be reopened for recovery")
+
+    def reconcile_page(
+        self,
+        generated_page_id: str,
+        *,
+        status: str,
+        output_uri: str | None = None,
+        output_checksum: str | None = None,
+        error: str | None = None,
+    ) -> None:
+        """Make SQLite agree with a validated, atomically committed JSONL record."""
+        if status not in FINAL_PAGE_STATES:
+            raise ValueError(f"Invalid final page state: {status}")
+        with self.connect() as connection, connection:
+            cursor = connection.execute(
+                """
+                UPDATE pages
+                SET status = ?, output_uri = ?, output_checksum = ?,
+                    error = ?, updated_at = ?
+                WHERE generated_page_id = ?
+                """,
+                (
+                    status,
+                    output_uri,
+                    output_checksum,
+                    error,
+                    utc_now(),
+                    generated_page_id,
+                ),
+            )
+            if cursor.rowcount != 1:
+                raise ValueError("Checkpoint page does not exist")
+
     def finish_page(
         self,
         generated_page_id: str,

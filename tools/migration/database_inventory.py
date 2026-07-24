@@ -13,6 +13,10 @@ def _readonly_connection(path: Path) -> sqlite3.Connection:
     return connection
 
 
+def _quote_identifier(value: str) -> str:
+    return '"' + value.replace('"', '""') + '"'
+
+
 def inventory_database(path: str | Path) -> dict[str, Any]:
     database_path = Path(path)
     if not database_path.is_file():
@@ -32,7 +36,9 @@ def inventory_database(path: str | Path) -> dict[str, Any]:
         ]
         row_counts = {
             table: int(
-                connection.execute(f'SELECT COUNT(*) FROM "{table}"').fetchone()[0]
+                connection.execute(
+                    f"SELECT COUNT(*) FROM {_quote_identifier(table)}"
+                ).fetchone()[0]
             )
             for table in table_names
         }
@@ -44,15 +50,19 @@ def inventory_database(path: str | Path) -> dict[str, Any]:
             schema_version = int(row[0]) if row is not None else None
         absolute_path_rows = 0
         for table in table_names:
-            columns = connection.execute(f'PRAGMA table_info("{table}")').fetchall()
+            quoted_table = _quote_identifier(table)
+            columns = connection.execute(
+                f"PRAGMA table_info({quoted_table})"
+            ).fetchall()
             for column in columns:
                 if str(column["type"]).upper() not in {"TEXT", ""}:
                     continue
                 name = str(column["name"])
+                quoted_name = _quote_identifier(name)
                 absolute_path_rows += int(
                     connection.execute(
-                        f'SELECT COUNT(*) FROM "{table}" '
-                        f'WHERE "{name}" GLOB "[A-Za-z]:\\\\*"'
+                        f"SELECT COUNT(*) FROM {quoted_table} "
+                        f"WHERE {quoted_name} GLOB '[A-Za-z]:\\*'"
                     ).fetchone()[0]
                 )
         return {
